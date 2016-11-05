@@ -2,7 +2,7 @@
 /dist
 /test/InferiorGL.*
 
-/nbprojects
+/nbproject
 /node_modules
 *.log
 .DS_Store
