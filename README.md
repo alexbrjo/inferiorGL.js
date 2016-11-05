@@ -14,7 +14,7 @@ How to try it out
 2. Clone git repo and run grunt task 'build'
 3. Open js console in your web browser and open ../test/index.html
 
-Current Indev Task
+Current Indev Tasks
 ----------------------
 - Create normals for object faces
 - Implement clip space and clip lines
