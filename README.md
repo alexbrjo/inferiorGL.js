@@ -1,4 +1,4 @@
-InferiorGL.js 
+inferiorGL.js 
 ==================================================
 
 The graphics library I'm doubtful you're looking for
@@ -30,3 +30,7 @@ Future Indev Tasks
 - Image rendering
 - Object transformations
 - parametric equation rendering
+
+Disclaimer
+-------------
+This is an indev project so the API is extremely fluid. Expect function names to change. 

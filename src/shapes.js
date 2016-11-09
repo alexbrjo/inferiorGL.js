@@ -5,13 +5,11 @@ var vector_2D = {
 }
 
 /**
- *
- *
  * 
- * @param x 
- * @param y 
- * @param z number (optional), if not provided point will be 2D
- * @param w number (optional) 
+ * @param {number} x 
+ * @param {number} y 
+ * @param {number} z (optional), if not provided point will be 2D
+ * @param {number} w (optional) 
  */       
 function Point(x,y,z,w) {
     this.isValid = typeof x === "number" && typeof y === "number";
@@ -72,10 +70,10 @@ function Vector(x,y,z) {
         
 }
 
-function Face(p, c) {
-    this.lines = p; // array of lines
-    this.normal;
-    this.origin;
+function Face(p, c, n, o) {
+    this.points = p; // array of ordered points
+    this.normal = n;
+    this.origin = o;
     this.color = c;
 }
 
@@ -103,12 +101,12 @@ function square(x, y, z) {
     var i = new Point(0.5+x, 0.5+y, 0.5+z);
     
     var faces = [
-        new Face([[a,b],[b,c],[c,d],[d,a]], "red"),
-        new Face([[a,b],[b,f],[f,e],[e,a]], "blue"),
-        new Face([[b,c],[c,g],[g,f],[e,a]], "yellow"),
-        new Face([[c,d],[d,h],[h,g],[g,c]], "blue"),
-        new Face([[d,a],[a,e],[e,h],[h,d]], "green"),
-        new Face([[e,f],[f,g],[g,h],[h,e]], "red")
+        new Face([a,b,c,d,a], "red", [0,0,-1], new Point(0.5+x,0.5+y,  z)),
+        new Face([a,b,f,e,a], "blue", [0,-1,0], new Point(0.5+x, y,0.5+z)),
+        new Face([b,c,g,f,b], "yellow", [1,0,0], new Point(1+x,0.5+y,0.5+z)),
+        new Face([c,d,h,g,c], "blue", [0,1,0], new Point(0.5+x,1+y,0.5+z)),
+        new Face([d,a,e,h,d], "green", [-1,0,0], new Point(  x,0.5+y,0.5+z)),
+        new Face([e,f,g,h,e], "red", [0,0,1], new Point(0.5+x,0.5+y,1+z))
     ];
     
     return new Shape([a,b,c,d,e,f,g,h,i], faces, i);
@@ -123,10 +121,10 @@ function triangle(x, y, z) {
     var e = new Point(0.5+x,0.5+y,0.5+z);
 
     var faces = [
-        new Face([[a,b],[b,c],[c,a]], "red"),
-        new Face([[a,b],[b,d],[d,a]], "green"),
-        new Face([[b,c],[c,d],[d,b]], "blue"),
-        new Face([[c,a],[a,d],[d,c]], "yellow")
+        new Face([a,b,c,a], "red"),
+        new Face([a,b,d,a], "green"),
+        new Face([b,c,d,b], "blue"),
+        new Face([c,a,d,c], "yellow")
     ];
     
     return new Shape([a,b,c,d,e], faces, e);
@@ -151,12 +149,15 @@ function coordinatePlane(x, y, z, m) {
     var i = new Point( x+0.25, y, m+z-0.5);
     
     var faces = [
-        new Face([
-            [o,a],[o,b],[o,c],
-            [a,d],[a,e],
-            [b,f],[b,g],
-            [c,h],[c,i]
-        ], "black")
+        new Face([o,a], "black"),
+        new Face([o,b], "black"),
+        new Face([o,c], "black"),
+        new Face([a,d], "black"),
+        new Face([a,e], "black"),
+        new Face([b,f], "black"),
+        new Face([b,g], "black"),
+        new Face([c,h], "black"),
+        new Face([c,i], "black")
     ];
     
     return new Shape([a,b,c,d,e,f,g,h,i,o], faces, o);

@@ -1,9 +1,8 @@
 /**
  * ResoureLoader is simple a resource preloader that can callback a function on
  * completion and update (via callback) when progress is made
- * @author Alex Johnson
+ * @constructor
  */
-
 function ResourceLoader() {
 
     var rscElements = {};
