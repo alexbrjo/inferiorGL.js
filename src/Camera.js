@@ -3,12 +3,16 @@
  * @construct
  */
 function Camera(x, y, z){
+    /* x, y, z Position  */
     this.x = x;
     this.y = y;
     this.z = z;
+    
+    /* yaw, pitch, roll */
     this.theta_x = -Math.PI/4;
     this.theta_y = -Math.PI/4;
     this.theta_z = 0;
+    
     this.scale = 4.0;
     this.maxScale = 6;
     this.edgeBuffer = 2;

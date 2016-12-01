@@ -19,6 +19,7 @@ function RenderingContext3D (c, camera) {
     this.save = function() {ctx.save();};
     this.restore = function() {ctx.restore();};
     this.beginPath = function() {ctx.beginPath();};
+    this.fillRect = function(a,b,c,d) {ctx.fillStyle = this.fillStyle; ctx.fillRect(a,b,c,d);}; 
     
     this.fov = 1.0/Math.tan((Math.PI/2)/2.0);
     this.camera;
@@ -100,12 +101,23 @@ function RenderingContext3D (c, camera) {
     this.renderShape = function(shape){
         var sortFace = [];
         var cameraRotationVector = camera.getRotation();
-        var tolerance = 0.1;
+        var tolerance = 0.0;
         for (var i = 0; i <= shape.faces.length-1; i++) { 
             var f = shape.faces[i];
-            var d = distanceBetween(f.origin, camera);  
+            var d = distanceBetween(f.origin, camera);
+            var p = this.projectPoint(f.origin);
             
-            if (angle(f.normal, cameraRotationVector) > (Math.PI/2 - tolerance)) {  
+            var adjustedCameraRotationVector = [
+                cameraRotationVector[0] + Math.sin(p.x),
+                cameraRotationVector[1] + Math.sin(p.y),
+                cameraRotationVector[2] + Math.cos(p.x)
+            ];
+            
+            if(Math.random() < 0.01 && false) {
+                console.log(adjustedCameraRotationVector);
+            }
+            
+            if (angle(f.normal, adjustedCameraRotationVector) > (Math.PI/2 - tolerance)) {  
                 sortFace.push([f,d]);
                 sortFace.sort(function(p, q) {return q[1] - p[1];});
             }
@@ -153,7 +165,7 @@ function RenderingContext3D (c, camera) {
     this.projectPath = function(path){
         this.beginPath();
         for (var i = 0; i <= path.length-1; i++) {
-            var pro3d = this.projectPoint(path[i], camera);
+            var pro3d = this.projectPoint(path[i]);
             if(pro3d.w < 0){ // if in front of the camera
                 if (i > 0) {
                     this.lineTo(pro3d.x*canvas.width + canvas.width/2,

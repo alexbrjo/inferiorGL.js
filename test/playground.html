@@ -1,15 +1,19 @@
+<!-- 
+    Play ground is a full environment to test visual.
+-->
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <title></title>
-        <link rel="stylesheet" type="text/css" href="rsc/style.css">
+        <link rel="stylesheet" type="text/css" href="rsc/playground_style.css">
     </head>
     <body>
         <canvas id="canvas"></canvas>
         <script type="text/javascript" src="InferiorGL.js"></script>
         <script type="text/javascript">
             var gl = new inferiorGL();
-            gl.init();
+            gl.init("canvas");
 
             gl.addShapes([
                 square(5, 5, 3), 
@@ -19,7 +23,9 @@
                 triangle(1, 1, 1),
                 square(-3, 0, 0),
                 triangle(0, 0, -7)
-            ]);           
+            ]);  
+            
+            var testRunner = new TestRunner();
         </script>
     </body>
 </html>

@@ -12,26 +12,21 @@ var vector_2D = {
  * @param {number} w (optional) 
  */       
 function Point(x,y,z,w) {
-    this.isValid = typeof x === "number" && typeof y === "number";
     this.x = x;
     this.y = y;
-    this.z = typeof z === "number" ? z : 0;
+    this.z = typeof z === "number" ? z : null;
     this.w = typeof w === "number" ? w : 1;
-    this.type = typeof z === "number" ?  "Point3D" : "Point2D";
-    
-    var type = "Point";
+    var isValid = typeof x === "number" && typeof y === "number";
+    this.type = isValid ? (typeof z === "number" ?  "Point3D" : "Point2D") 
+        : "Invalid";
+
     this.toString = function(){
-        if (this.type = "Point2D") { 
-            return type + "{"
-                + this.x + ", " 
-                + this.y + ", " 
-                + this.z + "}";
-        } else {
-            return type + "{"
-                + this.x + ", " 
-                + this.y + ", " 
-                + this.z + "}";
-        }
+        return "{"
+            + this.type + ", "
+            + this.x + ", " 
+            + this.y + ", " 
+            + this.z + ", " 
+            + this.w + "}";
     }
 }
 

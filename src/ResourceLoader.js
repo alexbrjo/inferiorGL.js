@@ -1,6 +1,7 @@
 /**
  * ResoureLoader is simple a resource preloader that can callback a function on
  * completion and update (via callback) when progress is made
+ * 
  * @constructor
  */
 function ResourceLoader() {
@@ -23,8 +24,9 @@ function ResourceLoader() {
     }
     
     /**
-     * Queues 
-     * @param {Array|String} f Array of paths of files to load 
+     * Queues images to be loaded
+     * 
+     * @param {Array|String} f Array of String of paths of files to load 
      */
     this.load = function (f) {
         if (f instanceof Array) {
@@ -32,7 +34,6 @@ function ResourceLoader() {
                 inQueue += f.length;
                 f.forEach(function (file) {
                     doLoad(file);
-                    progress();
                 });
             } else {
                 throw new Error(); // empty array
@@ -45,7 +46,11 @@ function ResourceLoader() {
         }
     }
 
-    // does the actual loading, creates <img>
+    /**
+     * Loads file by attaching to HTML based on file extention
+     * 
+     * @param {String} file Path to the file to load
+     */
     function doLoad(file) {
         if (rscElements[file]) {
             return rscElements[file];
@@ -65,6 +70,7 @@ function ResourceLoader() {
         img.onload = function () {
             rscElements[file] = img;
             inQueue--;
+            progress();
             if (inQueue == 0) {
                 callback();
             }
@@ -93,6 +99,7 @@ function ResourceLoader() {
         js.onload = function () {
             rscElements[file] = js;
             inQueue--;
+            progress();
             if (inQueue == 0) {
                 callback();
             }
@@ -134,6 +141,15 @@ function ResourceLoader() {
      */
     this.onProgress = function (f) {
         progress = f;
+    }
+    
+    /**
+     * Creates a text sumamry of this ResourceLoader
+     * @returns {String} String epersentation of this object
+     */
+    this.toString = function(){
+        return "{ResoureceLoader, inQueue: " + inQueue + 
+                ", loaded: " + Object.keys(rscElements).length + "}";
     }
 
 }
