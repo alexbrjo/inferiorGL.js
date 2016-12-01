@@ -6,7 +6,7 @@ The graphics library I'm doubtful you're looking for
 
 InferiorGL was designed to function just like a traditional graphics library, 
 but due to my own lack of experience and poor attention to detail it's hard to 
-call it a graphics library at at.
+call it a graphics library at all.
 
 How to try it out
 ----------------------
@@ -16,11 +16,14 @@ How to try it out
 
 Current Indev Tasks
 ----------------------
-- Create normals for object faces
+- Complete Test files 
+- Remove core dependency of ResourceLoader
+- Calculate projection-dependent angle between face normal and eye
 - Implement clip space and clip lines
 
 Indev Tasks Completed
 -------------------------
+- Create normals for object faces
 - Create objects for basic shapes
 - Clip points completely behind plane tangent to camera
 - Project 3D points onto the 2D display (thank you en.wikipedia.org/wiki/3D_projection)
