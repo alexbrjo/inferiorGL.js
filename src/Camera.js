@@ -3,6 +3,17 @@
  * @construct
  */
 function Camera(x, y, z){
+    
+    if (typeof x != "number") {
+        throw new TypeError("x is not a number");
+    }
+    if (typeof y != "number") {
+        throw new TypeError("y is not a number");
+    }
+    if (typeof z != "number") {
+        throw new TypeError("z is not a number");
+    }
+    
     /* x, y, z Position  */
     this.x = x;
     this.y = y;

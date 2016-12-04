@@ -35,4 +35,4 @@ shapesTest.run("testInValidPoint", "{Invalid, -4, 35, 47, 1}",
         }
 );
 
-shapesTest.publish(document.getElementById("shapes"));
+shapesTest.publish(document.getElementById("tests"));

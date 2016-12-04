@@ -13,7 +13,7 @@
         <script type="text/javascript" src="InferiorGL.js"></script>
         <script type="text/javascript">
             var gl = new inferiorGL();
-            gl.init("canvas");
+            gl.init(document.getElementById("canvas"));
 
             gl.addShapes([
                 square(5, 5, 3), 
@@ -24,8 +24,6 @@
                 square(-3, 0, 0),
                 triangle(0, 0, -7)
             ]);  
-            
-            var testRunner = new TestRunner();
         </script>
     </body>
 </html>

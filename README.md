@@ -12,7 +12,7 @@ How to try it out
 ----------------------
 1. Requires Grunt 0.4+ and a web browser that supports HTML5 canvas
 2. Clone git repo and run grunt task 'build'
-3. Open js console in your web browser and open ../test/index.html
+3. Open js console in your web browser and open ../test/playground.html
 
 Current Indev Tasks
 ----------------------

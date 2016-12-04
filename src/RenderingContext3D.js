@@ -241,24 +241,16 @@ function RenderingContext3D (c, camera) {
     /**
      * Calculates cross product of two vectors
      * 
-     * @param {Array} v1 First  vector "[x,y,z]" or "[x,y]"
-     * @param {Array} v2 Second vector "[x,y,z]" or "[x,y]"
+     * @param {Array} v1 First  vector "[x,y,z]"
+     * @param {Array} v2 Second vector "[x,y,z]"
      * @returns {Array} Cross product
      */
     function cross(v1, v2) {
-        if(v1.length == 2 || v2.length == 2){
-            return [
-                v1[1] * v2[2] - v1[2] * v2[1],
-                v1[2] * v2[0] - v1[0] * v2[2],
-                v1[0] * v2[1] - v1[1] * v2[0]
-            ];
-        } else if(v1.length < 1 || v2.length < 2){
-            return [
-                v1[1] * v2[2] - v1[2] * v2[1],
-                v1[2] * v2[0] - v1[0] * v2[2],
-                v1[0] * v2[1] - v1[1] * v2[0]
-            ];
-        }
+        return [
+            v1[1] * v2[2] - v1[2] * v2[1],
+            v1[2] * v2[0] - v1[0] * v2[2],
+            v1[0] * v2[1] - v1[1] * v2[0]
+        ];
     }
     
     /**
@@ -284,7 +276,10 @@ function RenderingContext3D (c, camera) {
     function angle(v1, v2) {
         var m1 = magnitude(v1[0], v1[1], v1[2]);
         var m2 = magnitude(v2[0], v2[1], v2[2]);
-        return Math.acos( dot(v1,v2) / (m1*m2));
+        return Math.acos( dot(v1, v2) / (m1 * m2));
     }
+    
+    this.math = {round: r, mag: magnitude, dist: distanceBetween, 
+        cross: cross, dot: dot, angle: angle};
 
 }

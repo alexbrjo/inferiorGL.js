@@ -34,9 +34,9 @@ function inferiorGL(){
     // time = now, last, delta Time
     this.time = new Clock();
               
-    this.init = function(canvasId){
-              
-        canvas = document.getElementById(canvasId);
+    this.init = function(canvasElement){
+
+        canvas = canvasElement;
         ctx = canvas.getContext('2d');
               
         edit_canvas = document.createElement('canvas');
@@ -126,11 +126,13 @@ function inferiorGL(){
         edit_canvas.height = canvas.height = window.innerHeight;
         
         // draw each shape       
-        for (var q = 1; q <= objects.length - 1; q++) {
-            edit_ctx.renderWireframeShape(objects[q]);
+        for (var q = 0; q <= objects.length - 1; q++) {
+            if (q = 0) {
+                edit_ctx.renderShape(objects[0]);
+            } else {
+                edit_ctx.renderWireframeShape(objects[q]);
+            }
         }
-        
-        edit_ctx.renderShape(objects[0]);
         
         this.printDebug();
         ctx.drawImage(edit_canvas, 0, 0);
