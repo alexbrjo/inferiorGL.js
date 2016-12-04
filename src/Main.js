@@ -126,9 +126,9 @@ function inferiorGL(){
         edit_canvas.height = canvas.height = window.innerHeight;
         
         // draw each shape       
-        for (var q = 0; q <= objects.length - 1; q++) {
-            if (q = 0) {
-                edit_ctx.renderShape(objects[0]);
+        for (var q = 0; q < objects.length; q++) {
+            if (q == 0) {
+                edit_ctx.renderShape(objects[q]);
             } else {
                 edit_ctx.renderWireframeShape(objects[q]);
             }

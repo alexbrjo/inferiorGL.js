@@ -1,6 +1,8 @@
 /**
  * Controller for running all cases in a Test file
  * @author Alex Johnson
+ * 
+ * @param {String} c The name of the class of testing
  */
 function TestRunner(c){
     var testClass = c;
@@ -8,6 +10,15 @@ function TestRunner(c){
     var passText = function() { return "<span style=\"font-weight: bold; color:green;\">PASS\n</span>"};
     var failText = function() { return "<span style=\"font-weight: bold; color:red;\">FAIL\n</span>"};
     var elseText = function(e) { return "<span style=\"font-weight: bold; color:#FFA500;\">" + e + "\n</span>"};
+    
+    /**
+     * Adds a new test to the test array.
+     * 
+     * @param {String} name Name of the test
+     * @param {var} expected Expected result of test
+     * @param {var} actual Actual result of the test
+     * @param {String|function} comparator Type of comparision to evaluate the test by
+     */
     this.run = function(name, expected, actual, comparator) {
         
         if (typeof comparator == "string") {
@@ -24,12 +35,17 @@ function TestRunner(c){
                 throw new TypeError();
             }
             
-        } else {
+        } else if (typeof comparator == "undefined"){
             comparator = compareDefault;
         }
         
         tests.push({name: name, exp: expected, act: actual, compare: comparator});
     }
+    
+    /**
+     * Adds the test result to a HTML table
+     * @param {HTMLelement} element The element to append the result to
+     */
     this.publish = function(element) {
         var contents = "<tr></tr><tr><th>Test</th>" +
                 "<th>Expected</th><th>Actual</th><th>Result</th></tr>";
@@ -56,8 +72,10 @@ function TestRunner(c){
     
     /**
      * Compares two numbers to 10 decimal places
+     * 
      * @param {Number} a first number to compare 
      * @param {Number} b first number to compare 
+     * @return {String} test result
      */
     function compareNumber(a, b) {
         
@@ -68,6 +86,13 @@ function TestRunner(c){
         return a.toFixed(10) == b.toFixed(10) ? passText() : failText();
     }
     
+    /**
+     * Compares two arrays of numbers by cell to avoid false fails.
+     * 
+     * @param {Array} a first array to compare 
+     * @param {Array} b first array to compare 
+     * @return {String} test result
+     */
     function compareArray(a, b) {
         if (!(a instanceof Array && b instanceof Array)) {
             return failText();
@@ -91,8 +116,10 @@ function TestRunner(c){
     
     /**
      * Compares two Strings
+     * 
      * @param {String} a first number to compare 
      * @param {String} b first number to compare 
+     * @return {String} test result
      */
     function compareString(a, b) {
         
@@ -105,8 +132,10 @@ function TestRunner(c){
     
     /**
      * Compares two variables. Default comparison 
+     * 
      * @param {var} a first variable to compare 
      * @param {var} b first variable to compare 
+     * @return {String} test result
      */
     function compareDefault(a, b) {
         return (a == b) ? passText() : failText();
