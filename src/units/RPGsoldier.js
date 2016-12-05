@@ -1,16 +1,16 @@
 /* Copyright Alex Johnson 2016 */
 
-var setRPGsoldier = function (e) {
+var RPGsoldier = function (e) {
     /** Essential Unit Properties */
-    e.width = 15;
-    e.height = 25;
+    this.width = 15;
+    this.height = 25;
     
     /** Sprite Properties */
-    e.img = "rpgsoldier.png";
-    e.imgSize = 40;
-    e.imgDisplacement = [12,12];
+    this.img = "rpgsoldier.png";
+    this.imgSize = 40;
+    this.imgDisplacement = [12,12];
 
-    e.update = function (world) {
+    this.update = function (world) {
         this.tick++;
         if (this.tick > 200)
             this.tick = 0;
@@ -32,8 +32,8 @@ var setRPGsoldier = function (e) {
         this.x += this.vx;
         this.y += this.vy;
 
-        for (var i = 0; i < this.points.length; i++) {
-            var point = this.points[i]();
+        for (var i = 0; i < this.points(); i++) {
+            var point = this.points(i);
             var block = world.level.getBlockObject(point.x, point.y).AABB;
             if (block.s(point.x, point.y)) {
                 // grounded
@@ -48,7 +48,7 @@ var setRPGsoldier = function (e) {
                     this.vy = 0;
                 }
 
-                var check = this.points[i]();
+                var check = this.points(i);
                 if (block.s(check.x, check.y)) {
                     // wall right
                     if (previous.x + previous.w <= block.x) {
@@ -64,7 +64,6 @@ var setRPGsoldier = function (e) {
             }
         }
     };
-    return e;
 }
 
 

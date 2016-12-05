@@ -1,26 +1,28 @@
-10/* Copyright Alex Johnson 2016 */
+/* Copyright Alex Johnson 2016 */
 
-var setPlayer = function (e) {
+var Player = function () {
 
-    e.width = 15;
-    e.height = 25;
+    this.width = 15;
+    this.height = 25;
 
-    e.speed = 180.0;
-    e.img = "warrior.png";
-    e.attackTick = -1;
-    e.jumpPrimed = false;
-    e.health = 10;
-    e.maxHealth = 10;
+    this.speed = 180.0;
+    this.img = "warrior.png";
+    this.attackTick = -1;
+    this.jumpPrimed = false;
+    this.health = 10;
+    this.maxHealth = 10;
+    this.imgSize = 40;
+    this.imgDisplacement = [-12, -15];
 
-    e.damage = function (d, time) {
+    this.damage = function (d, time) {
         this.health -= d;
-        e.invunerableUntil = time.now + 500; // so damage isn't taken too quickly
+        this.invunerableUntil = time.now + 500; // so damage isn't taken too quickly
         if (this.health <= 0) {
             console.log("dead");
         }
     };
 
-    e.update = function (world) {
+    this.update = function (world) {
         var time = world.time;
         var t = time.getSPF();
 
@@ -117,8 +119,8 @@ var setPlayer = function (e) {
         /*
          Check for collisions
          */
-        for (var i = 0; i < this.points.length; i++) {
-            var point = this.points[i]();
+        for (var i = 0; i < this.points(); i++) {
+            var point = this.points(i);
             var block = world.level.getBlockObject(point.x, point.y).AABB;
             if (block.s(point.x, point.y)) {
                 // grounded
@@ -133,7 +135,7 @@ var setPlayer = function (e) {
                     this.vy = 0;
                 }
 
-                var check = this.points[i]();
+                var check = this.points(i);
                 if (block.s(check.x, check.y)) {
                     // wall right
                     if (previous.x + previous.w <= block.x) {
@@ -162,7 +164,7 @@ var setPlayer = function (e) {
      * This function returns the entity obj for the player
      * @OPT this is 100 lines this needs to be condensed
      */
-    e.obj = function (time) {
+    this.obj = function (time) {
         var s = {x: 0, y: 0, w: 40, h: 40, id: this.img};
         var pos = this.aabb();
         var aabb = this.aabb();
@@ -244,7 +246,7 @@ var setPlayer = function (e) {
         };
     }
 
-    e.setMove = function (key, pressed) {
+    this.setMove = function (key, pressed) {
         if (pressed) {
             if (key == 0) {
                 this.jump = true;
@@ -278,6 +280,5 @@ var setPlayer = function (e) {
                 this.attack = false;
             }
         }
-    }
-    return e;
-}
+    };
+};

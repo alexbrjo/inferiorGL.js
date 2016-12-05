@@ -128,6 +128,6 @@ var Level = function(w, h){
                     }
                 }
              }
-         }
-    }
-}
+         };
+    };
+};

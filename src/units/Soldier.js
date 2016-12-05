@@ -1,14 +1,14 @@
-var setSoldier = function (e) {
+var Soldier = function () {
     /** Essential Unit Properties */
-    e.width = 15;
-    e.height = 25;
+    this.width = 15;
+    this.height = 25;
     
     /** Sprite Properties */
-    e.img = "enemy.png";
-    e.imgSize = 25;
-    e.imgDisplacement = [5,0];
+    this.img = "enemy.png";
+    this.imgSize = 25;
+    this.imgDisplacement = [5,0];
 
-    e.update = function (world) {
+    this.update = function (world) {
         this.tick++;
         if (this.tick > 200)
             this.tick = 0;
@@ -30,8 +30,8 @@ var setSoldier = function (e) {
         this.x += this.vx;
         this.y += this.vy;
 
-        for (var i = 0; i < this.points.length; i++) {
-            var point = this.points[i]();
+        for (var i = 0; i < this.points(); i++) {
+            var point = this.points(i);
             var block = world.level.getBlockObject(point.x, point.y).AABB;
             if (block.s(point.x, point.y)) {
                 // grounded
@@ -46,7 +46,7 @@ var setSoldier = function (e) {
                     this.vy = 0;
                 }
 
-                var check = this.points[i]();
+                var check = this.points(i);
                 if (block.s(check.x, check.y)) {
                     // wall right
                     if (previous.x + previous.w <= block.x) {
@@ -62,5 +62,4 @@ var setSoldier = function (e) {
             }
         }
     };
-    return e;
 }

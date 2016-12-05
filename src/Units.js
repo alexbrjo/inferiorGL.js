@@ -10,25 +10,23 @@ function UnitHandler() {
     this.setRPGsoldier = null;
 
     this.newPlayer = function (x, y) {
-        var u = this.setUnit(x, y);
-        player = setPlayer(u);
-        this.p = u;
+        var e = Object.assign(new Unit(this.list.length, x, y), new Player());
+        this.list.push(e);
+        this.p = e;
     };
 
     this.newSoldier = function (x, y) {
-        var u = this.setUnit(x, y);
-        player = setSoldier(u);
+        var e = Object.assign(new Unit(this.list.length, x, y), new Soldier());
+        this.list.push(e);
     };
 
     this.newRPGsoldier = function (x, y) {
-        var u = this.setUnit(x, y);
-        player = setRPGsoldier(u);
+        var e = Object.assign(new Unit(this.list.length, x, y), new RPGsoldier());
+        this.list.push(e);
     };
 
     this.init = function () {
-        this.setPlayer = setPlayer;
-        this.setPlayer = setSoldier;
-        this.setPlayer = setRPGsoldier;
+        
     }
 
     this.update = function (world) {
@@ -51,12 +49,11 @@ function UnitHandler() {
             }
         }
     }
-
     /**
      * Creates an object of a default unit. 
      * @return {Object} Unit
      */
-    this.setUnit = function (x, y) {
+    /**this.setUnit = function (x, y) {
         var e = {};
         this.list.push(e);
         e.id = this.list.length;
@@ -200,5 +197,5 @@ function UnitHandler() {
         };
 
         return e;
-    }
+    }*/
 }
