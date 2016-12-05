@@ -1,15 +1,28 @@
-/* Copyright Alex Johnson 2016 */
-
+/**
+ * Preloads and loads IMG and additional JS files.
+ */
 function ResourceLoader() {
-
+    
+    /** Object containing all loaded resources */
     var rscElements = {};
+    
+    /** Function to call when all files from queue have been loaded */
     var callback = function () {};
+    
+    /** The number of files currently in queue to be loaded */
     var inQueue = 0;
 
+    /** Path to where IMG files are stored */
     var path_img = "rsc/img/";
+    
+    /** Path to where JS files are stored */
     var path_js = "";
 
-    // gets load request
+    /** 
+     * Loads a new file or series of files.
+     * 
+     * @param {String|Array} File name or array of file names to load. 
+     */
     this.load = function (f) {
         if (f instanceof Array) {
             inQueue += f.length;
@@ -22,7 +35,12 @@ function ResourceLoader() {
         }
     }
 
-    // does the actual loading, creates <img>
+    /**
+     * Determines file type and if the file has already been loaded.
+     * 
+     * @param {String} file Name of file to load.
+     * @returns {HTMLelement} Returns file if it's already loaded.
+     */
     function doLoad(file) {
         if (rscElements[file]) {
             return rscElements[file];
@@ -35,6 +53,12 @@ function ResourceLoader() {
         }
     }
 
+    /**
+     * Loads IMG and calls callback if queue is empty.
+     * 
+     * @param {String} file Path of the IMG to load
+     * @throws {Error} if file doesn't exsist
+     */
     function loadIMG(file) {
         var img = new Image();
         img.onload = function () {
@@ -57,6 +81,12 @@ function ResourceLoader() {
 
     }
 
+    /**
+     * Loads JS file and calls callback if queue is empty.
+     * 
+     * @param {String} file Path of the JS file to load
+     * @throws {Error} if file doesn't exsist
+     */
     function loadJS(file) {
         var js = document.createElement("script");
 
@@ -94,7 +124,11 @@ function ResourceLoader() {
         return rscElements[path];
     }
 
-    // when all resources are done
+    /**
+     * Sets the callback function.
+     * 
+     * @param {Function} f Function to call when all files are loaded.
+     */
     this.whenReady = function (f) {
         callback = f;
     }

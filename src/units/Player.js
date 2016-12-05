@@ -12,7 +12,9 @@ var Player = function () {
     this.health = 10;
     this.maxHealth = 10;
     this.imgSize = 40;
-    this.imgDisplacement = [-12, -15];
+    this.imgDisplacement = [12, 15];
+    
+    this.invunerableUntil = 0;
 
     this.damage = function (d, time) {
         this.health -= d;
@@ -22,7 +24,7 @@ var Player = function () {
         }
     };
 
-    this.update = function (world) {
+    this.move = function (world) {
         var time = world.time;
         var t = time.getSPF();
 
@@ -95,81 +97,20 @@ var Player = function () {
         } else if (!this.airbourne) {
             this.vx = 0;
         }
-
-        /*
-         MOVE PLAYER
-         */
-
-        // gravity always applied
-        this.vy += 0.5;
-
-        var previous = this.aabb();
-
-        if ((this.vx < 0 && this.contact.left) || (this.vx > 0 && this.contact.right)) {
-
-            if (this.vy > 0) {
-                this.vx = 0;
-                this.airbourne = false;
-            }
-        } else {
-            this.x += this.vx;
-        }
-        this.y += this.vy;
-
-        /*
-         Check for collisions
-         */
-        for (var i = 0; i < this.points(); i++) {
-            var point = this.points(i);
-            var block = world.level.getBlockObject(point.x, point.y).AABB;
-            if (block.s(point.x, point.y)) {
-                // grounded
-                if (previous.y + previous.h <= block.y) {
-                    this.y = block.y - this.height;
-                    this.vy = 0;
-                    this.airbourne = false;
-                }
-                // hit head
-                if (previous.y >= block.y + block.h) {
-                    this.y = block.y + block.h;
-                    this.vy = 0;
-                }
-
-                var check = this.points(i);
-                if (block.s(check.x, check.y)) {
-                    // wall right
-                    if (previous.x + previous.w <= block.x) {
-                        this.x = block.x - this.width;
-                        this.vx = 0;
-                    }
-                    // wall left
-                    if (previous.x >= block.x + block.w) {
-                        this.x = block.x + block.w;
-                        this.vx = 0;
-                    }
-                }
-            }
-        } // for i
-        /*
-         UPDATE WHICH DIRECTIONS THE SPRITE IS COLLIDING FROM
-         */
-        this.contact.left = world.level.getBlockObject(this.x - 1, this.y).AABB.s(this.x - 1, this.y);
-        this.contact.right = world.level.getBlockObject(this.x + this.width + 1, this.y).AABB.s(this.x + this.width + 1, this.y);
-        this.contact.up = world.level.getBlockObject(this.x, this.y - 1).AABB.s(this.x, this.y - 1);
-        this.contact.down = world.level.getBlockObject(this.x + this.width * (1 / 2), this.y + this.height + 1).AABB.s(this.x + this.width * (1 / 2), this.y + this.height + 1);
-    }
+    };
 
     /** 
-     * obj() is unique to "player"
-     * This function returns the entity obj for the player
-     * @OPT this is 100 lines this needs to be condensed
+     * This function returns the entity obj. Holds a lot of sprite sheet logic.
+     * 
+     * @param {Clock} time The world clock object.
+     * @TODO this is 100 lines this needs to be condensed
      */
     this.obj = function (time) {
         var s = {x: 0, y: 0, w: 40, h: 40, id: this.img};
         var pos = this.aabb();
         var aabb = this.aabb();
-        pos.x -= 12;
-        pos.y -= 15;
+        pos.x -= this.imgDisplacement[0];
+        pos.y -= this.imgDisplacement[1];
 
         if (this.airbourne) { // jumping/falling
             if (!this.attack) { // just jumping/falling
@@ -184,30 +125,30 @@ var Player = function () {
                     s.y = (5 - this.direction) * 40;
                 }
             } else { // attacking while in air
-                if (this.direction == 1) {
+                if (this.direction === 1) {
                     s.x = time.it_24 % 8 * 40;
                     s.y = 6 * 40;
-                } else if (this.direction == 0) {
+                } else if (this.direction === 0) {
                     s.x = time.it_24 % 8 * 40;
                     s.y = 7 * 40;
                 }
             }
-        } else if (this.vx == 0) { // not moving horizontally
+        } else if (this.vx === 0) { // not moving horizontally
             if (this.attackTick > 0) {
                 if (this.attackTick > 10) {
-                    if (this.direction == 1) {
+                    if (this.direction === 1) {
                         s.x = 3 * 40;
                         s.y = 0;
-                    } else if (this.direction == 0) {
+                    } else if (this.direction === 0) {
                         s.x = 3 * 40;
                         s.y = 1 * 40;
                     }
                 } else {
-                    if (this.direction == 1) {
+                    if (this.direction === 1) {
                         s.x = 4 * 40;
                         s.y = 0;
                         pos.x += 10;
-                    } else if (this.direction == 0) {
+                    } else if (this.direction === 0) {
                         s.x = 4 * 40;
                         s.y = 1 * 40;
                         pos.x -= 10;
@@ -222,10 +163,10 @@ var Player = function () {
                     s.y = 5 * 40;
                 }
             } else {
-                if (this.direction == 1) { //standing still
+                if (this.direction === 1) { //standing still
                     s.x = 0;
                     s.y = 0;
-                } else if (this.direction == 0) {
+                } else if (this.direction === 0) {
                     s.x = 0;
                     s.y = 1 * 40;
                 }
@@ -244,39 +185,39 @@ var Player = function () {
             pos: pos, // position on canvas (happens to be the same to AABB)
             AABB: aabb // Axis-aligned bounding box
         };
-    }
+    };
 
     this.setMove = function (key, pressed) {
         if (pressed) {
-            if (key == 0) {
+            if (key === 0) {
                 this.jump = true;
-            } else if (key == 1) {
+            } else if (key === 1) {
                 this.up = true;
-            } else if (key == 2) {
+            } else if (key === 2) {
                 this.left = true;
-            } else if (key == 3) {
+            } else if (key === 3) {
                 this.down = true;
-            } else if (key == 4) {
+            } else if (key === 4) {
                 this.right = true;
-            } else if (key == 5) {
+            } else if (key === 5) {
                 this.jump = true;
-            } else if (key == 6) {
+            } else if (key === 6) {
                 this.attack = true;
             }
         } else if (!pressed) {
-            if (key == 0) {
+            if (key === 0) {
                 this.jump = false;
-            } else if (key == 1) {
+            } else if (key === 1) {
                 this.up = false;
-            } else if (key == 2) {
+            } else if (key === 2) {
                 this.left = false;
-            } else if (key == 3) {
+            } else if (key === 3) {
                 this.down = false;
-            } else if (key == 4) {
+            } else if (key === 4) {
                 this.right = false;
-            } else if (key == 5) {
+            } else if (key === 5) {
                 this.jump = false;
-            } else if (key == 6) {
+            } else if (key === 6) {
                 this.attack = false;
             }
         }

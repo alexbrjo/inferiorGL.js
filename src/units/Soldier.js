@@ -8,7 +8,7 @@ var Soldier = function () {
     this.imgSize = 25;
     this.imgDisplacement = [5,0];
 
-    this.update = function (world) {
+    this.move = function (world) {
         this.tick++;
         if (this.tick > 200)
             this.tick = 0;
@@ -23,43 +23,5 @@ var Soldier = function () {
             this.vx = this.speed;
             this.direction = 1;
         }
-
-        var previous = this.aabb();
-        this.vy += 0.5;
-
-        this.x += this.vx;
-        this.y += this.vy;
-
-        for (var i = 0; i < this.points(); i++) {
-            var point = this.points(i);
-            var block = world.level.getBlockObject(point.x, point.y).AABB;
-            if (block.s(point.x, point.y)) {
-                // grounded
-                if (previous.y + previous.h <= block.y) {
-                    this.y = block.y - this.height;
-                    this.vy = 0;
-                    this.airbourne = false;
-                }
-                // hit head
-                if (previous.y >= block.y + block.h) {
-                    this.y = block.y + block.h;
-                    this.vy = 0;
-                }
-
-                var check = this.points(i);
-                if (block.s(check.x, check.y)) {
-                    // wall right
-                    if (previous.x + previous.w <= block.x) {
-                        this.x = block.x - this.width;
-                        this.vx = 0;
-                    }
-                    // wall left
-                    if (previous.x >= block.x + block.w) {
-                        this.x = block.x + block.w;
-                        this.vx = 0;
-                    }
-                }
-            }
-        }
     };
-}
+}; 
