@@ -23,7 +23,7 @@
  *   	wrong
  *      - uses  50% ram at ~250 blocks and 60 fps (capped by chrome canvas implementation?)
  *      - uses  60% ram at ~300 blocks and 60 fps (capped?)
- *      - uses 100% ram at ~650 blocks and 50 fps
+ *      - uses 100% ram at ~650 blocks and 50 fps (fps dips)
  *
  *  2/3/2016: 
  *  - fps issue resolved (was defining large array every time l.terrain() was called)
@@ -33,52 +33,58 @@
  *
  *  30/9/2016:
  *	- Finally found time to start dev again. Current issues/tasks:
- *  	[] Entire app needs to be doc'd and named better. This is barely readable
+ *  	[+] Entire app needs to be doc'd and named better. This is barely readable
  *		[+] File structure needs to be redone
  *		[+] Break up the massive main object
- *		[] Git or some sort of source control
- *	- Core TODO:
- *		[] ResourceLoader should be able to handle js and json
- *		[] Change levelData from JS functions to json
- *      [+] Change debug console display from HTML to canvas
+ *		[+] Git or some sort of source control
+ *	[-] Core TODO:
+ *		[-] ResourceLoader should be able to handle js and json
+ *		[-] Change levelData from JS functions to json
+ *      [+/-] Change debug console display from HTML to canvas
  *		[+] Consider removing jQuery dependency; only used 10 times total
- *		[] Add settings .json for constants. 
- *	- Game TODO: 
- *		[] Plan out plot/story line/characters/scenes
- *		[] Design backgrounds
+ *		[-] Add settings .json for constants. 
+ *	[+/-] Game TODO: 
+ *		[-] Plan out plot/story line/characters/scenes
+ *		[-] Design backgrounds
  *		[+] Clean up and separate Units.js
- *		[] Add entities to LevelData
+ *		[-] Add entities to LevelData
  *
- *	@author Alex Johnson 
+ *  4/12/2016
+ *      Alright free time coming up. This is still a mess, but recoverable.
+ *      Docs and unit tests are a real must right now.
+ *        1. Organizing and cleaning
+ *              a. [ ] DOCS
+ *              b. [ ] Unit tests via Karma
+ *              c. [ ] Recode the level designer
+ *        2. Plan remainder of project. As in like design the enemies, bosses,
+ *           environment and levels.
+ *
+ *  @author Alex Johnson 
  */
 
 document.addEventListener(
-        "DOMContentLoaded",
-        function () {
-            var app = {rsc: null, ninja: null};
-            app.rsc = new ResourceLoader();
-            app.rsc.load([
-                "tiles.png", "rpgsoldier.png",
-                "warrior.png", "enemy.png",
-                "hud.png", "bg.png"
-            ]);
-            app.rsc.whenReady(function () {
-                app.ninja = new Ninja(16, true);
-                app.ninja.init(app.rsc);
-                window.onresize = function () {
-                    app.ninja.g.zoomed = false;
-                }
+    "DOMContentLoaded",
+    function () {
+        var app = {rsc: null, ninja: null};
+        app.rsc = new ResourceLoader();
+        app.rsc.load([
+            "tiles.png", "rpgsoldier.png",
+            "warrior.png", "enemy.png",
+            "hud.png", "bg.png"
+        ]);
+        app.rsc.whenReady(function () {
+            app.ninja = new Ninja(16, true, app.rsc);
 
-                var main = function () {
-                    app.ninja.update();
-                    aniFrame = window.requestAnimationFrame ||
-                            window.mozRequestAnimationFrame ||
-                            window.webkitRequestAnimationFrame ||
-                            window.msRequestAnimationFrame ||
-                            window.oRequestAnimationFrame;
-                    aniFrame(main, app.ninja.g.canvas);
-                }
-                main();
-            });
-        }
+            var main = function () {
+                app.ninja.update();
+                aniFrame = window.requestAnimationFrame ||
+                        window.mozRequestAnimationFrame ||
+                        window.webkitRequestAnimationFrame ||
+                        window.msRequestAnimationFrame ||
+                        window.oRequestAnimationFrame;
+                aniFrame(main, app.ninja.g.canvas);
+            }
+            main();
+        });
+    }
 );
