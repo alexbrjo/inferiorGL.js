@@ -1,0 +1,8 @@
+/build
+/dist
+/test/ninja.*
+
+/nbproject
+/node_modules
+*.log
+.DS_Store
