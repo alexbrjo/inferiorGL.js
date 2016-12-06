@@ -279,7 +279,7 @@ function RenderingContext3D (c, camera) {
         return Math.acos( dot(v1, v2) / (m1 * m2));
     }
     
-    this.math = {round: r, mag: magnitude, dist: distanceBetween, 
+    this.math = {round: r, magnitude: magnitude, dist: distanceBetween, 
         cross: cross, dot: dot, angle: angle};
 
 }

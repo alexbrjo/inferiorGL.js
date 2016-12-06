@@ -6,7 +6,6 @@
     "grunt-contrib-concat": "~0.4.x",
     "grunt-contrib-clean": "~0.4.x",
     "grunt-contrib-copy": "~0.4.x",
-    "grunt-contrib-karma": "~0.4.x",
     "grunt-contrib-uglify": "~0.5.x"
   }
 }

@@ -10,6 +10,7 @@ var v1 = [3,4,5];
 var v2 = [12,33,0];
 var v3 = [4,0,9];
 var v4 = [2.2, 1.1, 3.3];
+var testCamera = new Camera(0,0,0);
 var testCanvas = document.createElement('canvas');
 var textCtx2D = testCanvas.getContext('2d');
 var math = new RenderingContext3D(textCtx2D, testCamera).math;
@@ -161,6 +162,60 @@ vectorMathTest.run("testAngle double", Math.PI/6,
 vectorMathTest.run("testAngle double", Math.PI/3,
         function () {
             return math.angle([1, Math.sqrt(3), 0], [1, 0, 0]);
+        },
+"number");
+
+/**
+ * Magnitude Test
+ * 
+ * <0, 0, 0>
+ * Should be 1 because the only component is length 1.
+ */
+vectorMathTest.run("testMagnitude int", 0,
+        function () {
+            return math.magnitude(0, 0, 0);
+        },
+"number");
+
+/**
+ * Magnitude Test
+ * 
+ * <1, 0, 0>
+ * Should be 1 because the only component is length 1.
+ */
+vectorMathTest.run("testMagnitude int", 1,
+        function () {
+            return math.magnitude(1, 0, 0);
+        },
+"number");
+
+/**
+ * Magnitude Test
+ * 
+ * <4, 3, 0>
+ * sqrt(4^2 + 3^2 +0^2)
+ * sqrt(16 + 9)
+ * sqrt(25)
+ * 5
+ */
+vectorMathTest.run("testMagnitude int", 5,
+        function () {
+            return math.magnitude(4, 3, 0);
+        },
+"number");
+
+/**
+ * Magnitude Test
+ * 
+ * <0.5, 1.5, 3>
+ * sqrt(0.5^2 + 1.5^2 +3^2)
+ * sqrt(0.25 + 2.25 + 9)
+ * sqrt(11.50)
+ * 3.39116499156
+ */
+vectorMathTest.run("testMagnitude double", 3.39116499156,
+        function () {
+            return math.magnitude(0.5, 1.5, 3);
         },
 "number");
 
