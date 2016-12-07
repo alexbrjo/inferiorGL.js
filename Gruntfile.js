@@ -42,17 +42,18 @@ module.exports = function (grunt) {
                 }
             }
         },
-        karma: {
-            options: {
-                files: ['test/**/*.js'],
-                browsers: ['Chrome', 'Firefox']
-            }
+        jasmine : {
+            src : 'src/**/*.js',
+                options : {
+                    specs : 'test/**/*.spec.js'
+                }
         }
     });
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.registerTask(
         'build', 
         'cleans, copys to build folder and uglifies', 
