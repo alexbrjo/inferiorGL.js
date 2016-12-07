@@ -24,7 +24,11 @@ var Graphics = function() {
     /** The size of a board tile */ 
     var tileSize = 16;
     
-    /** Truncates a position to a block location */
+    /** 
+     * Truncates a position to a block location
+     *  
+     * @param {Number} x Position to truncate to tile postition.
+     */
     var trunc = function(x) { return Math.trunc(x/tileSize, 2); };
     
     /** The number of blocks rendered during the last update */
@@ -62,7 +66,7 @@ var Graphics = function() {
      * The master print function called once (1) an update loop. Is responsible for
      * dispatching functions for drawing all items in the queue
      *
-     *	@param {Ninja} world The entire universe
+     *	@param {Universe} world The entire universe
      */
     this.print = function(world) {
 
@@ -98,7 +102,7 @@ var Graphics = function() {
     
     /**
      * Responsible for printing all objects in the Unit queue
-     *	@param {Ninja} world The entire universe
+     *	@param {Universe} world The entire universe
      */
     this.printUnits = function(world) {
 	for (var i = 0; i < world.units.list.length; i++) {
@@ -119,7 +123,7 @@ var Graphics = function() {
     /**
      * Prints terrain
      * 
-     * @param {Ninja} world The entire universe
+     * @param {Universe} world The entire universe
      */
     this.printTerrain = function(world) {
         for (var i = 0; i < 3; i++) {
@@ -157,7 +161,7 @@ var Graphics = function() {
      *	- Design new health bar
      *	- Implement scoreboard
      *	
-     *	@param {Ninja} world The entire universe
+     *	@param {Universe} world The entire universe
      */
     this.printHUD = function(world) {
     	var p = world.units.p;
@@ -178,7 +182,7 @@ var Graphics = function() {
     /**
      * Prints the Debug console
      * 
-     * @param {Ninja} world The entire universe
+     * @param {Universe} world The entire universe
      * @param {Array} units The array of all units
      * @BUG if array isn't defined graphs don't work
      */

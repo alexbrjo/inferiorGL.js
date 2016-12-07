@@ -124,8 +124,8 @@ function Unit(id, x, y) {
      * This method creates point around the Unit that are used to check 
      * collisions with the world and other entities. 
      * 
-     * @param {type} i The point in to calculate.
-     * @param {type} o A object with and x and y value the translates the point.
+     * @param {Number} i The point in to calculate.
+     * @param {Point} o A object with and x and y value the translates the point.
      * @returns {Point} An object with an x and y value corresponding to an xy point.
      */
     this.points = function (i, o) {
@@ -162,7 +162,7 @@ function Unit(id, x, y) {
      * direction. This function is kind of final, most units will never have to
      * override this.
      * 
-     * @param {Ninja} world The entire universe 
+     * @param {Universe} world The entire universe 
      */
     this.update = function (world) {
         this.move(world);

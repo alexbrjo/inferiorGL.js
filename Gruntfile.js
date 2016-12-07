@@ -29,36 +29,37 @@ module.exports = function (grunt) {
                 src:'build'
             },
             test:{
-                src:'Ninja.*'
+                src:'ninja.*'
             }
         },
         uglify: {
             build: {
                 files: {
-                    'dist/Ninja.min.js': [ 'dist/Ninja.js' ]
+                    'dist/ninja.min.js': [ 'dist/ninja.js' ]
                 }
             }
         },
-        karma: {
-            options: {
-                files: ['test/**/*.js'],
-                browsers: ['Chrome', 'Firefox']
+        
+        /**
+         * Tests are currently running headless and therefore a complete 
+         * instance of the app shouldn't be created
+         */ 
+        jasmine : {
+            src : ['src/**/*.js', '!src/Main.js'],
+                options : {
+                    specs : 'test/**/*.test.js'
+                }
             }
-        }
     });
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.registerTask(
-        'test', 
-        'Runs all tests in test folder', 
-        ['karma']
-    );
+    grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.registerTask(
         'build', 
         'cleans, copys to build folder and uglifies', 
         ['clean', 'copy:build', 'concat', 'uglify', 'copy:test']
     );
-
+    
 };

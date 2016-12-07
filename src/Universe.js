@@ -1,9 +1,3 @@
-/************************************ Ninja OBJECT ************************************\
-||                                                                                    ||
-||            Contains the world and updates all objects and projectiles              ||
-||                                                                                    ||
-\**************************************************************************************/
-  
 /**
  * Contains the game loop, level data, graphics and units. Responsible for 
  * updating Units, the game board and the screen.
@@ -12,7 +6,7 @@
  * @param {Boolean} debug If the debug console is shown
  * @param {ResourceLoader} rsc 
  */  
-function Ninja(tileSize, debug, rsc){
+function Universe(tileSize, debug, rsc){
 
     /** {Number} The height and width of the foreground tiles */
     this.tileSize = tileSize;
@@ -24,7 +18,7 @@ function Ninja(tileSize, debug, rsc){
     this.time = new Clock();
 
     /** {Graphics} */
-    this.g = new Graphics(16);
+    var g = new Graphics(16);
     
     /** {UnitHandler} Stores, manages and updates Units  */
     this.units = new UnitHandler();
@@ -66,7 +60,7 @@ function Ninja(tileSize, debug, rsc){
             if(x.which === 75) units.p.setMove(6, false); //k
     };
     window.onresize = function () {
-        this.g.zoomed = false;
+        g.zoomed = false;
     }
 
     /**
@@ -76,7 +70,7 @@ function Ninja(tileSize, debug, rsc){
         this.stats.addStat("fps", this.time.fps);
 	this.time.update(); // updates the time 
         this.units.update(this); // moves things
-        this.g.print(this); // draws things
+        g.print(this); // draws things
     }
     
     /**
@@ -84,8 +78,12 @@ function Ninja(tileSize, debug, rsc){
      * 
      * @returns {Array} array of units in the UnitHandler
      */
-    this.getUnits = function(){ 
+    this.getUnits = function (){ 
         return this.units.list; 
     };
+    
+    this.getCanvas = function () {
+        return g.canvas;
+    }
 }
     

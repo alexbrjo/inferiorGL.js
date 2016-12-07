@@ -46,7 +46,7 @@ function UnitHandler() {
     /**
      * Updates units and removes ref if scheduled to be deleted.
      * 
-     * @param {Ninja} world @TODO can't be passing the entire universe around like this smh
+     * @param {Universe} world @TODO can't be passing the entire universe around like this smh
      */
     this.update = function (world) {
         if (this.list[0].x > 0) {

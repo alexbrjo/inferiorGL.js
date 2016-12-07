@@ -53,7 +53,7 @@
  *      Alright free time coming up. This is still a mess, but recoverable.
  *      Docs and unit tests are a real must right now.
  *        1. Organizing and cleaning
- *              a. [ ] DOCS
+ *              a. [+] DOCS
  *              b. [ ] Unit tests via Karma
  *              c. [ ] Recode the level designer
  *        2. Plan remainder of project. As in like design the enemies, bosses,
@@ -65,7 +65,7 @@
 document.addEventListener(
     "DOMContentLoaded",
     function () {
-        var app = {rsc: null, ninja: null};
+        var app = {rsc: null, world: null};
         app.rsc = new ResourceLoader();
         app.rsc.load([
             "tiles.png", "rpgsoldier.png",
@@ -73,17 +73,17 @@ document.addEventListener(
             "hud.png", "bg.png"
         ]);
         app.rsc.whenReady(function () {
-            app.ninja = new Ninja(16, true, app.rsc);
+            app.world = new Universe(16, true, app.rsc);
 
             var main = function () {
-                app.ninja.update();
+                app.world.update();
                 aniFrame = window.requestAnimationFrame ||
                         window.mozRequestAnimationFrame ||
                         window.webkitRequestAnimationFrame ||
                         window.msRequestAnimationFrame ||
                         window.oRequestAnimationFrame;
-                aniFrame(main, app.ninja.g.canvas);
-            }
+                aniFrame(main, app.world.getCanvas());
+            };
             main();
         });
     }
