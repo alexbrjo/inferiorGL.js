@@ -4,36 +4,69 @@
  * @author Alex Johnson 2016 
  */  
 function inferiorGL(){
+    
+    /** All the objects to render */
     var objects = [];
+    
+    /**
+     * Adds a shape into the array.
+     * 
+     * @param {Shape} s The shape to add to the object list
+     * @returns {Shape} The shape added to the object list.
+     */
     this.addShape = function(s) {
         objects[objects.length] = s;
         return s;
     };
+    
+    /**
+     * Adds an array of shapes to the object list.
+     * 
+     * @param {Array} arr Array of shapes to add to the object list.
+     */
     this.addShapes = function(arr) {
         var th = this;
         arr.forEach(function(shape){
             th.addShape(shape);
         });
-        return arr;
     };
 
+    /**
+     * Gets the shape at the given index.
+     * 
+     * @param {int} x The index of the shape to return.
+     * @returns {Shape} The shape.
+     */
     this.getShape = function(x){return objects[x];};
     
+    /** The canvas to publish the rendered environment to */
     var canvas = null;
     var ctx = null;
-              
+    
+    /** The canvas to prerender shapes to */    
     var edit_canvas = null;
     var edit_ctx = null;
             
     var smoothing = true;
     this.target_spf = 0.016;
-              
+      
+    /** Loads extrnal resources */
     var rsc = new ResourceLoader();
+    
+    /** Updates current user input */
     var user = new DefaultController();
-    var camera = new Camera(10, 15, 10);                
-    // time = now, last, delta Time
+    
+    /** The camera object required to in RenderingContext3D render */
+    var camera = new Camera(10, 15, 10);  
+    
+    /** Updates current time */
     this.time = new Clock();
-              
+    
+    /**
+     * Initalizes the Inferior graphics library framework.
+     * 
+     * @param {Canvas} canvasElement The html canvas object to render objects on.
+     */
     this.init = function(canvasElement){
 
         canvas = canvasElement;
@@ -65,15 +98,21 @@ function inferiorGL(){
             main();
         });
     };
+    
     this.resize = function(){
-           
         if (!smoothing){   
             ctx.mozImageSmoothingEnabled = false;
             ctx.webkitImageSmoothingEnabled = false;
             ctx.msImageSmoothingEnabled = false;
             ctx.imageSmoothingEnabled = false;
         }
-    }
+    };
+    
+    /**
+     * Updates the camera and re-prints the image.
+     * 
+     * @param {type} dt The change in time since the last frame.
+     */
     this.update = function(dt){
         this.print();
         
@@ -120,6 +159,10 @@ function inferiorGL(){
         camera.y += user.getCtrl().vy * dt;
         camera.z += user.getCtrl().vz * dt;
     };
+    
+    /**
+     * Prints all the objects in the list.
+     */
     this.print = function(){
         // resize canvas to fit window. Resetting width or height clears canvas
         edit_canvas.width = canvas.width = window.innerWidth; 
@@ -127,7 +170,7 @@ function inferiorGL(){
         
         // draw each shape       
         for (var q = 0; q < objects.length; q++) {
-            if (q == 0) {
+            if (q === 0) {
                 edit_ctx.renderShape(objects[q]);
             } else {
                 edit_ctx.renderWireframeShape(objects[q]);
@@ -138,6 +181,15 @@ function inferiorGL(){
         ctx.drawImage(edit_canvas, 0, 0);
     };
     
+    /**
+     * Generates a clip matrix.
+     * 
+     * @param {type} fov Field of view
+     * @param {type} aspect The aspect ratio
+     * @param {type} near The near point of the pupil (closest distance to render).
+     * @param {type} far The far point of the pupil (farthest distance to render).
+     * @returns {Array} The clip matrix
+     */
     this.clipMatrix = function(fov, aspect, near, far){
         return [
                 [fov*aspect,    0,      0,                          0],
@@ -147,6 +199,9 @@ function inferiorGL(){
             ];
     };
     
+    /**
+     * Prints the debug console in the top left corner.
+     */
     this.printDebug = function() {
     	var t = this.time;
     	var lines = [

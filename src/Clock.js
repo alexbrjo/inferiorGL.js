@@ -22,7 +22,10 @@
     var min_spf = 0.032; // minimum seconds per frame
     var target_spf = 0.016; // target seconds per frame
     this.getSPF = function(){ return (this.dt < min_spf) ? this.dt : min_spf; };
-                  
+    
+    /**
+     * Updates the current time and iteration variables.
+     */
     this.update = function(){
         this.last = this.now;
         this.now = Date.now();
@@ -43,5 +46,5 @@
         this.it_12 = Math.round( (n - Math.trunc(n) )* 12-0.5);
         this.it_16 = Math.round( (n - Math.trunc(n) )* 16-0.5);
         this.it_24 = Math.round( (n - Math.trunc(n) )* 24-0.5);
-    }
+    };
 }

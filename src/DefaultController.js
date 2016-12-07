@@ -9,62 +9,62 @@ function DefaultController () {
             
     this.getCtrl = function () {
         return ctrl;
-    }
+    };
             
     window.onresize = this.resize;
     window.onkeydown = function(x){
-        if(x.which == "A".charCodeAt()) { 
+        if(x.which === "A".charCodeAt()) { 
             ctrl.left = true;
-        } else if(x.which == "D".charCodeAt()) {
+        } else if(x.which === "D".charCodeAt()) {
             ctrl.right = true;
-        } else if(x.which == "S".charCodeAt()) {
+        } else if(x.which === "S".charCodeAt()) {
             ctrl.backward = true;
-        } else if(x.which == "W".charCodeAt()) {
+        } else if(x.which === "W".charCodeAt()) {
             ctrl.forward = true;
         }
         
-        if(x.which == "J".charCodeAt()) {
+        if(x.which === "J".charCodeAt()) {
             ctrl.turnleft = true;
-        } else if(x.which == "L".charCodeAt()) {
+        } else if(x.which === "L".charCodeAt()) {
             ctrl.turnright = true;
         }
         
-        if(x.which == "I".charCodeAt()) {
+        if(x.which === "I".charCodeAt()) {
             ctrl.turnup = true;
-        } else if(x.which == "K".charCodeAt()) {
+        } else if(x.which === "K".charCodeAt()) {
             ctrl.turndown = true;
         }
         
-        if(x.which == "Q".charCodeAt()) { 
+        if(x.which === "Q".charCodeAt()) { 
             ctrl.up = true;
-        } else if(x.which == "E".charCodeAt()) { 
+        } else if(x.which === "E".charCodeAt()) { 
             ctrl.down = true;
         }
     };
     window.onkeyup = function(x){
-        if(x.which == "A".charCodeAt()) { 
+        if(x.which === "A".charCodeAt()) { 
             ctrl.left = false;
-        } else if(x.which == "D".charCodeAt()) {
+        } else if(x.which === "D".charCodeAt()) {
             ctrl.right = false;
-        } else if(x.which == "S".charCodeAt()) {
+        } else if(x.which === "S".charCodeAt()) {
             ctrl.backward = false;
-        } else if(x.which == "W".charCodeAt()) {
+        } else if(x.which === "W".charCodeAt()) {
             ctrl.forward = false;
         }
         
-        if(x.which == "J".charCodeAt()) {
+        if(x.which === "J".charCodeAt()) {
             ctrl.turnleft = false;
-        } else if(x.which == "L".charCodeAt()) {
+        } else if(x.which === "L".charCodeAt()) {
             ctrl.turnright = false;
         }
         
-        if(x.which == "I".charCodeAt()) {
+        if(x.which === "I".charCodeAt()) {
             ctrl.turnup = false;
-        } else if(x.which == "K".charCodeAt()) {
+        } else if(x.which === "K".charCodeAt()) {
             ctrl.turndown = false;
         }
         
-        if(x.which == "Q".charCodeAt()) ctrl.up = false; 
-        if(x.which == "E".charCodeAt()) ctrl.down = false;
+        if(x.which === "Q".charCodeAt()) ctrl.up = false; 
+        if(x.which === "E".charCodeAt()) ctrl.down = false;
     };
 }

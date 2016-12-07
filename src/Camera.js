@@ -19,16 +19,20 @@ function Camera(x, y, z){
     this.y = y;
     this.z = z;
     
-    /* yaw, pitch, roll */
+    /** The yaw of the camera */
     this.theta_x = -Math.PI/4;
+    
+    /** The pitch of the camera */
     this.theta_y = -Math.PI/4;
+    
+    /** The roll of the camera */
     this.theta_z = 0;
     
-    this.scale = 4.0;
-    this.maxScale = 6;
-    this.edgeBuffer = 2;
-    this.range = {x:0, y:0};
-    
+    /**
+     * The current rotation of the camera
+     * 
+     * @returns {Array} The rotation in pitch, yaw, spin
+     */
     this.getRotation = function(){
         return [
             Math.sin(this.theta_y),
@@ -37,6 +41,11 @@ function Camera(x, y, z){
         ];
     };
     
+    /**
+     * Creates an object with the postition of the camera.
+     * 
+     * @returns {Object} The location of the camera relative to the origin
+     */
     this.getTransform = function(){
         return {
             x: this.x,

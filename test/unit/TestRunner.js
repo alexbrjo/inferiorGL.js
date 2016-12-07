@@ -7,9 +7,9 @@
 function TestRunner(c){
     var testClass = c;
     var tests = [];
-    var passText = function() { return "<span style=\"font-weight: bold; color:green;\">PASS\n</span>"};
-    var failText = function() { return "<span style=\"font-weight: bold; color:red;\">FAIL\n</span>"};
-    var elseText = function(e) { return "<span style=\"font-weight: bold; color:#FFA500;\">" + e + "\n</span>"};
+    var passText = function() { return "<span style=\"font-weight: bold; color:green;\">PASS\n</span>";};
+    var failText = function() { return "<span style=\"font-weight: bold; color:red;\">FAIL\n</span>";};
+    var elseText = function(e) { return "<span style=\"font-weight: bold; color:#FFA500;\">" + e + "\n</span>";};
     
     /**
      * Adds a new test to the test array.
@@ -21,26 +21,26 @@ function TestRunner(c){
      */
     this.run = function(name, expected, actual, comparator) {
         
-        if (typeof comparator == "string") {
+        if (typeof comparator === "string") {
             
             comparator = comparator.toLowerCase();
             
-            if (comparator == "string") {
+            if (comparator === "string") {
                 comparator = compareString;
-            } else if (comparator == "number") {
+            } else if (comparator === "number") {
                 comparator = compareNumber;
-            } else if (comparator == "array") {
+            } else if (comparator === "array") {
                 comparator = compareArray;
             } else {
                 throw new TypeError();
             }
             
-        } else if (typeof comparator == "undefined"){
+        } else if (typeof comparator === "undefined"){
             comparator = compareDefault;
         }
         
         tests.push({name: name, exp: expected, act: actual, compare: comparator});
-    }
+    };
     
     /**
      * Adds the test result to a HTML table
@@ -68,7 +68,7 @@ function TestRunner(c){
             
         }   
         element.innerHTML = element.innerHTML +  "<h2>" + testClass + "</h2>" + contents;
-    }
+    };
     
     /**
      * Compares two numbers to 10 decimal places
@@ -79,12 +79,12 @@ function TestRunner(c){
      */
     function compareNumber(a, b) {
         
-        if (typeof a != "number" || typeof b != "number") {
+        if (typeof a !== "number" || typeof b !== "number") {
             return false;
         }
         
-        return a.toFixed(10) == b.toFixed(10) ? passText() : failText();
-    }
+        return a.toFixed(10) === b.toFixed(10) ? passText() : failText();
+    };
     
     /**
      * Compares two arrays of numbers by cell to avoid false fails.
@@ -123,11 +123,11 @@ function TestRunner(c){
      */
     function compareString(a, b) {
         
-        if (typeof a != "string" || typeof b != "string") {
+        if (typeof a !== "string" || typeof b !== "string") {
             return false;
         }
         
-        return (a == b) ? passText() : failText();
+        return (a === b) ? passText() : failText();
     }
     
     /**
@@ -138,6 +138,6 @@ function TestRunner(c){
      * @return {String} test result
      */
     function compareDefault(a, b) {
-        return (a == b) ? passText() : failText();
+        return (a === b) ? passText() : failText();
     }
 }
