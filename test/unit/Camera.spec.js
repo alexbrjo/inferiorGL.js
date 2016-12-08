@@ -4,7 +4,7 @@
  * @author Alex Johnson
  */
 
-describe("testCamera", function() {
+describe("Camera", function() {
     
     var cam;
     
