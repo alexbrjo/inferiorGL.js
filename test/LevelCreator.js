@@ -5,7 +5,7 @@ function Camera(){
     this.x = 0;
     this.y = 0,
     this.focusObj = null;
-    this.scale = 4.0;
+    this.scale = 1.0;
     this.maxScale = 6;
     this.edgeBuffer = 2;
     this.range = {x:0, y:0};
@@ -140,6 +140,43 @@ function Camera(){
         this.it_24 = Math.round( (n - Math.trunc(n) )* 24-0.5);
     }
 }
+;function Control () {
+    
+    /** If the space bar is pressed down*/
+    this.space = false;
+
+    /**
+     * 
+     * @param {Number} which The char code of the key that is down
+     * @param {Boolean} down If the key is down
+     */
+    this.setKey = function (which, down) {
+        if (which >= 65 && which <= 90) {
+            var key = String.fromCharCode(which);
+            this[key.toLowerCase()] = down;
+        } else {
+            if (which === 32) this.space = down;
+        }
+    };
+    
+    /**
+     * Sets all keys a to z to false
+     */
+    for (var i = 65; i <= 90; i++) {
+        this.setKey(i, false);
+    }
+    
+    /**
+     * Makes key listeners callback here
+     */
+    var t = this;
+    window.onkeydown = function (x) {
+        t.setKey(x.which, true);
+    };
+    window.onkeyup = function (x) {
+        t.setKey(x.which, false);
+    };
+}
 ;/** 
  * Contains canvas objects and handles all rendering. Graphics were chosen to not be 
  * drawn in entity classes. All 
@@ -188,7 +225,6 @@ var Graphics = function(camera) {
      * dispatching functions for drawing all items in the queue
      *
      *	@param {Universe} world The entire universe
-     *	@param {position} Object with x y of where to center camera.
      */
     this.print = function(world) {
 	
@@ -498,101 +534,11 @@ var Level = function(w, h){
          };
     };
 };
-;/** Copyright Alex Johnson 2016 
- *
- *  Special thanks to:
- *  https://hacks.mozilla.org/2011/08/animating-with-javascript-from-
- *  setinterval-to-requestanimationframe/
- *  
- *  http://programmers.stackexchange.com/questions/194822/when-to-separate-a-project-in-multiple-subprojects
- *
- *  The Pros and cons of Variable framerate
- *  http://www.learn-cocos2d.com/2013/10/game-engine-multiply-delta-time-or-not/
- * 
- *  http://zackbellgames.com/2014/10/27/how-to-make-a-platformer-feel-good/
- *
- *	- Stung by a dead bee
- *	- Corner a dog in a deadend street and he will turn around and bite
- *	- Prey that fights back is not prey
- *	- What kills you makes you stronger
- *	- Pain is gain
- *	
- * 
- *   1/3/2016:
- *   - Cannot do full srceen uses two much ram to render terrain. Must be doing something 
- *   	wrong
- *      - uses  50% ram at ~250 blocks and 60 fps (capped by chrome canvas implementation?)
- *      - uses  60% ram at ~300 blocks and 60 fps (capped?)
- *      - uses 100% ram at ~650 blocks and 50 fps (fps dips)
- *
- *  2/3/2016: 
- *  - fps issue resolved (was defining large array every time l.terrain() was called)
- *      - uses 50% ram at  ~650 blocks and 60 fps
- *      - uses 55% ram at ~1700 blocks and 60 fps
- *      - uses 60% ram at 3000+ blocks and 60 fps
- *
- *  30/9/2016:
- *	- Finally found time to start dev again. Current issues/tasks:
- *  	[+] Entire app needs to be doc'd and named better. This is barely readable
- *		[+] File structure needs to be redone
- *		[+] Break up the massive main object
- *		[+] Git or some sort of source control
- *	[-] Core TODO:
- *		[-] ResourceLoader should be able to handle js and json
- *		[-] Change levelData from JS functions to json
- *      [+/-] Change debug console display from HTML to canvas
- *		[+] Consider removing jQuery dependency; only used 10 times total
- *		[-] Add settings .json for constants. 
- *	[+/-] Game TODO: 
- *		[-] Plan out plot/story line/characters/scenes
- *		[-] Design backgrounds
- *		[+] Clean up and separate Units.js
- *		[-] Add entities to LevelData
- *
- *  4/12/2016
- *      Alright free time coming up. This is still a mess, but recoverable.
- *      Docs and unit tests are a real must right now.
- *        1. Organizing and cleaning
- *              a. [+] DOCS
- *              b. [ ] Unit tests via Karma
- *              c. [ ] Recode the level designer
- *        2. Plan remainder of project. As in like design the enemies, bosses,
- *           environment and levels.
- *
- *  @author Alex Johnson 
- */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-        var app = {rsc: null, world: null};
-        app.rsc = new ResourceLoader();
-        app.rsc.load([
-            "tiles.png", "rpgsoldier.png",
-            "warrior.png", "enemy.png",
-            "hud.png", "bg.png"
-        ]);
-        app.rsc.whenReady(function () {
-            app.world = new Universe(16, true, app.rsc);
-
-            var main = function () {
-                app.world.update();
-                aniFrame = window.requestAnimationFrame ||
-                        window.mozRequestAnimationFrame ||
-                        window.webkitRequestAnimationFrame ||
-                        window.msRequestAnimationFrame ||
-                        window.oRequestAnimationFrame;
-                aniFrame(main, app.world.getCanvas());
-            };
-            main();
-        });
-    }
-);
 ;/**
  * Preloads and loads IMG and additional JS files.
  */
 function ResourceLoader() {
-    
+
     /** Object containing all loaded resources */
     var rscElements = {};
     
@@ -611,7 +557,7 @@ function ResourceLoader() {
     /** 
      * Loads a new file or series of files.
      * 
-     * @param {String|Array} File name or array of file names to load. 
+     * @param {String|Array} f File name or array of file names to load. 
      */
     this.load = function (f) {
         if (f instanceof Array) {
@@ -623,7 +569,7 @@ function ResourceLoader() {
             inQueue++;
             doLoad(f);
         }
-    }
+    };
 
     /**
      * Determines file type and if the file has already been loaded.
@@ -654,7 +600,7 @@ function ResourceLoader() {
         img.onload = function () {
             rscElements[file] = img;
             inQueue--;
-            if (inQueue == 0) {
+            if (inQueue === 0) {
                 callback();
             }
         };
@@ -662,7 +608,7 @@ function ResourceLoader() {
             console.log("file " + path_img + file + " doesn't exist");
             rscElements[file] = null;
             inQueue--;
-            if (inQueue == 0) {
+            if (inQueue === 0) {
                 callback();
             }
         };
@@ -688,7 +634,7 @@ function ResourceLoader() {
         js.onload = function () {
             rscElements[file] = js;
             inQueue--;
-            if (inQueue == 0) {
+            if (inQueue === 0) {
                 callback();
             }
         };
@@ -696,7 +642,7 @@ function ResourceLoader() {
             console.log("file " + path_js + file + " doesn't exist");
             rscElements[file] = null;
             inQueue--;
-            if (inQueue == 0) {
+            if (inQueue === 0) {
                 callback();
             }
         };
@@ -707,12 +653,12 @@ function ResourceLoader() {
     /** 
      * Gets the reloaded image element for it's file path
      * 
-     * @param String path
-     * @returns object|img element
+     * @param {String} path The path of the img to load
+     * @returns {object|img} element
      */
     this.get = function (path) {
         return rscElements[path];
-    }
+    };
 
     /**
      * Sets the callback function.
@@ -721,7 +667,7 @@ function ResourceLoader() {
      */
     this.whenReady = function (f) {
         callback = f;
-    }
+    };
 
 };/** 
  * Keeps track of game statistics. Mainly for debugging 
@@ -844,7 +790,7 @@ function UnitHandler() {
  * @param {ResourceLoader} rsc 
  */  
 function Universe(tileSize, debug, rsc){
-
+    
     /** {Number} The height and width of the foreground tiles */
     this.tileSize = tileSize;
 
@@ -871,12 +817,21 @@ function Universe(tileSize, debug, rsc){
     
     /** {Stats} Runs statistics for analytics */
     this.stats = new Stats();
-
+    
+    /** {Control} Keeps track of current user input */
+    this.controller = new Control();
+    
     /**
      * The main game loop. Called dt/1000 times a second. Must be implemented
-     * by whenever Univererse extends this one.
+     * by sub-Universe.
      */
-    this.update = function(){}
+    this.update = function () {};
+    
+    /**
+     * The initialization of the universe presets.
+     * Must be implemented by sub-universe;
+     */
+    this.init = function () {};
     
     /**
      * Access to all the units currently loaded.
@@ -902,7 +857,7 @@ function Universe(tileSize, debug, rsc){
 document.addEventListener(
     "DOMContentLoaded",
     function () {
-        var app = {rsc: null, world: null};
+        var app = {rsc: null, universe: null};
         app.rsc = new ResourceLoader();
         app.rsc.load([
             "tiles.png", "rpgsoldier.png",
@@ -910,16 +865,17 @@ document.addEventListener(
             "hud.png", "bg.png"
         ]);
         app.rsc.whenReady(function () {
-            app.world = new LevelCreator(16, true, app.rsc);
+            app.universe = new LevelCreator(16, true, app.rsc);
+            app.universe.init();
 
             var main = function () {
-                app.world.update();
+                app.universe.update();
                 aniFrame = window.requestAnimationFrame ||
                         window.mozRequestAnimationFrame ||
                         window.webkitRequestAnimationFrame ||
                         window.msRequestAnimationFrame ||
                         window.oRequestAnimationFrame;
-                aniFrame(main, app.world.getCanvas());
+                aniFrame(main, app.universe.getCanvas());
             };
             main();
         });
@@ -944,6 +900,16 @@ function LevelCreator(tileSize, debug, rsc){
     }
 
     this.units.newPlayer(150, 70);
+    this.wizard = new Wizard(0, 0);
+    this.wizard.setController(this.controller);
+    this.camera.setFocusObj(this.wizard);
+    this.camera.scale = 2.0;
+    
+    var g = this.graphics;
+
+    window.onresize = function () {
+        g.zoomed = false;
+    };
     
     /**
      * The main game loop. Called dt/1000 times a second.
@@ -951,37 +917,31 @@ function LevelCreator(tileSize, debug, rsc){
     this.update = function(){
         this.stats.addStat("fps", this.time.fps);
 	this.time.update(); // updates the time 
-        this.units.update(this); // moves things
+        this.camera.update(window.innerWidth, window.innerHeight);
         this.graphics.print(this, this.units.p); // draws things
+        this.wizard.update();
     };
-    
-    var p = this.units.p;
-    var g = this.graphics;
-    /** @TODO Seperate object for user input */
-    window.onkeydown = function(x){
-             if(x.which === 48) p.inventory(1);
-             if(x.which === 32) p.setMove(0, true); // SPACEBAR
-             if(x.which === 65) p.setMove(4, true); //A
-             if(x.which === 68) p.setMove(2, true); //D
-             if(x.which === 83) p.setMove(3, true); //S
-             if(x.which === 87) p.setMove(1, true); //W
-             if(x.which === 74) p.setMove(5, true); //j
-             if(x.which === 75) p.setMove(6, true); //k
-    };
-    window.onkeyup = function(x){
-            if(x.which === 32) p.setMove(0, false); // SPACEBAR
-            if(x.which === 65) p.setMove(4, false); //A
-            if(x.which === 68) p.setMove(2, false); //D
-            if(x.which === 83) p.setMove(3, false); //S
-            if(x.which === 87) p.setMove(1, false); //W
-            if(x.which === 74) p.setMove(5, false); //j
-            if(x.which === 75) p.setMove(6, false); //k
-    };
-    window.onresize = function () {
-        g.zoomed = false;
-    }
 }
-    ;/* Copyright Alex Johnson 2016 */
+    ;function Wizard(x, y) {
+    this.x = x;
+    this.y = y;
+    
+    this.vx = 0;
+    this.vy = 0;
+   
+   var ctrl = null;
+   this.setController = function (c){
+       ctrl = c;
+   };
+   
+    this.update = function () {
+        if (ctrl.a) this.x--;
+        if (ctrl.d) this.x++;
+        if (ctrl.w) this.y--;
+        if (ctrl.s) this.y++;
+    };
+}
+;/* Copyright Alex Johnson 2016 */
 
 var Player = function () {
 
@@ -996,6 +956,11 @@ var Player = function () {
     this.maxHealth = 10;
     this.imgSize = 40;
     this.imgDisplacement = [12, 15];
+    
+    var ctrl;
+    this.setController = function (controller) {
+        ctrl = controller;
+    };
     
     this.invunerableUntil = 0;
 
@@ -1014,9 +979,9 @@ var Player = function () {
         /*
          DO DAMAGE TO ENEMYS
          */
-        if (!this.attack && this.attackTick === 0) { // if attack button isn't pressed
-            this.attackTick = -1 // prime attack, this makes sure it doesn't jump loop attack animations
-        } else if (this.attack && this.attackTick === -1) { // if attack button is pressed and
+        if (!ctrl.k && this.attackTick === 0) { // if attack button isn't pressed
+            this.attackTick = -1; // prime attack, this makes sure it doesn't jump loop attack animations
+        } else if (ctrl.k && this.attackTick === -1) { // if attack button is pressed and
             this.attackTick = 12;
         }
         if (this.attackTick > 0) {
@@ -1060,20 +1025,20 @@ var Player = function () {
          GIVE PLAYER DESIRED DIRECTION (VELOCITIES)
          */
         if (this.canMove) {
-            if (this.jump && this.jumpPrimed && !this.airbourne) {
+            if (ctrl.space && this.jumpPrimed && !this.airbourne) {
                 this.vy = -8.0;
                 this.airbourne = true;
                 this.jumpPrimed = false;
-            } else if (!this.jump) {
+            } else if (!ctrl.space) {
                 this.jumpPrimed = true;
             }
 
-            if (!this.left && !this.right)
+            if (!ctrl.a && !ctrl.d)
                 this.vx = 0;
-            if (this.left) { // left
+            if (ctrl.d) { // right
                 this.vx = this.speed * t;
                 this.direction = 1;
-            } else if (this.right) { // right
+            } else if (ctrl.a) { // left
                 this.vx = -this.speed * t;
                 this.direction = 0;
             }
@@ -1096,7 +1061,7 @@ var Player = function () {
         pos.y -= this.imgDisplacement[1];
 
         if (this.airbourne) { // jumping/falling
-            if (!this.attack) { // just jumping/falling
+            if (!ctrl.k) { // just jumping/falling
                 if (Math.abs(this.vy) > 3) {
                     s.x = 0;
                     s.y = (5 - this.direction) * 40;
@@ -1168,42 +1133,6 @@ var Player = function () {
             pos: pos, // position on canvas (happens to be the same to AABB)
             AABB: aabb // Axis-aligned bounding box
         };
-    };
-
-    this.setMove = function (key, pressed) {
-        if (pressed) {
-            if (key === 0) {
-                this.jump = true;
-            } else if (key === 1) {
-                this.up = true;
-            } else if (key === 2) {
-                this.left = true;
-            } else if (key === 3) {
-                this.down = true;
-            } else if (key === 4) {
-                this.right = true;
-            } else if (key === 5) {
-                this.jump = true;
-            } else if (key === 6) {
-                this.attack = true;
-            }
-        } else if (!pressed) {
-            if (key === 0) {
-                this.jump = false;
-            } else if (key === 1) {
-                this.up = false;
-            } else if (key === 2) {
-                this.left = false;
-            } else if (key === 3) {
-                this.down = false;
-            } else if (key === 4) {
-                this.right = false;
-            } else if (key === 5) {
-                this.jump = false;
-            } else if (key === 6) {
-                this.attack = false;
-            }
-        }
     };
 };;/* Copyright Alex Johnson 2016 */
 
@@ -1314,15 +1243,6 @@ function Unit(id, x, y) {
     /** Whether the Unit can move or not */
     this.canMove = true;
     
-    /** Whether the Unit is currently jumping */ 
-    this.jump = false;
-    
-    /** Whether the Unit is currently attacking */
-    this.attack = false;
-    
-    /** The direction that the player wants to move */
-    this.up = false, this.left = false, this.down = false, this.right = false;
-    
     /** The hit points of the Unit */
     this.health = 1;
     
@@ -1404,19 +1324,19 @@ function Unit(id, x, y) {
             case 0:
                 return {x: x, y: y};
             case 1:
-                return {x: x, y: y + this.height * 1 / 2}
+                return {x: x, y: y + this.height * 1 / 2};
             case 2:
-                return {x: x, y: y + this.height}
+                return {x: x, y: y + this.height};
             case 3:
-                return {x: x + (this.width * 1 / 2), y: y}
+                return {x: x + (this.width * 1 / 2), y: y};
             case 4:
-                return {x: x + (this.width * 1 / 2), y: y + this.height}
+                return {x: x + (this.width * 1 / 2), y: y + this.height};
             case 5:
-                return {x: x + this.width, y: y}
+                return {x: x + this.width, y: y};
             case 6:
-                return {x: x + this.width, y: y + this.height * 1 / 2}
+                return {x: x + this.width, y: y + this.height * 1 / 2};
             case 7:
-                return {x: x + this.width, y: y + this.height}
+                return {x: x + this.width, y: y + this.height};
             default: 
                 return 8;
         }

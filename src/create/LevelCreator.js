@@ -16,11 +16,16 @@ function LevelCreator(tileSize, debug, rsc){
     }
 
     this.units.newPlayer(150, 70);
-    this.wizard = {
-        x: 0,
-        y: 0,
-    };
+    this.wizard = new Wizard(0, 0);
+    this.wizard.setController(this.controller);
     this.camera.setFocusObj(this.wizard);
+    this.camera.scale = 2.0;
+    
+    var g = this.graphics;
+
+    window.onresize = function () {
+        g.zoomed = false;
+    };
     
     /**
      * The main game loop. Called dt/1000 times a second.
@@ -28,33 +33,9 @@ function LevelCreator(tileSize, debug, rsc){
     this.update = function(){
         this.stats.addStat("fps", this.time.fps);
 	this.time.update(); // updates the time 
+        this.camera.update(window.innerWidth, window.innerHeight);
         this.graphics.print(this, this.units.p); // draws things
+        this.wizard.update();
     };
-    
-    var p = this.units.p;
-    var g = this.graphics;
-    /** @TODO Seperate object for user input */
-    window.onkeydown = function(x){
-             if(x.which === 48) p.inventory(1);
-             if(x.which === 32) p.setMove(0, true); // SPACEBAR
-             if(x.which === 65) p.setMove(4, true); //A
-             if(x.which === 68) p.setMove(2, true); //D
-             if(x.which === 83) p.setMove(3, true); //S
-             if(x.which === 87) p.setMove(1, true); //W
-             if(x.which === 74) p.setMove(5, true); //j
-             if(x.which === 75) p.setMove(6, true); //k
-    };
-    window.onkeyup = function(x){
-            if(x.which === 32) p.setMove(0, false); // SPACEBAR
-            if(x.which === 65) p.setMove(4, false); //A
-            if(x.which === 68) p.setMove(2, false); //D
-            if(x.which === 83) p.setMove(3, false); //S
-            if(x.which === 87) p.setMove(1, false); //W
-            if(x.which === 74) p.setMove(5, false); //j
-            if(x.which === 75) p.setMove(6, false); //k
-    };
-    window.onresize = function () {
-        g.zoomed = false;
-    }
 }
     

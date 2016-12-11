@@ -2,7 +2,7 @@
  * Preloads and loads IMG and additional JS files.
  */
 function ResourceLoader() {
-    
+
     /** Object containing all loaded resources */
     var rscElements = {};
     
@@ -21,7 +21,7 @@ function ResourceLoader() {
     /** 
      * Loads a new file or series of files.
      * 
-     * @param {String|Array} File name or array of file names to load. 
+     * @param {String|Array} f File name or array of file names to load. 
      */
     this.load = function (f) {
         if (f instanceof Array) {
@@ -33,7 +33,7 @@ function ResourceLoader() {
             inQueue++;
             doLoad(f);
         }
-    }
+    };
 
     /**
      * Determines file type and if the file has already been loaded.
@@ -64,7 +64,7 @@ function ResourceLoader() {
         img.onload = function () {
             rscElements[file] = img;
             inQueue--;
-            if (inQueue == 0) {
+            if (inQueue === 0) {
                 callback();
             }
         };
@@ -72,7 +72,7 @@ function ResourceLoader() {
             console.log("file " + path_img + file + " doesn't exist");
             rscElements[file] = null;
             inQueue--;
-            if (inQueue == 0) {
+            if (inQueue === 0) {
                 callback();
             }
         };
@@ -98,7 +98,7 @@ function ResourceLoader() {
         js.onload = function () {
             rscElements[file] = js;
             inQueue--;
-            if (inQueue == 0) {
+            if (inQueue === 0) {
                 callback();
             }
         };
@@ -106,7 +106,7 @@ function ResourceLoader() {
             console.log("file " + path_js + file + " doesn't exist");
             rscElements[file] = null;
             inQueue--;
-            if (inQueue == 0) {
+            if (inQueue === 0) {
                 callback();
             }
         };
@@ -117,12 +117,12 @@ function ResourceLoader() {
     /** 
      * Gets the reloaded image element for it's file path
      * 
-     * @param String path
-     * @returns object|img element
+     * @param {String} path The path of the img to load
+     * @returns {object|img} element
      */
     this.get = function (path) {
         return rscElements[path];
-    }
+    };
 
     /**
      * Sets the callback function.
@@ -131,6 +131,6 @@ function ResourceLoader() {
      */
     this.whenReady = function (f) {
         callback = f;
-    }
+    };
 
 }

@@ -7,7 +7,7 @@
  * @param {ResourceLoader} rsc 
  */  
 function Universe(tileSize, debug, rsc){
-
+    
     /** {Number} The height and width of the foreground tiles */
     this.tileSize = tileSize;
 
@@ -34,12 +34,21 @@ function Universe(tileSize, debug, rsc){
     
     /** {Stats} Runs statistics for analytics */
     this.stats = new Stats();
-
+    
+    /** {Control} Keeps track of current user input */
+    this.controller = new Control();
+    
     /**
      * The main game loop. Called dt/1000 times a second. Must be implemented
-     * by whenever Univererse extends this one.
+     * by sub-Universe.
      */
-    this.update = function(){}
+    this.update = function () {};
+    
+    /**
+     * The initialization of the universe presets.
+     * Must be implemented by sub-universe;
+     */
+    this.init = function () {};
     
     /**
      * Access to all the units currently loaded.

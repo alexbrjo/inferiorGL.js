@@ -65,7 +65,7 @@
 document.addEventListener(
     "DOMContentLoaded",
     function () {
-        var app = {rsc: null, world: null};
+        var app = {rsc: null, universe: null};
         app.rsc = new ResourceLoader();
         app.rsc.load([
             "tiles.png", "rpgsoldier.png",
@@ -73,16 +73,17 @@ document.addEventListener(
             "hud.png", "bg.png"
         ]);
         app.rsc.whenReady(function () {
-            app.world = new World(16, true, app.rsc);
-
+            app.universe = new World(16, true, app.rsc);
+            app.universe.init();
+            
             var main = function () {
-                app.world.update();
+                app.universe.update();
                 aniFrame = window.requestAnimationFrame ||
                         window.mozRequestAnimationFrame ||
                         window.webkitRequestAnimationFrame ||
                         window.msRequestAnimationFrame ||
                         window.oRequestAnimationFrame;
-                aniFrame(main, app.world.getCanvas());
+                aniFrame(main, app.universe.getCanvas());
             };
             main();
         });

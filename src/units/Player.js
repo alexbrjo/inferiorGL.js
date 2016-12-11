@@ -14,6 +14,11 @@ var Player = function () {
     this.imgSize = 40;
     this.imgDisplacement = [12, 15];
     
+    var ctrl;
+    this.setController = function (controller) {
+        ctrl = controller;
+    };
+    
     this.invunerableUntil = 0;
 
     this.damage = function (d, time) {
@@ -31,9 +36,9 @@ var Player = function () {
         /*
          DO DAMAGE TO ENEMYS
          */
-        if (!this.attack && this.attackTick === 0) { // if attack button isn't pressed
-            this.attackTick = -1 // prime attack, this makes sure it doesn't jump loop attack animations
-        } else if (this.attack && this.attackTick === -1) { // if attack button is pressed and
+        if (!ctrl.k && this.attackTick === 0) { // if attack button isn't pressed
+            this.attackTick = -1; // prime attack, this makes sure it doesn't jump loop attack animations
+        } else if (ctrl.k && this.attackTick === -1) { // if attack button is pressed and
             this.attackTick = 12;
         }
         if (this.attackTick > 0) {
@@ -77,20 +82,20 @@ var Player = function () {
          GIVE PLAYER DESIRED DIRECTION (VELOCITIES)
          */
         if (this.canMove) {
-            if (this.jump && this.jumpPrimed && !this.airbourne) {
+            if (ctrl.space && this.jumpPrimed && !this.airbourne) {
                 this.vy = -8.0;
                 this.airbourne = true;
                 this.jumpPrimed = false;
-            } else if (!this.jump) {
+            } else if (!ctrl.space) {
                 this.jumpPrimed = true;
             }
 
-            if (!this.left && !this.right)
+            if (!ctrl.a && !ctrl.d)
                 this.vx = 0;
-            if (this.left) { // left
+            if (ctrl.d) { // right
                 this.vx = this.speed * t;
                 this.direction = 1;
-            } else if (this.right) { // right
+            } else if (ctrl.a) { // left
                 this.vx = -this.speed * t;
                 this.direction = 0;
             }
@@ -113,7 +118,7 @@ var Player = function () {
         pos.y -= this.imgDisplacement[1];
 
         if (this.airbourne) { // jumping/falling
-            if (!this.attack) { // just jumping/falling
+            if (!ctrl.k) { // just jumping/falling
                 if (Math.abs(this.vy) > 3) {
                     s.x = 0;
                     s.y = (5 - this.direction) * 40;
@@ -185,41 +190,5 @@ var Player = function () {
             pos: pos, // position on canvas (happens to be the same to AABB)
             AABB: aabb // Axis-aligned bounding box
         };
-    };
-
-    this.setMove = function (key, pressed) {
-        if (pressed) {
-            if (key === 0) {
-                this.jump = true;
-            } else if (key === 1) {
-                this.up = true;
-            } else if (key === 2) {
-                this.left = true;
-            } else if (key === 3) {
-                this.down = true;
-            } else if (key === 4) {
-                this.right = true;
-            } else if (key === 5) {
-                this.jump = true;
-            } else if (key === 6) {
-                this.attack = true;
-            }
-        } else if (!pressed) {
-            if (key === 0) {
-                this.jump = false;
-            } else if (key === 1) {
-                this.up = false;
-            } else if (key === 2) {
-                this.left = false;
-            } else if (key === 3) {
-                this.down = false;
-            } else if (key === 4) {
-                this.right = false;
-            } else if (key === 5) {
-                this.jump = false;
-            } else if (key === 6) {
-                this.attack = false;
-            }
-        }
     };
 };

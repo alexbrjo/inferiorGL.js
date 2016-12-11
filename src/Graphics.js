@@ -46,7 +46,6 @@ var Graphics = function(camera) {
      * dispatching functions for drawing all items in the queue
      *
      *	@param {Universe} world The entire universe
-     *	@param {position} Object with x y of where to center camera.
      */
     this.print = function(world) {
 	

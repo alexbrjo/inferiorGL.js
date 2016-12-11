@@ -49,15 +49,6 @@ function Unit(id, x, y) {
     /** Whether the Unit can move or not */
     this.canMove = true;
     
-    /** Whether the Unit is currently jumping */ 
-    this.jump = false;
-    
-    /** Whether the Unit is currently attacking */
-    this.attack = false;
-    
-    /** The direction that the player wants to move */
-    this.up = false, this.left = false, this.down = false, this.right = false;
-    
     /** The hit points of the Unit */
     this.health = 1;
     
@@ -139,19 +130,19 @@ function Unit(id, x, y) {
             case 0:
                 return {x: x, y: y};
             case 1:
-                return {x: x, y: y + this.height * 1 / 2}
+                return {x: x, y: y + this.height * 1 / 2};
             case 2:
-                return {x: x, y: y + this.height}
+                return {x: x, y: y + this.height};
             case 3:
-                return {x: x + (this.width * 1 / 2), y: y}
+                return {x: x + (this.width * 1 / 2), y: y};
             case 4:
-                return {x: x + (this.width * 1 / 2), y: y + this.height}
+                return {x: x + (this.width * 1 / 2), y: y + this.height};
             case 5:
-                return {x: x + this.width, y: y}
+                return {x: x + this.width, y: y};
             case 6:
-                return {x: x + this.width, y: y + this.height * 1 / 2}
+                return {x: x + this.width, y: y + this.height * 1 / 2};
             case 7:
-                return {x: x + this.width, y: y + this.height}
+                return {x: x + this.width, y: y + this.height};
             default: 
                 return 8;
         }

@@ -5,7 +5,7 @@ function Camera(){
     this.x = 0;
     this.y = 0,
     this.focusObj = null;
-    this.scale = 4.0;
+    this.scale = 1.0;
     this.maxScale = 6;
     this.edgeBuffer = 2;
     this.range = {x:0, y:0};
