@@ -5,23 +5,27 @@ module.exports = function (grunt) {
             options: {
                 separator: ';'
             },
-            dist: {
-                src: ['build/**/*.js'],
+            game: {
+                src: ['build/**/*.js', '!build/create/*'],
                 dest: 'dist/ninja.js'
+            },
+            creator: {
+                src: ['build/**/*.js', '!build/play/*'],
+                dest: 'dist/LevelCreator.js'
             }
         },
         copy:{
             build:{
-                cwd:'src',
-                src:['**'],
-                dest:'build',
-                expand:true
+                cwd: 'src',
+                src: ['**'],
+                dest: 'build',
+                expand: true
             },
             test:{
-                cwd:'dist',
-                src:"ninja.*",
-                dest:'test',
-                expand:true
+                cwd: 'dist',
+                src: ["ninja.*", "LevelCreator.*"],
+                dest: 'test',
+                expand: true
             }
         },
         clean:{
@@ -35,7 +39,8 @@ module.exports = function (grunt) {
         uglify: {
             build: {
                 files: {
-                    'dist/ninja.min.js': [ 'dist/ninja.js' ]
+                    'dist/ninja.min.js': [ 'dist/ninja.js' ],
+                    'dist/LevelCreator.min.js': [ 'dist/LevelCreator.js' ]
                 }
             }
         },
@@ -57,9 +62,18 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.registerTask(
+        'build-game', 
+        'cleans, copys to build folder and uglifies', 
+        ['clean', 'copy:build', 'concat:game', 'uglify', 'copy:test']
+    );
+    grunt.registerTask(
+        'build-creator', 
+        'cleans, copys to build folder and uglifies', 
+        ['clean', 'copy:build', 'concat:creator', 'uglify', 'copy:test']
+    );
+    grunt.registerTask(
         'build', 
         'cleans, copys to build folder and uglifies', 
-        ['clean', 'copy:build', 'concat', 'uglify', 'copy:test']
+        ['build-game', 'build-creator']
     );
-    
 };

@@ -16,6 +16,11 @@ function LevelCreator(tileSize, debug, rsc){
     }
 
     this.units.newPlayer(150, 70);
+    this.wizard = {
+        x: 0,
+        y: 0,
+    };
+    this.camera.setFocusObj(this.wizard);
     
     /**
      * The main game loop. Called dt/1000 times a second.
@@ -23,9 +28,8 @@ function LevelCreator(tileSize, debug, rsc){
     this.update = function(){
         this.stats.addStat("fps", this.time.fps);
 	this.time.update(); // updates the time 
-        this.units.update(this); // moves things
         this.graphics.print(this, this.units.p); // draws things
-    }
+    };
     
     var p = this.units.p;
     var g = this.graphics;

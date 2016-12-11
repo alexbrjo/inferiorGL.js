@@ -25,6 +25,9 @@ function World(tileSize, debug, rsc){
     this.units.newRPGsoldier(31*16, 13*16);
     this.units.newSoldier(84*16, 3*16);
     // ------------------------------------------------------//
+    
+    this.camera.setBounds(0, 0, 151 * 16, 30 * 16, true);
+    this.camera.setFocusObj(this.units.p);
 
     /**
      * The main game loop. Called dt/1000 times a second.
@@ -33,12 +36,13 @@ function World(tileSize, debug, rsc){
         this.stats.addStat("fps", this.time.fps);
 	this.time.update(); // updates the time 
         this.units.update(this); // moves things
-        this.graphics.print(this, this.units.p); // draws things
+        this.camera.update(window.innerWidth, window.innerHeight);
+        this.graphics.print(this); // draws things
     }
     
     
     var p = this.units.p;
-    var g = this.graphics;
+    var c = this.camera;
     /** @TODO Seperate object for user input */
     window.onkeydown = function(x){
              if(x.which === 48) p.inventory(1);
@@ -60,7 +64,7 @@ function World(tileSize, debug, rsc){
             if(x.which === 75) p.setMove(6, false); //k
     };
     window.onresize = function () {
-        g.zoomed = false;
-    }
+        c.zoomed = false;
+    };
 }
     

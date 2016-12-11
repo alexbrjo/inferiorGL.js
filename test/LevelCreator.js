@@ -1,4 +1,90 @@
-/** 
+/**
+ * Stores data for how the screen is drawn.
+ */
+function Camera(){
+    this.x = 0;
+    this.y = 0,
+    this.focusObj = null;
+    this.scale = 4.0;
+    this.maxScale = 6;
+    this.edgeBuffer = 2;
+    this.range = {x:0, y:0};
+    var bounds = {areSet: false, left: null, right: null, top: null, bottom: null};
+    this.zoom = function(factor) {
+        this.scale *= factor;
+        if (this.scale > this.maxScale) this.scale = this.maxScale;
+    };
+    
+    /** The size of a board tile */ 
+    var tileSize = 16;
+    
+    /**
+     * Updates the position of the camera.
+     * 
+     * @param {Number} display_width The width of the display.
+     * @param {Number} display_height The height of the display.
+     */
+    this.update = function (display_width, display_height) {
+         
+        if (!this.zoomed) {this.resize(display_width, display_height);}
+         
+        /**
+         * Centers Camera on the focusobj and prevents from moving out of 
+         * bounds
+         */
+        var half_width = display_width / (2 * this.scale);
+        var half_height = display_height / (2 * this.scale);
+        this.x = Math.round(Math.round(this.focusObj.x) - half_width);
+        this.y = Math.round(Math.round(this.focusObj.y) - half_height);
+         
+        /** 
+         * Prevents Camera from moving out of bounds
+         */
+        if (bounds.areSet) { 
+            if(this.x < bounds.left) this.x = bounds.left;
+            if(this.x + display_width > bounds.right) this.x = bounds.right;
+            if(this.y < bounds.top) this.y = bounds.top;
+            if(this.y + display_height > bounds.bottom) this.y = bounds.bottom;
+        }
+    };
+    
+    /**
+     * Resizes Camera range
+     * 
+     * @param {Number} display_width The width of the display.
+     * @param {Number} display_height The height of the display.
+     */
+    this.resize = function(display_width, display_height) {
+        this.range.x = Math.round( display_width / (tileSize * this.scale));
+        this.range.y = Math.round(display_height / (tileSize * this.scale));
+        this.zoomed = true;
+    };
+    
+    this.setBounds = function (left, right, top, bottom, disable) {
+        if (typeof left   !== "null" && typeof left   !== "number" &&
+            typeof right  !== "null" && typeof right  !== "number" && 
+            typeof top    !== "null" && typeof top    !== "number" &&
+            typeof bottom !== "null" && typeof bottom !== "number") {
+            throw TypeError("4 arguements of {Null|Number} required");
+        }
+        
+        bounds.left = left;
+        bounds.right = right;
+        bounds.top = top;
+        bounds.bottom = bottom;
+        
+        if (disable !== true) {
+            bounds.areSet = true;
+        }
+    };
+    this.enableBounds = function () {bounds.areSet = true;};
+    this.disableBounds = function () {bounds.areSet = false;};
+    
+    this.setFocusObj = function (o) {
+        this.focusObj = o;
+    };
+}
+;/** 
  * Handles all time calculations including delta time and iterations per second. 
  *
  *	@author Alex Johnson
@@ -62,9 +148,11 @@
  * queue. This variable that contains the 1 instance of this object is named 'g'. The  
  * actual graphical context is referred to as 'c' inside this function.
  *
- *	@author Alex Johnson
+ * @author Alex Johnson
+ * 
+ * @param {Camera} camera What part of the level to paint.
  */
-var Graphics = function() {
+var Graphics = function(camera) {
 
     /** canvas and context for the <canvas> displayed */  
     var display = document.getElementById('alexjo-ninja');
@@ -73,6 +161,8 @@ var Graphics = function() {
     /** canvas object to draw frame on */              
     var canvas = document.createElement('canvas');
     var ctx = canvas.getContext('2d');  
+    
+    this.camera = camera;
     
     /** Whether the canvas has been zoomed */
     this.zoomed = false;
@@ -93,53 +183,18 @@ var Graphics = function() {
     /** The number of entities rendered during the last update */
     this.entities_rendered = 0;
     
-    /** 
-     * Holds variables that are used to figure out what part of the board
-     * needs to be drawn 
-     */
-    this.camera = {
-    	x:0, y:0,
-    	scale: 4.0,
-    	maxScale: 6,
-        edgeBuffer: 2,
-        range: {x:0, y:0},
-        zoom: function(factor) {
-            this.scale *= factor;
-            if (this.scale > this.maxScale) this.scale = this.maxScale;
-        }
-    };
-         
-    /**
-     * Resizes graphical context and affected variables.
-     */
-    this.resize = function() {
-        this.camera.range.x = Math.round(display.width/(tileSize*this.camera.scale));
-        this.camera.range.y = Math.round(display.height/(tileSize*this.camera.scale));
-        this.zoomed = true;
-    };
-    
     /**
      * The master print function called once (1) an update loop. Is responsible for
      * dispatching functions for drawing all items in the queue
      *
      *	@param {Universe} world The entire universe
-     *	@param {x, y} object with x and y properties to center the camera on
+     *	@param {position} Object with x y of where to center camera.
      */
-    this.print = function(world, focus) {
-
-	var window_width = window.innerWidth/(2*this.camera.scale);
-        var window_height = window.innerHeight/(2*this.camera.scale);
-        this.camera.x = Math.round(Math.round(focus.x) - window_width);
-        this.camera.y = Math.round(Math.round(focus.y) - window_height);
-        if(this.camera.x < 0) this.camera.x = 0;
-        if(this.camera.x+window_width > 151*16) this.camera.x = 151*16;
-        if(this.camera.y < 0) this.camera.y = 0;
-        if(this.camera.y+window_height > 30*16) this.camera.y = 30*16;
+    this.print = function(world) {
 	
-         // clear the edit_ctx for a new frame
+        // clear the edit_ctx for a new frame
         canvas.width = display.width = window.innerWidth;
         canvas.height = display.height = window.innerHeight;
-        if (!this.zoomed) {this.resize();}
     	
         this.printTerrain(world);
     	this.printUnits(world);
@@ -191,20 +246,25 @@ var Graphics = function() {
                   
         this.blocks_rendered = 0;
         // the +2 try to change to a variable or integrate into camera.range.x
-        for (var i = trunc(this.camera.x) - this.camera.range.x + 2; 
-        		 i < trunc(this.camera.x) + this.camera.range.x + 2;
+        
+        for (var i = trunc(world.camera.x) - world.camera.range.x + 2; 
+        		 i < trunc(world.camera.x) + world.camera.range.x + 2;
         		 i++) {
-            for (var j = trunc(this.camera.y) - this.camera.range.y + 2; 
-            		 j < trunc(this.camera.y) + this.camera.range.y + 2; 
+            for (var j = trunc(world.camera.y) - world.camera.range.y + 2; 
+            		 j < trunc(world.camera.y) + world.camera.range.y + 2; 
             		 j++) {
-                var block = world.level.getBlockObject(tileSize*i, tileSize*j);
+                var block = world.level.getBlockObject(tileSize * i, tileSize * j);
                 var pos = block.pos; // pos of tile in background
                 var img = block.sprite; //pos of sprite on img file
 
+                if (Math.random() < 0.0001 && false) {
+                    console.log((pos.x + " " + world.camera.x) + " " +  (pos.y + " " + world.camera.y));
+                }
+                    
                 if (img.id > 0) {
                     ctx.drawImage(world.rsc.get(world.level.sprite_sheet),
-                            img.x*tileSize, img.y*tileSize, img.w, img.h,
-                            pos.x-this.camera.x, pos.y-this.camera.y, pos.w, pos.h);
+                            img.x * tileSize, img.y * tileSize, img.w, img.h,
+                            pos.x - world.camera.x, pos.y - world.camera.y, pos.w, pos.h);
                     this.blocks_rendered++;
                 }
             } // for j
@@ -226,12 +286,12 @@ var Graphics = function() {
         for (var i = 0; i < p.maxHealth; i++) {
     	    if (i < p.health) {
         	    ctx.drawImage(world.rsc.get("hud.png"),
-            	    0, 0, 9, 9,
-                	2, 30+9*i, 9, 9);
+                        0, 0, 9, 9,
+                	2, 30 + 9 * i, 9, 9);
             } else {
             	ctx.drawImage(world.rsc.get("hud.png"),
-                    9, 0, 9, 9,
-                	2, 30+9*i, 9, 9);
+                        9, 0, 9, 9,
+                	2, 30 + 9 * i, 9, 9);
             }
         }
     };
@@ -246,8 +306,8 @@ var Graphics = function() {
     this.printDebug = function(world, units) {
     	var t = world.time;
     	var lines = [
-    		"GameName in-dev v0.0.1 ("+ (Math.round(t.now/1000) - 
-    			Math.round(t.started/1000)) +" seconds old)",
+    		"GameName in-dev v0.0.1 ("+ (Math.round(t.now / 1000) - 
+    			Math.round(t.started / 1000)) +" seconds old)",
 			t.dt*1000 + " ms / " + t.fps + " fps",
 			units.list.length + " entities",
 			this.blocks_rendered + "/" + 
@@ -263,8 +323,8 @@ var Graphics = function() {
         
         var xspace = 12;
         var yspace = 12;
-        for (var i = 1; i<=lines.length; i++) {
-        	graphics.fillText( lines[i-1], xspace, yspace*(i+1));
+        for (var i = 1; i <= lines.length; i++) {
+        	graphics.fillText( lines[i - 1], xspace, yspace * (i + 1));
         }
 		graphics.restore(); //restores graphics settings
 		
@@ -278,10 +338,10 @@ var Graphics = function() {
 		graphics.strokeStyle = "red"; // blocks rendered
 		graphics.beginPath();
 		graphics.moveTo(graphX, graphY - 
-			((arr[i]/((this.camera.range.x*2)*(this.camera.range.y*2))) *graphmag));
+			((arr[i]/((this.camera.range.x * 2) * (this.camera.range.y * 2))) * graphmag));
 		for(var i = 1; i < arr.length; i++){
-			graphics.lineTo(graphX+i, graphY - 
-				((arr[i]/((this.camera.range.x*2)*(this.camera.range.y*2)))) *graphmag);
+			graphics.lineTo(graphX + i, graphY - 
+				((arr[i] / ((this.camera.range.x * 2) * (this.camera.range.y * 2)))) * graphmag);
 		}
 		graphics.stroke();
 		
@@ -289,9 +349,9 @@ var Graphics = function() {
 		arr = world.stats.entities_rendered;
 		graphics.strokeStyle = "blue"; // entities rendered
 				graphics.beginPath();
-		graphics.moveTo(graphX, graphY - arr[0]/6*graphmag);
+		graphics.moveTo(graphX, graphY - arr[0] / 6 * graphmag);
 		for(var i = 1; i < arr.length; i++){
-			graphics.lineTo(graphX+i, graphY - arr[i]/6*graphmag);
+			graphics.lineTo(graphX + i, graphY - arr[i] / 6 * graphmag);
 		}
 		graphics.stroke();
 		
@@ -299,9 +359,9 @@ var Graphics = function() {
 		arr = world.stats.frame_rate;
 		graphics.strokeStyle = "green"; //fps
 				graphics.beginPath();
-		graphics.moveTo(graphX, graphY - arr[0]/60*graphmag);
+		graphics.moveTo(graphX, graphY - arr[0] / 60 * graphmag);
 		for(var i = 1; i < arr.length; i++){
-			graphics.lineTo(graphX+i, graphY - arr[i]/60*graphmag);
+			graphics.lineTo(graphX + i, graphY - arr[i] /60 * graphmag);
 		}
 		graphics.stroke();
     };
@@ -438,6 +498,96 @@ var Level = function(w, h){
          };
     };
 };
+;/** Copyright Alex Johnson 2016 
+ *
+ *  Special thanks to:
+ *  https://hacks.mozilla.org/2011/08/animating-with-javascript-from-
+ *  setinterval-to-requestanimationframe/
+ *  
+ *  http://programmers.stackexchange.com/questions/194822/when-to-separate-a-project-in-multiple-subprojects
+ *
+ *  The Pros and cons of Variable framerate
+ *  http://www.learn-cocos2d.com/2013/10/game-engine-multiply-delta-time-or-not/
+ * 
+ *  http://zackbellgames.com/2014/10/27/how-to-make-a-platformer-feel-good/
+ *
+ *	- Stung by a dead bee
+ *	- Corner a dog in a deadend street and he will turn around and bite
+ *	- Prey that fights back is not prey
+ *	- What kills you makes you stronger
+ *	- Pain is gain
+ *	
+ * 
+ *   1/3/2016:
+ *   - Cannot do full srceen uses two much ram to render terrain. Must be doing something 
+ *   	wrong
+ *      - uses  50% ram at ~250 blocks and 60 fps (capped by chrome canvas implementation?)
+ *      - uses  60% ram at ~300 blocks and 60 fps (capped?)
+ *      - uses 100% ram at ~650 blocks and 50 fps (fps dips)
+ *
+ *  2/3/2016: 
+ *  - fps issue resolved (was defining large array every time l.terrain() was called)
+ *      - uses 50% ram at  ~650 blocks and 60 fps
+ *      - uses 55% ram at ~1700 blocks and 60 fps
+ *      - uses 60% ram at 3000+ blocks and 60 fps
+ *
+ *  30/9/2016:
+ *	- Finally found time to start dev again. Current issues/tasks:
+ *  	[+] Entire app needs to be doc'd and named better. This is barely readable
+ *		[+] File structure needs to be redone
+ *		[+] Break up the massive main object
+ *		[+] Git or some sort of source control
+ *	[-] Core TODO:
+ *		[-] ResourceLoader should be able to handle js and json
+ *		[-] Change levelData from JS functions to json
+ *      [+/-] Change debug console display from HTML to canvas
+ *		[+] Consider removing jQuery dependency; only used 10 times total
+ *		[-] Add settings .json for constants. 
+ *	[+/-] Game TODO: 
+ *		[-] Plan out plot/story line/characters/scenes
+ *		[-] Design backgrounds
+ *		[+] Clean up and separate Units.js
+ *		[-] Add entities to LevelData
+ *
+ *  4/12/2016
+ *      Alright free time coming up. This is still a mess, but recoverable.
+ *      Docs and unit tests are a real must right now.
+ *        1. Organizing and cleaning
+ *              a. [+] DOCS
+ *              b. [ ] Unit tests via Karma
+ *              c. [ ] Recode the level designer
+ *        2. Plan remainder of project. As in like design the enemies, bosses,
+ *           environment and levels.
+ *
+ *  @author Alex Johnson 
+ */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+        var app = {rsc: null, world: null};
+        app.rsc = new ResourceLoader();
+        app.rsc.load([
+            "tiles.png", "rpgsoldier.png",
+            "warrior.png", "enemy.png",
+            "hud.png", "bg.png"
+        ]);
+        app.rsc.whenReady(function () {
+            app.world = new Universe(16, true, app.rsc);
+
+            var main = function () {
+                app.world.update();
+                aniFrame = window.requestAnimationFrame ||
+                        window.mozRequestAnimationFrame ||
+                        window.webkitRequestAnimationFrame ||
+                        window.msRequestAnimationFrame ||
+                        window.oRequestAnimationFrame;
+                aniFrame(main, app.world.getCanvas());
+            };
+            main();
+        });
+    }
+);
 ;/**
  * Preloads and loads IMG and additional JS files.
  */
@@ -703,9 +853,15 @@ function Universe(tileSize, debug, rsc){
 
     /** {Clock} Manages dt and time analytics */
     this.time = new Clock();
+        
+    /** 
+     * Holds variables that are used to figure out what part of the board
+     * needs to be drawn 
+     */
+    this.camera = new Camera();
 
     /** {Graphics} */
-    this.graphics = new Graphics(16);
+    this.graphics = new Graphics(this.camera);
     
     /** {UnitHandler} Stores, manages and updates Units  */
     this.units = new UnitHandler();
@@ -717,10 +873,10 @@ function Universe(tileSize, debug, rsc){
     this.stats = new Stats();
 
     /**
-     * The main game loop. Called dt/1000 times a second. A undefined 
-     * Universe should never be created and this function must be overrid.
+     * The main game loop. Called dt/1000 times a second. Must be implemented
+     * by whenever Univererse extends this one.
      */
-    this.update = function(){};
+    this.update = function(){}
     
     /**
      * Access to all the units currently loaded.
@@ -732,9 +888,7 @@ function Universe(tileSize, debug, rsc){
     };
     
     /**
-     * Gets the canvas the double buffer layer of the graphics.
-     * 
-     * @returns {HTMLcanvas} the drawing canvas
+     * Returns an instance of the graphical drawing canvas
      */
     this.getCanvas = function () {
         return this.graphics.canvas;
@@ -799,7 +953,7 @@ function LevelCreator(tileSize, debug, rsc){
 	this.time.update(); // updates the time 
         this.units.update(this); // moves things
         this.graphics.print(this, this.units.p); // draws things
-    }
+    };
     
     var p = this.units.p;
     var g = this.graphics;
