@@ -89,43 +89,23 @@ function RenderingContext3D (c, camera) {
     };
     
     /**
-     * Fills each face of a shape with a solid color. Faces are sorted by 
-     * distance so the farthest face is drawn first and the closet face last. 
-     * To optimize speed faces are not included in the sort array in their 
-     * normal vector is facing away from the camera. 
-     * @todo implement variable (dependent on fov) Camera angle to determine 
-     *     which faces can be seen.
+     * Fills each face of a shape with a solid color. Faces are not drawn if 
+     * their normal vector is facing away from the camera. 
      *
      * @param {Shape} shape Shape to draw
      */
     this.renderShape = function(shape){
-        var sortFace = [];
-        var cameraRotationVector = camera.getRotation();
-        for (var i = 0; i <= shape.faces.length-1; i++) { 
+        for (var i = 0; i <= shape.faces.length - 1; i++) { 
             var f = shape.faces[i];
-            var d = distanceBetween(f.origin, camera);
-            var p = this.projectPoint(f.origin);
-                        
-            var adjustedCameraRotationVector = [
-                cameraRotationVector[0] + p.x,
-                cameraRotationVector[1] + p.y,
-                cameraRotationVector[2]
-            ];
+            var o = f.origin;
+            var t = camera.getTransform();
+            var adjustedCameraRotationVector = [t.x - o.x, t.y - o.y, t.z - o.z];
             
-            if(Math.random() < 0.01) {
-                console.log(p);
+            if (angle(f.normal, adjustedCameraRotationVector) < Math.PI/2) { 
+                this.fillStyle = f.color;
+                this.projectPath(f.points);
+                this.fill();
             }
-            
-            if (angle(f.normal, adjustedCameraRotationVector) > Math.PI/2) {  
-                sortFace.push([f, d]);
-                sortFace.sort(function(p, q) {return q[1] - p[1];});
-            }
-        }
-         
-        for (var i = 0; i <= sortFace.length-1; i++) {
-            this.fillStyle = sortFace[i][0].color;
-            this.projectPath(sortFace[i][0].points);
-            this.fill(); 
         }
     };
     
