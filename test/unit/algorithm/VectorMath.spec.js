@@ -66,7 +66,10 @@ describe("Vector Math", function () {
      * <-165, 60, 51>
      */
     it("testCrossProduct int", function () {
-        expect(math.cross([1, 0, 0], [0, 1, 0])).toEqual([0, 0, 1]);
+        var vec = math.cross([1, 0, 0], [0, 1, 0]);
+        expect(vec[0]).toBeCloseTo(0, 10);
+        expect(vec[1]).toBeCloseTo(0, 10);
+        expect(vec[2]).toBeCloseTo(1, 10);
     });
 
     /**
@@ -82,7 +85,10 @@ describe("Vector Math", function () {
      * < 7.7, 1.1, -5.5>
      */
     it("testCrossProduct double", function () {
-        expect(math.cross(v1, v4)).toEqual([7.7, 1.1, -5.5]);
+        var vec = math.cross(v1, v4);
+        expect(vec[0]).toBeCloseTo(7.7, 10);
+        expect(vec[1]).toBeCloseTo(1.1, 10);
+        expect(vec[2]).toBeCloseTo(-5.5, 10);
     });
 
     /**

@@ -6,7 +6,9 @@ The graphics library I'm doubtful you're looking for
 
 InferiorGL was designed to function just like a traditional graphics library, 
 but due to my own lack of experience and poor attention to detail it's hard to 
-call it a graphics library at all.
+call it a graphics library at all. But in all seriousness I'm writing this for 
+better understand what goes into rending 3D graphics and to get practice 
+writing larger code projects. 
 
 How to try it out
 ----------------------

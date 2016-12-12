@@ -1,16 +1,24 @@
 /**
  * Represents a 3D camera object
  * @construct
+ * 
+ * @param {Number} x The x position of the Camera
+ * @param {Number} y The y position of the Camera
+ * @param {Number} z The z position of the Camera
+ * @param {Number} yaw The rotation in the x plane
+ * @param {Number} pitch The rotation in the y plane
+ * @param {Number} roll The rotation in the z plane
+
  */
-function Camera(x, y, z){
+function Camera(x, y, z, yaw, pitch , roll){
     
-    if (typeof x != "number") {
+    if (typeof x !== "number") {
         throw new TypeError("x is not a number");
     }
-    if (typeof y != "number") {
+    if (typeof y !== "number") {
         throw new TypeError("y is not a number");
     }
-    if (typeof z != "number") {
+    if (typeof z !== "number") {
         throw new TypeError("z is not a number");
     }
     
@@ -20,13 +28,13 @@ function Camera(x, y, z){
     this.z = z;
     
     /** The yaw of the camera */
-    this.theta_x = -Math.PI/4;
+    this.theta_x = yaw;
     
     /** The pitch of the camera */
-    this.theta_y = -Math.PI/4;
+    this.theta_y = pitch;
     
     /** The roll of the camera */
-    this.theta_z = 0;
+    this.theta_z = roll;
     
     /**
      * The current rotation of the camera

@@ -57,7 +57,7 @@ function inferiorGL(){
     var user = new DefaultController();
     
     /** The camera object required to in RenderingContext3D render */
-    var camera = new Camera(10, 15, 10);  
+    var camera = new Camera(0, 5, 17, 0, 0, 0);  
     
     /** Updates current time */
     this.time = new Clock();

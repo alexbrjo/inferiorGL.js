@@ -1,8 +1,8 @@
 /* Copyright Alex Johnson 2016 */
   
 var vector_2D = {
-    add: function(a, b) { return {x: a.x + b.x, y: a.y + b.y} }// both a and b need variables x and y
-}
+    add: function(a, b) { return {x: a.x + b.x, y: a.y + b.y}; }// both a and b need variables x and y
+};
 
 /**
  * 
@@ -27,7 +27,7 @@ function Point(x,y,z,w) {
             + this.y + ", " 
             + this.z + ", " 
             + this.w + "}";
-    }
+    };
 }
 
 function Vector(x,y,z) {
@@ -39,16 +39,16 @@ function Vector(x,y,z) {
         return type + "{" + this.x + ", " 
                           + this.y + ", " 
                           + this.z + "}";
-    }
+    };
     
     this.dot = function (v) {
         
-        if (typeof v === undefined || v == undefined){
+        if (typeof v === undefined || v === undefined){
             error("vector is undefined");
             return;
         }
         
-        if (v.who != "Vector") {
+        if (v.who !== "Vector") {
             error("object is not a vector");
             return;
         }
@@ -57,11 +57,11 @@ function Vector(x,y,z) {
         var y0 = this.y*v.y;
         var z0 = 2;
         return new Vector(x0, y0, z0);
-    }
+    };
     
     this.cross = function (v) {
     
-    } 
+    };
         
 }
 
@@ -73,8 +73,10 @@ function Face(p, c, n, o) {
 }
 
 /**
- *
- * @param f array of Faces
+ * A 3D shape is defined by its points 
+ * 
+ * @param p Array of points that make up the Shape
+ * @param f Array of object references to the faces that make up the shape
  * @param o Point origin (optional) 
  */ 
 function Shape(p, f, o) {
@@ -96,12 +98,12 @@ function square(x, y, z) {
     var i = new Point(0.5+x, 0.5+y, 0.5+z);
     
     var faces = [
-        new Face([a,b,c,d,a], "red", [0,0,-1], new Point(0.5+x,0.5+y,  z)),
-        new Face([a,b,f,e,a], "blue", [0,-1,0], new Point(0.5+x, y,0.5+z)),
-        new Face([b,c,g,f,b], "yellow", [1,0,0], new Point(1+x,0.5+y,0.5+z)),
-        new Face([c,d,h,g,c], "blue", [0,1,0], new Point(0.5+x,1+y,0.5+z)),
+        new Face([a,b,c,d,a], "red",   [0,0,-1], new Point(0.5+x,0.5+y,  z)),
+        new Face([a,b,f,e,a], "blue",  [0,-1,0], new Point(0.5+x,  y,0.5+z)),
+        new Face([b,c,g,f,b], "yellow",[ 1,0,0], new Point(1+x,0.5+y,0.5+z)),
+        new Face([c,d,h,g,c], "blue",  [0, 1,0], new Point(0.5+x,1+y,0.5+z)),
         new Face([d,a,e,h,d], "green", [-1,0,0], new Point(  x,0.5+y,0.5+z)),
-        new Face([e,f,g,h,e], "red", [0,0,1], new Point(0.5+x,0.5+y,1+z))
+        new Face([e,f,g,h,e], "red",   [0,0, 1], new Point(0.5+x,0.5+y,1+z))
     ];
     
     return new Shape([a,b,c,d,e,f,g,h,i], faces, i);

@@ -101,24 +101,23 @@ function RenderingContext3D (c, camera) {
     this.renderShape = function(shape){
         var sortFace = [];
         var cameraRotationVector = camera.getRotation();
-        var tolerance = 0.0;
         for (var i = 0; i <= shape.faces.length-1; i++) { 
             var f = shape.faces[i];
             var d = distanceBetween(f.origin, camera);
             var p = this.projectPoint(f.origin);
-            
+                        
             var adjustedCameraRotationVector = [
-                cameraRotationVector[0] + Math.sin(p.x),
-                cameraRotationVector[1] + Math.sin(p.y),
-                cameraRotationVector[2] + Math.cos(p.x)
+                cameraRotationVector[0] + p.x,
+                cameraRotationVector[1] + p.y,
+                cameraRotationVector[2]
             ];
             
-            if(Math.random() < 0.01 && false) {
-                console.log(adjustedCameraRotationVector);
+            if(Math.random() < 0.01) {
+                console.log(p);
             }
             
-            if (angle(f.normal, adjustedCameraRotationVector) > (Math.PI/2 - tolerance)) {  
-                sortFace.push([f,d]);
+            if (angle(f.normal, adjustedCameraRotationVector) > Math.PI/2) {  
+                sortFace.push([f, d]);
                 sortFace.sort(function(p, q) {return q[1] - p[1];});
             }
         }
@@ -212,7 +211,7 @@ function RenderingContext3D (c, camera) {
      * @returns {Number} magnitude of the vector 
      */
     function magnitude(a,b,c) {
-        if (typeof c === 'undefined' || c == 'undefined') {
+        if (typeof c === 'undefined' || c === 'undefined') {
             return Math.sqrt(Math.pow(a,2) + Math.pow(b,2));
         } else {
             return Math.sqrt(Math.pow(a,2) + Math.pow(b,2) + Math.pow(c,2));
