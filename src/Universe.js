@@ -3,10 +3,9 @@
  * updating Units, the game board and the screen.
  * 
  * @param {Number} tileSize The pixel size of the square gird tiles 
- * @param {Boolean} debug If the debug console is shown
  * @param {ResourceLoader} rsc 
  */  
-function Universe(tileSize, debug, rsc){
+function Universe(tileSize, rsc){
     
     /** {Number} The height and width of the foreground tiles */
     this.tileSize = tileSize;
@@ -22,15 +21,19 @@ function Universe(tileSize, debug, rsc){
      * needs to be drawn 
      */
     this.camera = new Camera();
+    var c = this.camera;
+    window.onresize = function () {
+        c.zoomed = false;
+    };
+    
+    this.environment = null;
 
     /** {Graphics} */
     this.graphics = new Graphics(this.camera);
     
-    /** {UnitHandler} Stores, manages and updates Units  */
-    this.units = new UnitHandler();
-    
-    /** {Level} The data for the tiles, entites, and units in a level */
-    this.level = new Level();
+    if (typeof DebugGraphics === "function") {
+        this.graphics.enableDebug();
+    }
     
     /** {Stats} Runs statistics for analytics */
     this.stats = new Stats();
@@ -38,17 +41,13 @@ function Universe(tileSize, debug, rsc){
     /** {Control} Keeps track of current user input */
     this.controller = new Control();
     
+    this.applicationStateChange = null;
+    
     /**
      * The main game loop. Called dt/1000 times a second. Must be implemented
      * by sub-Universe.
      */
     this.update = function () {};
-    
-    /**
-     * The initialization of the universe presets.
-     * Must be implemented by sub-universe;
-     */
-    this.init = function () {};
     
     /**
      * Access to all the units currently loaded.
@@ -64,6 +63,17 @@ function Universe(tileSize, debug, rsc){
      */
     this.getCanvas = function () {
         return this.graphics.canvas;
+    };
+    
+    /**
+     * Returns the universe back to a blank slate
+     */
+    this.close = function () {
+        this.units = null;
+        this.wizard = null;
+        this.level = null;
+        this.graphics.clearTasks();
+        this.camera.scale = 1.0;
     };
 }
     

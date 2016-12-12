@@ -2,18 +2,24 @@
  * Extends a Universe. Contains the game loop, level data, graphics and units. Responsible for 
  * updating Units, the game board and the screen.
  * 
- * @param {Number} tileSize The pixel size of the square gird tiles 
- * @param {Boolean} debug If the debug console is shown
- * @param {ResourceLoader} rsc 
+ * @param {Universe} universe The universe to transform in a World
+ * @param {Level} level The level that the world is playing.
  */  
-function World(tileSize, debug, rsc){
-    
-    var uni = new Universe(tileSize, debug, rsc);
-    for (var variable in uni) {
-        if (uni.hasOwnProperty(variable)) {
-            this[variable] = uni[variable];
+function World(universe, level){
+
+    for (var variable in universe) {
+        if (universe.hasOwnProperty(variable)) {
+            this[variable] = universe[variable];
         }
     }
+    
+    this.graphics.addTask(new LevelGraphics());
+    
+    /** {UnitHandler} Stores, manages and updates Units  */
+    this.units = new UnitHandler();
+    
+    /** {Level} The data for the tiles, entites, and units in a level */
+    this.level = level;
     
     // ----- LevelData doesn't handle entities yet @TODO ----\\
     this.units.newPlayer(150, 70);
@@ -28,17 +34,11 @@ function World(tileSize, debug, rsc){
     this.camera.scale = 4.0;
 
     this.units.p.setController(this.controller);
-    var c = this.camera;
-
-    window.onresize = function () {
-        c.zoomed = false;
-    };
 
     /**
      * The main game loop. Called dt/1000 times a second.
      */
     this.update = function(){
-        this.stats.addStat("fps", this.time.fps);
 	this.time.update(); // updates the time 
         this.units.update(this); // moves things
         this.camera.update(window.innerWidth, window.innerHeight);

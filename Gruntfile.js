@@ -5,13 +5,9 @@ module.exports = function (grunt) {
             options: {
                 separator: ';'
             },
-            game: {
-                src: ['build/**/*.js', '!build/create/*'],
+            all: {
+                src: ['build/**/*.js'],
                 dest: 'dist/ninja.js'
-            },
-            creator: {
-                src: ['build/**/*.js', '!build/play/*'],
-                dest: 'dist/LevelCreator.js'
             }
         },
         copy:{
@@ -39,8 +35,7 @@ module.exports = function (grunt) {
         uglify: {
             build: {
                 files: {
-                    'dist/ninja.min.js': [ 'dist/ninja.js' ],
-                    'dist/LevelCreator.min.js': [ 'dist/LevelCreator.js' ]
+                    'dist/ninja.min.js': [ 'dist/ninja.js' ]
                 }
             }
         },
@@ -62,18 +57,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.registerTask(
-        'build-game', 
-        'cleans, copys to build folder and uglifies', 
-        ['clean', 'copy:build', 'concat:game', 'uglify', 'copy:test']
-    );
-    grunt.registerTask(
-        'build-creator', 
-        'cleans, copys to build folder and uglifies', 
-        ['clean', 'copy:build', 'concat:creator', 'uglify', 'copy:test']
-    );
-    grunt.registerTask(
         'build', 
         'cleans, copys to build folder and uglifies', 
-        ['build-game', 'build-creator']
+        ['clean', 'copy:build', 'concat:all', 'uglify', 'copy:test']
     );
 };

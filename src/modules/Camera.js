@@ -10,10 +10,7 @@ function Camera(){
     this.edgeBuffer = 2;
     this.range = {x:0, y:0};
     var bounds = {areSet: false, left: null, right: null, top: null, bottom: null};
-    this.zoom = function(factor) {
-        this.scale *= factor;
-        if (this.scale > this.maxScale) this.scale = this.maxScale;
-    };
+    this.zoomed = false;
     
     /** The size of a board tile */ 
     var tileSize = 16;

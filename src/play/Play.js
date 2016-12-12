@@ -61,23 +61,27 @@
  *
  *  @author Alex Johnson 
  */
-
 document.addEventListener(
     "DOMContentLoaded",
     function () {
-        var app = {rsc: null, universe: null};
+        var app = new App();
         app.rsc = new ResourceLoader();
         app.rsc.load([
             "tiles.png", "rpgsoldier.png",
             "warrior.png", "enemy.png",
             "hud.png", "bg.png"
         ]);
-        app.rsc.whenReady(function () {
-            app.universe = new World(16, true, app.rsc);
-            app.universe.init();
+        app.rsc.whenReady(function () {  
+            app.universe = new Universe(16, app.rsc);
+            app.menu();
             
             var main = function () {
-                app.universe.update();
+                if (typeof app.universe.applicationStateChange === "function") {
+                    app.universe.applicationStateChange(app);
+                    app.universe.applicationStateChange = null;
+                } else {
+                    app.universe.update();
+                }
                 aniFrame = window.requestAnimationFrame ||
                         window.mozRequestAnimationFrame ||
                         window.webkitRequestAnimationFrame ||

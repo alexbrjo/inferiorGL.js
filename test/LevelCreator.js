@@ -1,4 +1,9 @@
-/**
+function App() {
+    this.rsc = null;
+    this.universe = null;
+    
+}
+;/**
  * Stores data for how the screen is drawn.
  */
 function Camera(){
@@ -248,6 +253,11 @@ var Graphics = function(camera) {
         this.printDebug(world, world.units);  
     };
     
+    
+    this.printMenu = function () {
+        
+    };
+    
     /**
      * Responsible for printing all objects in the Unit queue
      *	@param {Universe} world The entire universe
@@ -262,7 +272,7 @@ var Graphics = function(camera) {
             if(world.units.list[i].invunerableUntil > world.time.now) ctx.globalAlpha = 0.7;
             ctx.drawImage(world.rsc.get(img.id),
                     img.x, img.y, img.w, img.h,
-                    pos.x-this.camera.x, pos.y-this.camera.y, img.w, img.h);
+                    pos.x - this.camera.x, pos.y - this.camera.y, img.w, img.h);
             ctx.restore();
         }
         world.stats.addStat("er", world.units.list.length);
@@ -292,10 +302,6 @@ var Graphics = function(camera) {
                 var block = world.level.getBlockObject(tileSize * i, tileSize * j);
                 var pos = block.pos; // pos of tile in background
                 var img = block.sprite; //pos of sprite on img file
-
-                if (Math.random() < 0.0001 && false) {
-                    console.log((pos.x + " " + world.camera.x) + " " +  (pos.y + " " + world.camera.y));
-                }
                     
                 if (img.id > 0) {
                     ctx.drawImage(world.rsc.get(world.level.sprite_sheet),
@@ -805,15 +811,15 @@ function Universe(tileSize, debug, rsc){
      * needs to be drawn 
      */
     this.camera = new Camera();
+    var c = this.camera;
+    window.onresize = function () {
+        c.zoomed = false;
+    };
+    
+    this.environment = null;
 
     /** {Graphics} */
     this.graphics = new Graphics(this.camera);
-    
-    /** {UnitHandler} Stores, manages and updates Units  */
-    this.units = new UnitHandler();
-    
-    /** {Level} The data for the tiles, entites, and units in a level */
-    this.level = new Level();
     
     /** {Stats} Runs statistics for analytics */
     this.stats = new Stats();
@@ -853,7 +859,6 @@ function Universe(tileSize, debug, rsc){
  * Ninja Level Builder
  * 
  */
-
 document.addEventListener(
     "DOMContentLoaded",
     function () {
@@ -898,18 +903,18 @@ function LevelCreator(tileSize, debug, rsc){
             this[variable] = uni[variable];
         }
     }
-
+    
+    /** {UnitHandler} Stores, manages and updates Units  */
+    this.units = new UnitHandler();
+    
+    /** {Level} The data for the tiles, entites, and units in a level */
+    this.level = new Level();
+    
     this.units.newPlayer(150, 70);
     this.wizard = new Wizard(0, 0);
     this.wizard.setController(this.controller);
     this.camera.setFocusObj(this.wizard);
     this.camera.scale = 2.0;
-    
-    var g = this.graphics;
-
-    window.onresize = function () {
-        g.zoomed = false;
-    };
     
     /**
      * The main game loop. Called dt/1000 times a second.
