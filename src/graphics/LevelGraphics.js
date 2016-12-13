@@ -67,7 +67,7 @@ function LevelGraphics () {
                 var img = block.sprite; //pos of sprite on img file
                     
                 if (img.id > 0) {
-                    c.drawImage(world.rsc.get(world.level.sprite_sheet),
+                    c.drawImage(world.rsc.get(world.level.terrain_sprite),
                             img.x * tileSize, img.y * tileSize, img.w, img.h,
                             pos.x - c.camera.x, pos.y - c.camera.y, pos.w, pos.h);
                     this.blocks_rendered++;

@@ -15,7 +15,7 @@ function Universe(tileSize, rsc){
 
     /** {Clock} Manages dt and time analytics */
     this.time = new Clock();
-        
+    
     /** 
      * Holds variables that are used to figure out what part of the board
      * needs to be drawn 

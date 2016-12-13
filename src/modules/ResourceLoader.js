@@ -5,7 +5,9 @@ function ResourceLoader() {
 
     /** Object containing all loaded resources */
     var rscElements = {};
-    
+    this.getRsc = function() {
+        return rscElements;
+    };
     /** Function to call when all files from queue have been loaded */
     var callback = function () {};
     
@@ -131,6 +133,11 @@ function ResourceLoader() {
      */
     this.whenReady = function (f) {
         callback = f;
+        
+        //if Resource loader is already ready then callback
+        if (inQueue === 0) {
+            callback();
+            callback = function(){};
+        }
     };
-
 }

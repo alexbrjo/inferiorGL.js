@@ -7,11 +7,11 @@ module.exports = function (grunt) {
             },
             all: {
                 src: ['build/**/*.js'],
-                dest: 'dist/ninja.js'
+                dest: 'dist/JoResEngine.js'
             },
             release: {
                 src: ['build/**/*.js', '!build/**/*.dev.js'],
-                dest: 'dist/ninja.js'
+                dest: 'dist/JoResEngine.js'
             }
         },
         copy:{
@@ -23,8 +23,14 @@ module.exports = function (grunt) {
             },
             test:{
                 cwd: 'dist',
-                src: ["ninja.*"],
+                src: ["JoResEngine.*"],
                 dest: 'test',
+                expand: true
+            },
+            example:{
+                cwd: 'dist',
+                src: ["JoResEngine.*"],
+                dest: 'sample',
                 expand: true
             }
         },
@@ -33,13 +39,13 @@ module.exports = function (grunt) {
                 src:'build'
             },
             test:{
-                src:'ninja.*'
+                src:'JoResEngine.*'
             }
         },
         uglify: {
             build: {
                 files: {
-                    'dist/ninja.min.js': [ 'dist/ninja.js' ]
+                    'dist/ninja.min.js': [ 'dist/JoResEngine.js' ]
                 }
             }
         },
@@ -63,11 +69,11 @@ module.exports = function (grunt) {
     grunt.registerTask(
         'build', 
         'cleans, copys to build folder and uglifies', 
-        ['clean', 'copy:build', 'concat:all', 'uglify', 'copy:test']
+        ['clean', 'copy:build', 'concat:all', 'uglify', 'copy:test', 'copy:example']
     );
     grunt.registerTask(
         'build-release', 
         'builds the app the same way but without developer features', 
-        ['clean', 'copy:build', 'concat:release', 'uglify', 'copy:test']
+        ['clean', 'copy:build', 'concat:release', 'uglify', 'copy:test', 'copy:example']
     );
 };

@@ -3,13 +3,18 @@
     <head>
         <title>Ninja</title>
         <link rel="stylesheet" type="text/css" href="rsc/style.css">
-        <script type="text/javascript" src="ninja.js"></script>
+        <script type="text/javascript" src="JoResEngine.js"></script>
     </head>
     <body>
         <canvas id="alexjo-ninja"></canvas>
         <script type="text/javascript" >
+            var $;
             document.addEventListener("DOMContentLoaded", function(){
-                var app = new App();
+                $ = new JoResEngine();
+                $.setMenuPath('rsc/SampleMenu.js');
+                $.setLevelPath('rsc/SampleLevel*.js');
+                $.setImgPath('rsc/img/*.png');
+                $.start();
             });
         </script>
     </body>
