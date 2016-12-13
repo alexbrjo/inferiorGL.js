@@ -2,14 +2,25 @@
  * Stores data for how the screen is drawn.
  */
 function Camera(){
+    /** The x and y position of the camera */
     this.x = 0;
     this.y = 0,
+            
+    /** The object to center the camera on */        
     this.focusObj = null;
+    
+    /** How many times bigger pixels appear to be after zoomed */
     this.scale = 1.0;
     this.maxScale = 6;
     this.edgeBuffer = 2;
+    
+    /** How many pixels the camera's image encompasses */
     this.range = {x:0, y:0};
+    
+    /** The limits, both near and far of the Camera */
     var bounds = {areSet: false, left: null, right: null, top: null, bottom: null};
+    
+    /** If the camera has been zoomed */
     this.zoomed = false;
     
     /** The size of a board tile */ 
@@ -57,6 +68,15 @@ function Camera(){
         this.zoomed = true;
     };
     
+    /**
+     * Sets new bounds for the camera's position
+     * 
+     * @param {Number} left The left bound of the camera
+     * @param {Number} right The right bound of the camera
+     * @param {Number} top The upper bound of the camera
+     * @param {Number} bottom The lower bound of the camera
+     * @param {boolean} disable If the camera bounds are disabled after setting
+     */
     this.setBounds = function (left, right, top, bottom, disable) {
         if (typeof left   !== "null" && typeof left   !== "number" &&
             typeof right  !== "null" && typeof right  !== "number" && 
@@ -74,9 +94,22 @@ function Camera(){
             bounds.areSet = true;
         }
     };
+    
+    /**
+     * Disables camera bounds
+     */
     this.enableBounds = function () {bounds.areSet = true;};
+    
+    /**
+     * Enables camera bounds
+     */
     this.disableBounds = function () {bounds.areSet = false;};
     
+    /**
+     * Sets the reference to the object for the camera to focus on.
+     * 
+     * @param {Object} o Object with x and y to focus camera on
+     */
     this.setFocusObj = function (o) {
         this.focusObj = o;
     };

@@ -1,4 +1,7 @@
-var Soldier = function () {
+/**
+ * Creates a new solider
+ */
+function Soldier() {
     /** Essential Unit Properties */
     this.width = 15;
     this.height = 25;

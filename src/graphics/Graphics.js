@@ -20,7 +20,11 @@ var Graphics = function(camera) {
     var canvas = document.createElement('canvas');
     var ctx = canvas.getContext('2d');  
     
-    this.camera = camera;
+    /** 
+     * Any function that has the ctx variable also needs the camera so I went
+     * ahead and added a ref directly to the context.
+     */
+    ctx.camera = camera;
 
     /** The number of blocks rendered during the last update */
     this.blocks_rendered = 0;
@@ -30,15 +34,31 @@ var Graphics = function(camera) {
     
     /** Components to print */
     var printTasks = [];
+    
+    /**
+     * Adds a task to the printTasks list
+     * 
+     * @param {TaskGraphics} t An object with a .print() function 
+     */
     this.addTask = function (t) {
         printTasks.push(t);
     };
     
+    /**
+     * Clears the prinkTasks list
+     */
     this.clearTasks = function () {
         printTasks = [];
     };
     
+    /**
+     * If the debug console is enabled
+     */
     var debug = null;
+    
+    /**
+     * Enables the debug console
+     */
     this.enableDebug = function () {
         debug = new DebugGraphics();
     };
@@ -66,8 +86,8 @@ var Graphics = function(camera) {
 		
         graphics.clearRect(0, 0, display.width, display.height);
         graphics.drawImage(canvas, 0,0, 
-        	display.width  * this.camera.scale, 
-        	display.height * this.camera.scale);
+        	display.width  * ctx.camera.scale, 
+        	display.height * ctx.camera.scale);
         if (debug !== null) {
             debug.print(world, graphics);
         }

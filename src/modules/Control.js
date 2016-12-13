@@ -1,3 +1,6 @@
+/**
+ * Keeps user input up to date
+ */
 function Control () {
     
     /** If the space bar is pressed down*/
@@ -28,10 +31,6 @@ function Control () {
      * Makes key listeners callback here
      */
     var t = this;
-    window.onkeydown = function (x) {
-        t.setKey(x.which, true);
-    };
-    window.onkeyup = function (x) {
-        t.setKey(x.which, false);
-    };
+    window.onkeydown = function (x) { t.setKey(x.which, true); };
+    window.onkeyup = function (x) { t.setKey(x.which, false); };
 }

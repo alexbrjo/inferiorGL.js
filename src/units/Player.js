@@ -21,9 +21,17 @@ var Player = function () {
     
     this.invunerableUntil = 0;
 
+    /**
+     * Do damage to the player
+     * 
+     * @param {Number} d The ammount of damage
+     * @param {Clock} time The world's instance of clock
+     */
     this.damage = function (d, time) {
-        this.health -= d;
-        this.invunerableUntil = time.now + 500; // so damage isn't taken too quickly
+        if (time.now > this.invunerableUntil) {
+            this.health -= d;
+            this.invunerableUntil = time.now + 500; // so damage isn't taken too quickly
+        }
         if (this.health <= 0) {
             console.log("dead");
         }
@@ -118,7 +126,18 @@ var Player = function () {
         pos.y -= this.imgDisplacement[1];
 
         if (this.airbourne) { // jumping/falling
-            if (!ctrl.k) { // just jumping/falling
+            if (this.attackTick > 0) { // if attacking
+                if (this.direction === 1) {
+                    //s.x = time.it_24 % 8 * 40;
+                    //s.y = 6 * 40;
+                } else if (this.direction === 0) {
+                    //s.x = time.it_24 % 8 * 40;
+                    //s.y = 7 * 40;
+                }
+                s.x = 3 * 40;
+                s.y = (5 - this.direction) * 40;
+                pos.x += (this.direction === 1) ? 10 : -10;
+            } else { // just airbourne
                 if (Math.abs(this.vy) > 3) {
                     s.x = 0;
                     s.y = (5 - this.direction) * 40;
@@ -128,14 +147,6 @@ var Player = function () {
                 } else if (Math.abs(this.vy) <= 1) {
                     s.x = 2 * 40;
                     s.y = (5 - this.direction) * 40;
-                }
-            } else { // attacking while in air
-                if (this.direction === 1) {
-                    s.x = time.it_24 % 8 * 40;
-                    s.y = 6 * 40;
-                } else if (this.direction === 0) {
-                    s.x = time.it_24 % 8 * 40;
-                    s.y = 7 * 40;
                 }
             }
         } else if (this.vx === 0) { // not moving horizontally

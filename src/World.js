@@ -1,6 +1,6 @@
 /**
- * Extends a Universe. Contains the game loop, level data, graphics and units. Responsible for 
- * updating Units, the game board and the screen.
+ * Extends a Universe. Contains the game loop, level data, graphics and units. 
+ * Responsible for updating Units, the game board and the screen.
  * 
  * @param {Universe} universe The universe to transform in a World
  * @param {Level} level The level that the world is playing.
@@ -14,6 +14,7 @@ function World(universe, level){
     }
     
     this.graphics.addTask(new LevelGraphics());
+    this.graphics.addTask(new HudGraphics());
     
     /** {UnitHandler} Stores, manages and updates Units  */
     this.units = new UnitHandler();

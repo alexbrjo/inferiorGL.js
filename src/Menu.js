@@ -17,7 +17,7 @@ function Menu(universe){
 
     this.graphics.addTask(new MenuGraphics());
 
-    this.camera.setBounds(0, 0, 151 * 16, 30 * 16, true);
+    this.camera.setFocusObj({x: 0, y: 0});
 
     /**
      * The main game loop. Called dt/1000 times a second.
@@ -27,8 +27,13 @@ function Menu(universe){
             this.applicationStateChange = function (app) {
                 app.play(0);
             };
+        } else if (this.controller.c) {
+            this.applicationStateChange = function (app) {
+                app.create();
+            };
         }
-	this.time.update(); // updates the time 
+        this.time.update(); // updates the time 
+        this.camera.update(window.innerWidth, window.innerHeight);
         this.graphics.print(this); // draws things
     };
 }

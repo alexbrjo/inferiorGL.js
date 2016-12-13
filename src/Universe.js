@@ -34,10 +34,7 @@ function Universe(tileSize, rsc){
     if (typeof DebugGraphics === "function") {
         this.graphics.enableDebug();
     }
-    
-    /** {Stats} Runs statistics for analytics */
-    this.stats = new Stats();
-    
+
     /** {Control} Keeps track of current user input */
     this.controller = new Control();
     

@@ -1,6 +1,8 @@
-/* Copyright Alex Johnson 2016 */
+/**
+ * Creates an RPGsoldier
+ */
 
-var RPGsoldier = function (e) {
+function RPGsoldier() {
     /** Essential Unit Properties */
     this.width = 15;
     this.height = 25;

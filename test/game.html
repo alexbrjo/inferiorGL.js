@@ -3,9 +3,14 @@
     <head>
         <title>Ninja</title>
         <link rel="stylesheet" type="text/css" href="rsc/style.css">
+        <script type="text/javascript" src="ninja.js"></script>
     </head>
     <body>
         <canvas id="alexjo-ninja"></canvas>
-        <script type="text/javascript" src="ninja.js"></script>
+        <script type="text/javascript" >
+            document.addEventListener("DOMContentLoaded", function(){
+                var app = new App();
+            });
+        </script>
     </body>
 </html>

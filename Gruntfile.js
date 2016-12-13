@@ -8,6 +8,10 @@ module.exports = function (grunt) {
             all: {
                 src: ['build/**/*.js'],
                 dest: 'dist/ninja.js'
+            },
+            release: {
+                src: ['build/**/*.js', '!build/**/*.dev.js'],
+                dest: 'dist/ninja.js'
             }
         },
         copy:{
@@ -19,7 +23,7 @@ module.exports = function (grunt) {
             },
             test:{
                 cwd: 'dist',
-                src: ["ninja.*", "LevelCreator.*"],
+                src: ["ninja.*"],
                 dest: 'test',
                 expand: true
             }
@@ -45,7 +49,7 @@ module.exports = function (grunt) {
          * instance of the app shouldn't be created
          */ 
         jasmine : {
-            src : ['src/**/*.js', '!src/Main.js'],
+            src : ['src/**/*.js', '!src/App.js'],
                 options : {
                     specs : 'test/**/*.test.js'
                 }
@@ -60,5 +64,10 @@ module.exports = function (grunt) {
         'build', 
         'cleans, copys to build folder and uglifies', 
         ['clean', 'copy:build', 'concat:all', 'uglify', 'copy:test']
+    );
+    grunt.registerTask(
+        'build-release', 
+        'builds the app the same way but without developer features', 
+        ['clean', 'copy:build', 'concat:release', 'uglify', 'copy:test']
     );
 };
