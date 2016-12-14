@@ -55,7 +55,7 @@ function LevelGraphics () {
                   
         this.blocks_rendered = 0;
         // the +2 try to change to a variable or integrate into camera.range.x
-        
+
         for (var i = trunc(c.camera.x) - c.camera.range.x + 2; 
         		 i < trunc(c.camera.x) + c.camera.range.x + 2;
         		 i++) {

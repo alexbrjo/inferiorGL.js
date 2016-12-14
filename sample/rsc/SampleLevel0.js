@@ -1,7 +1,7 @@
 /** 
  * Sample level
  */
-var Level = function () {
+var JoResLevel = function () {
     this.h = 29;
     this.w = 150;
     this.tileSize = 16;

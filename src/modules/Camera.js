@@ -7,7 +7,7 @@ function Camera(){
     this.y = 0,
             
     /** The object to center the camera on */        
-    this.focusObj = null;
+    this.focusObj = {x:0, y:0};
     
     /** How many times bigger pixels appear to be after zoomed */
     this.scale = 1.0;
@@ -42,6 +42,7 @@ function Camera(){
          */
         var half_width = display_width / (2 * this.scale);
         var half_height = display_height / (2 * this.scale);
+        
         this.x = Math.round(Math.round(this.focusObj.x) - half_width);
         this.y = Math.round(Math.round(this.focusObj.y) - half_height);
          

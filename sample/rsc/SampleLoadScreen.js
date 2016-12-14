@@ -1,7 +1,7 @@
 /**
  * Prints all the main menu graphics
  */
-function JoResMainMenu () {
+function JoResLoadScreen () {
     
     /**
      * Prints the main menu
@@ -11,6 +11,6 @@ function JoResMainMenu () {
      */
     this.print = function (world, c) {
         c.fillStyle = "black";
-        c.fillText("Main menu", -50 - world.camera.x, 0 - world.camera.y);
+        c.fillText("Load Screen", -50 - world.camera.x, 0 - world.camera.y);
     };
 }

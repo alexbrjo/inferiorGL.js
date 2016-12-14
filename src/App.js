@@ -28,25 +28,41 @@ function JoResEngine() {
      * Starts the main game loop using requestAnimationFrame
      */
     this.start = function () {
-        this.rsc.load([menuPath]);
+        joRes.universe = new Universe(16, joRes.rsc);
+        var splashAni = new SplashGraphics(1500, 250, 300);
+        joRes.universe.graphics.addTask(splashAni);
+        joRes.universe.camera.scale = 8.0;
+        function loop() {
+            if (typeof joRes.universe.applicationStateChange === "function") {
+                joRes.universe.applicationStateChange(joRes);
+                joRes.universe.applicationStateChange = null;
+            } else {
+                joRes.update();
+            }
+            frame = window.requestAnimationFrame ||
+                    window.mozRequestAnimationFrame ||
+                    window.webkitRequestAnimationFrame ||
+                    window.msRequestAnimationFrame ||
+                    window.oRequestAnimationFrame;
+            frame(loop, joRes.universe.getCanvas());
+        };
+        loop();
+        
+        var animationDone = false;
+        var loadDone = false;
         this.rsc.whenReady(function () {
-            joRes.universe = new Universe(16, joRes.rsc);
-            joRes.menu();
-            function loop() {
-                if (typeof joRes.universe.applicationStateChange === "function") {
-                    joRes.universe.applicationStateChange(joRes);
-                    joRes.universe.applicationStateChange = null;
-                } else {
-                    joRes.update();
-                }
-                frame = window.requestAnimationFrame ||
-                        window.mozRequestAnimationFrame ||
-                        window.webkitRequestAnimationFrame ||
-                        window.msRequestAnimationFrame ||
-                        window.oRequestAnimationFrame;
-                frame(loop, joRes.universe.getCanvas());
-            };
-            loop();
+            if (animationDone) {
+                joRes.menu();
+            } else {
+                loadDone = true;
+            }
+        });
+        splashAni.whenComplete(function () {
+            if (loadDone) {
+                joRes.menu();
+            } else {
+                animationDone = true;
+            }
         });
     };
 
@@ -56,14 +72,19 @@ function JoResEngine() {
      * @param {Number} level_id Which level to load.
      */
     this.play = function (level_id) {
+        
         this.universe.close();
+        this.universe.graphics.addTask(new JoResLoadScreen());
+        
         //loads level data
         this.rsc.load(this.getLevelPath(level_id));
         this.rsc.whenReady(function () {
             var level = InitLevel();
-            //loads level resource data
+            // loads level resource data
             joRes.rsc.load(level.resources);
             joRes.rsc.whenReady(function () {
+                // make sure universe is cleared
+                joRes.universe.close();
                 joRes.universe = new World(joRes.universe, level);
             });
         });
@@ -93,8 +114,8 @@ function JoResEngine() {
         levelPath = url;
     };
 
-    this.setMenuPath = function (url) {
-        menuPath = url;
+    this.load = function (url) {
+        this.rsc.load(url);
     };
 
     this.setImgPath = function (url) {

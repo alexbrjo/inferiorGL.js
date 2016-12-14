@@ -6,12 +6,12 @@
         <script type="text/javascript" src="JoResEngine.js"></script>
     </head>
     <body>
-        <canvas id="alexjo-ninja"></canvas>
+        <canvas id="JoRes-target"></canvas>
         <script type="text/javascript" >
             var $;
             document.addEventListener("DOMContentLoaded", function(){
                 $ = new JoResEngine();
-                $.setMenuPath('rsc/SampleMenu.js');
+                $.load(['rsc/SampleMenu.js', 'rsc/SampleLoadScreen.js']);
                 $.setLevelPath('rsc/SampleLevel*.js');
                 $.setImgPath('rsc/img/*.png');
                 $.start();

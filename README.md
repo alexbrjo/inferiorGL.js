@@ -8,10 +8,20 @@ Try out the sample game
 2. Clone git repo and run grunt task 'build'
 3. Open ../sample/play.html
 
-Todo
-------------------------
-- Add tests
-- Level creator
+How it's done
+--------------------------
+1. Build JoResEngine.js and add the script to your webpage. Your page must have a canvas element with id "JoRes-target".
+    ''' <script type="text/javascript" src="JoResEngine.js"></script> '''
+    ''' <canvas id="JoRes-target"></canvas> '''
+2. Create an instance of the Engine.
+    ''' var joRes = new JoResEngine(); '''
+3. Override the default menu and load screen.
+    ''' $.load(['MyMenu.js', 'MyLoadScreen.js']); '''
+4. Add the relative level data and image paths for JoRes to find.
+    ''' $.setLevelPath('myLevels/level*.js');
+        $.setImgPath('myImages/*.png'); '''
+5. Start!
+    ''' joRes.start(); '''
 
 History
 ------------

@@ -44,7 +44,11 @@ function Universe(tileSize, rsc){
      * The main game loop. Called dt/1000 times a second. Must be implemented
      * by sub-Universe.
      */
-    this.update = function () {};
+    this.update = function () {
+        this.time.update(); // updates the time 
+        this.camera.update(window.innerWidth, window.innerHeight);
+        this.graphics.print(this);
+    };
     
     /**
      * Access to all the units currently loaded.
@@ -71,6 +75,7 @@ function Universe(tileSize, rsc){
         this.level = null;
         this.graphics.clearTasks();
         this.camera.scale = 1.0;
+        this.camera.zoomed = false;
     };
 }
     

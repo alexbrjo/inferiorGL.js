@@ -1,13 +1,13 @@
 /**
  * Prints all the main menu graphics
  */
-function MenuGraphics () {
+function JoResMainMenu () {
     
     /**
      * Prints the main menu
      * 
      * @param {Universe} world The entire universe
-     * @param {REnderingContext2D} c The context to draw on
+     * @param {RenderingContext2D} c The context to draw on
      */
     this.print = function (world, c) {
         c.fillStyle = "red";

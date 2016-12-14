@@ -15,9 +15,10 @@ function Menu(universe){
         }
     }
 
-    this.graphics.addTask(new MenuGraphics());
+    this.graphics.addTask(new JoResMainMenu());
 
     this.camera.setFocusObj({x: 0, y: 0});
+    this.camera.scale = 4.0;
 
     /**
      * The main game loop. Called dt/1000 times a second.

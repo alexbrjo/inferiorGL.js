@@ -13,7 +13,7 @@
 var Graphics = function(camera) {
 
     /** canvas and context for the <canvas> displayed */  
-    var display = document.getElementById('alexjo-ninja');
+    var display = document.getElementById('JoRes-target');
     var graphics = display.getContext('2d');
     
     /** canvas object to draw frame on */              

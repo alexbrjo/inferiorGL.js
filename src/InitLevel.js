@@ -5,7 +5,7 @@
  */
 function InitLevel() {
 
-    if (typeof Level !== "function") {
+    if (typeof JoResLevel !== "function") {
         throw new Error("Level not loaded");
     }
     
@@ -17,7 +17,7 @@ function InitLevel() {
                 sprite_index: [],
                 data: []
             },
-    new Level());
+    new JoResLevel());
 
     level.trunc = function (x) {
         return Math.trunc(x / this.tileSize, 2);
