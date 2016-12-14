@@ -26,13 +26,13 @@ How it's done
 
 3. Override the default menu and load screen.
     ```javascript 
-    $.load(['MyMenu.js', 'MyLoadScreen.js']);
+    joRes.load(['MyMenu.js', 'MyLoadScreen.js']);
     ```
 
 4. Add the relative level data and image paths for JoRes to find.
     ```javascript
-        $.setLevelPath('myLevels/level*.js');
-        $.setImgPath('myImages/*.png');
+    joRes.setLevelPath('myLevels/level*.js');
+    joRes.setImgPath('myImages/*.png');
     ```
 
 5. Start!
