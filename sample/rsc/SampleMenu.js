@@ -11,6 +11,6 @@ function JoResMainMenu () {
      */
     this.print = function (world, c) {
         c.fillStyle = "black";
-        c.fillText("Main menu", -50 - world.camera.x, 0 - world.camera.y);
+        c.fillText("Main menu: Press space to start", -50 - c.camera.x, 0 - c.camera.y);
     };
 }

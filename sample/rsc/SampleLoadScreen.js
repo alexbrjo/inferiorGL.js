@@ -11,6 +11,6 @@ function JoResLoadScreen () {
      */
     this.print = function (world, c) {
         c.fillStyle = "black";
-        c.fillText("Load Screen", -50 - world.camera.x, 0 - world.camera.y);
+        c.fillText("bug, try again. might take a couple refreshes", -50 - c.camera.x, 0 - c.camera.y);
     };
 }

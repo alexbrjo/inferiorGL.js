@@ -38,9 +38,11 @@ var Player = function () {
     };
 
     this.move = function (world) {
-        var time = world.time;
+        var time = world.getTime();
         var t = time.getSPF();
-
+        var units = world.getUniverse().units;
+        var ctrl = world.getController();
+        
         /*
          DO DAMAGE TO ENEMYS
          */
@@ -53,7 +55,6 @@ var Player = function () {
             this.attackTick--;
             this.canMove = false;
             if (this.attackTick === 5) {
-                var units = world.getUnits();
                 for (var i = 1; i < units.length; i++) {
                     var u = units[i];
                     if (this.direction === 1) {
@@ -77,11 +78,10 @@ var Player = function () {
          DO DAMAGE TO PLAYER
          */
         if (time.now > this.invunerableUntil) {
-            var units = world.getUnits();
             for (var i = 1; i < units.length; i++) {
                 var u = units[i].aabb();
                 if (u.c(this.aabb())) {
-                    this.damage(1, world.time);
+                    this.damage(1, world.getTime());
                 }
             }
         }

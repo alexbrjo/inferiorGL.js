@@ -34,16 +34,16 @@ function SplashGraphics (displayTime, fadeSpeed, pause) {
      */
     this.print = function (world, c) {
         if (startTime === null) {
-            startTime = world.time.now;
+            startTime = world.getTime().now;
             endTime = startTime + ANI_TIME;
         } 
         
-        if (world.time.now > endTime) {
+        if (world.getTime().now > endTime) {
             callBack();
         } else {
-            c.globalAlpha = getAlpha(world.time.now);
+            c.globalAlpha = getAlpha(world.getTime().now);
             c.drawImage(splash, 
-                -(splash.width/2) - world.camera.x, -(splash.height/2) - world.camera.y);
+                -(splash.width/2) - c.camera.x, -(splash.height/2) - c.camera.y);
             c.globalAlpha = 1.0;
         }
     };

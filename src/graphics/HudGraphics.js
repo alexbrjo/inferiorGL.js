@@ -26,15 +26,15 @@ function HudGraphics () {
      * @fix world.units, world.rsc
      */
     this.printHUD = function(world, c) {
-    	var p = world.units.p;
+    	var p = world.getUniverse().player();
     	//last thing drawn is HUD
         for (var i = 0; i < p.maxHealth; i++) {
     	    if (i < p.health) {
-        	    c.drawImage(world.rsc.get("hud.png"),
+        	    c.drawImage(world.get("hud.png"),
                         0, 0, 9, 9,
                 	2, 30 + 9 * i, 9, 9);
             } else {
-            	c.drawImage(world.rsc.get("hud.png"),
+            	c.drawImage(world.get("hud.png"),
                         9, 0, 9, 9,
                 	2, 30 + 9 * i, 9, 9);
             }

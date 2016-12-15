@@ -13,25 +13,40 @@ function LevelGraphics () {
      * @param {RenderingContext2D} c The context to draw on
      */
     this.print = function(world, c) {
+        this.printBackground(world, c);
         this.printTerrain(world, c);
     	this.printUnits(world, c);
     };
     
     /**
      * Responsible for printing all objects in the Unit queue
+     * 
      * @param {Universe} world The entire universe
      * @param {RenderingContext2D} c The context to draw graphics
+     */
+    this.printBackground = function(world, c) {    
+        for (var i = 0; i < 3; i++) {
+            c.drawImage(world.get("bg.png"),
+                0, 0, 240, 240,
+                i*240, -50, 240, 240);
+        }
+    };
+    
+    /**
+     * Responsible for printing all objects in the Unit queue
      * 
-     * @fix world.units, world.time, world.rsc
+     * @param {Universe} world The entire universe
+     * @param {RenderingContext2D} c The context to draw graphics
      */
     this.printUnits = function(world, c) {
-	for (var i = 0; i < world.units.list.length; i++) {
-            var u = world.units.list[i].obj(world.time);
+        var units = world.getUniverse().units;
+	for (var i = 0; i < units.length; i++) {
+            var u = units[i].obj(world.getTime());
             var img = u.sprite;
             var pos = u.pos;
             c.save();
-            if(world.units.list[i].invunerableUntil > world.time.now) c.globalAlpha = 0.7;
-            c.drawImage(world.rsc.get(img.id),
+            if(units[i].invunerableUntil > world.getTime().now) c.globalAlpha = 0.7;
+            c.drawImage(world.get(img.id),
                     img.x, img.y, img.w, img.h,
                     pos.x - c.camera.x, pos.y - c.camera.y, img.w, img.h);
             c.restore();
@@ -43,16 +58,9 @@ function LevelGraphics () {
      * 
      * @param {Universe} world The entire universe
      * @param {RenderingContext2D} c The context to draw graphics
-     * 
-     * @fix world.rsc, world.level
      */
     this.printTerrain = function(world, c) {
-        for (var i = 0; i < 3; i++) {
-            c.drawImage(world.rsc.get("bg.png"),
-                0, 0, 240, 240,
-                i*240, -50, 240, 240);
-        }
-                  
+        var lvl = world.getUniverse();
         this.blocks_rendered = 0;
         // the +2 try to change to a variable or integrate into camera.range.x
 
@@ -62,12 +70,12 @@ function LevelGraphics () {
             for (var j = trunc(c.camera.y) - c.camera.range.y + 2; 
             		 j < trunc(c.camera.y) + c.camera.range.y + 2; 
             		 j++) {
-                var block = world.level.getBlockObject(tileSize * i, tileSize * j);
+                var block = lvl.getBlockObject(tileSize * i, tileSize * j);
                 var pos = block.pos; // pos of tile in background
                 var img = block.sprite; //pos of sprite on img file
                     
                 if (img.id > 0) {
-                    c.drawImage(world.rsc.get(world.level.terrain_sprite),
+                    c.drawImage(world.get(lvl.terrain_sprite),
                             img.x * tileSize, img.y * tileSize, img.w, img.h,
                             pos.x - c.camera.x, pos.y - c.camera.y, pos.w, pos.h);
                     this.blocks_rendered++;

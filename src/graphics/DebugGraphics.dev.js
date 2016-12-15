@@ -20,9 +20,9 @@ function DebugGraphics() {
      * @param {type} c
      */
     this.print = function (world, c) {
-        if (typeof world.units !== "undefined" && world.units !== null) {
-            this.printDebug(world, c);
-        }
+        this.printAppDebug(world, c);
+        if (typeof world.getUniverse().units !== "undefined" &&
+            world.getUniverse().units.length > 0) this.printGameDebug(world, c);
     };
 
     /**
@@ -33,19 +33,31 @@ function DebugGraphics() {
      * 
      * @fix world.time, world.units, world.camera, world.graphics
      */
-    this.printDebug = function (world, c) {
-        var t = world.time;
+    this.printAppDebug = function (world, c) {
+        var t = world.getTime();
         var lines = [
             "GameName in-dev v0.0.1 (" + (Math.round(t.now / 1000) -
                     Math.round(t.started / 1000)) + " seconds old)",
-            t.dt * 1000 + " ms / " + t.fps + " fps",
-            world.units.list.length + " entities",
-            world.graphics.blocks_rendered + "/" +
-                    (world.camera.range.x * 2) * (world.camera.range.y * 2) + " Blocks rendered",
-            "camera x: " + world.camera.x + " y: " + world.camera.y,
-            "( pos ) x: " + Math.round(world.units.p.x) + " y: " + Math.round(world.units.p.y),
-            "(Block) x: " + trunc(world.units.p.x) + " y: " + trunc(Math.round(world.units.p.y))
+            t.dt * 1000 + " ms / " + t.fps + " fps"
         ];
+        this.printInverseText(lines, c);
+    };
+    
+    this.printGameDebug = function (world, c) {
+        var u = world.getUniverse().units;
+        var cam = world.getCamera();
+        var lines = ["","",
+            u.length + " entities",
+            world.getBlocksRendered() + "/" +
+                    (cam.range.x * 2) * (cam.range.y * 2) + " Blocks rendered",
+            "camera x: " + cam.x + " y: " + cam.y,
+            "( pos ) x: " + Math.round(u[0].x) + " y: " + Math.round(u[0].y),
+            "(Block) x: " + trunc(u[0].x) + " y: " + trunc(Math.round(u[0].y))
+        ];
+        this.printInverseText(lines, c);
+    };
+    
+    this.printInverseText = function (lines, c) {
         c.save(); //saves graphics settings without 'difference composition'
         c.globalCompositeOperation = "difference";
         c.fillStyle = "white";

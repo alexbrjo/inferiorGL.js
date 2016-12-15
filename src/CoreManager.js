@@ -2,10 +2,21 @@
  * Contains the game loop, level data, graphics and units. Responsible for 
  * updating Units, the game board and the screen.
  * 
+ * Graphics
+ *      Tasks
+ *      Camera 
+ * Level Data
+ *      Terrain
+ *      Units & Entities 
+ * Time
+ * Controller
+ *      KeyListener
+ *      MouseListener
+ * 
  * @param {Number} tileSize The pixel size of the square gird tiles 
  * @param {ResourceLoader} rsc 
  */  
-function Universe(tileSize, rsc){
+function CoreManager(tileSize, rsc){
     
     /** {Number} The height and width of the foreground tiles */
     this.tileSize = tileSize;
@@ -22,11 +33,7 @@ function Universe(tileSize, rsc){
      */
     this.camera = new Camera();
     var c = this.camera;
-    window.onresize = function () {
-        c.zoomed = false;
-    };
-    
-    this.environment = null;
+    window.onresize = function () { c.zoomed = false; };
 
     /** {Graphics} */
     this.graphics = new Graphics(this.camera);
@@ -40,32 +47,54 @@ function Universe(tileSize, rsc){
     
     this.applicationStateChange = null;
     
+    this.component = {update: function(){}};
+    
     /**
-     * The main game loop. Called dt/1000 times a second. Must be implemented
-     * by sub-Universe.
+     * The main game loop. Called dt/1000 times a second. 
      */
-    this.update = function () {
-        this.time.update(); // updates the time 
+    this.update = function () {        
+        var w = this.public();
+        this.applicationStateChange = this.component.update(w);
+        this.time.update(w); // updates the time 
         this.camera.update(window.innerWidth, window.innerHeight);
-        this.graphics.print(this);
+        this.graphics.print(w);
     };
     
     /**
-     * Access to all the units currently loaded.
+     * Access to all the units currently loaded
      * 
      * @returns {Array} array of units in the UnitHandler
      */
-    this.getUnits = function (){ 
-        return this.units.list; 
-    };
+    this.getUnits = function (){ return (this.units || {list:null}).list; };
     
     /**
      * Returns an instance of the graphical drawing canvas
+     * 
+     * @return {HTMLcanvas} The canvas element on screen
      */
-    this.getCanvas = function () {
-        return this.graphics.canvas;
-    };
+    this.getCanvas = function () { return this.graphics.canvas; };
     
+    /**
+     * 
+     * @type Universe.level
+     */
+    this.public = function () {       
+        var cam = this.camera;
+        var ctl = this.controller;
+        var gra = this.graphics;
+        var com = this.component;
+        var tim = this.time;
+        var rsc = this.rsc;
+        return { 
+            get: function (a) { return rsc.get(a); },
+            getBlocksRendered: function () { return gra.blocks_rendered; },
+            getCamera: function () { return cam; },
+            getController: function () { return ctl; },
+            getUniverse: function () { return com; },
+            getTime: function () { return tim; }
+        };
+    };
+
     /**
      * Returns the universe back to a blank slate
      */

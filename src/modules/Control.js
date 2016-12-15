@@ -33,4 +33,5 @@ function Control () {
     var t = this;
     window.onkeydown = function (x) { t.setKey(x.which, true); };
     window.onkeyup = function (x) { t.setKey(x.which, false); };
+    window.onmousemove = function (x) { }; 
 }
