@@ -3,8 +3,26 @@
  */
 function Control () {
     
+    /** The current mouse event */
+    this.current = null;
+    
+    /** List of last 10 mouseEvents */
+    this.clickList = new Array(10);
+    
+    this.clickPos = function () {
+        this.blocks_rendered.unshift(this.blocks_rendered.pop());
+            this.blocks_rendered[0] = value;
+    };
+    
     /** If the space bar is pressed down*/
     this.space = false;
+
+//         __ _     _                           
+//        / /(_)___| |_ ___ _ __   ___ _ __   ___ 
+//       / / | / __| __/ _ \ '_ \ / _ \ '_ \ / __|
+//      / /__| \__ \ ||  __/ | | |  __/ | | |\__ \
+//      \____/_|___/\__\___|_| |_|\___|_| | ||___/
+//       KeyEvent Listeners, MouseEvent Listeners                                     
 
     /**
      * 
@@ -28,10 +46,42 @@ function Control () {
     }
     
     /**
-     * Makes key listeners callback here
+     * Starts a click
+     * 
+     * @param {MouseEvent} mouseEvent The mouse event from the HTML document
+     */
+    this.setMouseDown = function (mouseEvent) {
+        this.clickList.unshift(this.clickList.pop());
+        this.clickList[0] = mouseEvent;
+        this.isDown = true;
+    };
+    
+    /**
+     * Ends a click
+     * 
+     * @param {MouseEvent} mouseEvent The mouse event from the HTML document
+     */
+    this.setMouseUp = function (mouseEvent) {
+        this.isDown = false;
+    };
+    
+    /**
+     * Sets the position of the mouse
+     * 
+     * @param {MouseEvent} mouseEvent The mouse event from the HTML document
+     */
+    this.moveMouse = function (mouseEvent) {
+        this.posx = mouseEvent.offsetX;
+        this.posy = mouseEvent.offsetY;
+    };
+    
+    /**
+     * Set key listener functions here
      */
     var t = this;
-    window.onkeydown = function (x) { t.setKey(x.which, true); };
-    window.onkeyup = function (x) { t.setKey(x.which, false); };
-    window.onmousemove = function (x) { }; 
+    window.onkeydown = function (keyEvent) { t.setKey(keyEvent.which, true); };
+    window.onkeyup = function (keyEvent) { t.setKey(keyEvent.which, false); };
+    window.onmousedown = function (mouseEvent) { t.setMouseDown(mouseEvent); }; 
+    window.onmouseup = function (mouseEvent) { t.setMouseUp(mouseEvent); }; 
+    window.onmousemove = function (mouseEvent) { t.moveMouse(mouseEvent); }; 
 }
