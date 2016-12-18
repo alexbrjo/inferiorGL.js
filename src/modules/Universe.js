@@ -47,9 +47,11 @@ function Universe(){
      * @param {Graphics} graphics The core graphics object.
      */
     this.init = function (world, graphics) {
-        graphics.addTask(new LevelGraphics());
+        graphics.addTask(new LevelGraphics(16));
         graphics.addTask(new HudGraphics());
-        world.getCamera().setBounds(0, 0, 151 * 16, 30 * 16, true);
+        world.getCamera().setBounds(0, 0, 
+                this.w * this.tileSize, this.h * this.tileSize, true);
+        world.getCamera().setScaleBounds(2.0, 4.0);
         world.getCamera().setFocusObj(this.units[0]);
     };
     

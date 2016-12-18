@@ -18,10 +18,16 @@ function Camera(){
     var rawScale = 1.0;
     
     /** The min scaling of the camera */
-    var minScale = 2.0;
+    var minScale = null;
     
     /** The max scaling of the camera */
-    var maxScale = 4.0;
+    var maxScale = null;
+    
+    /** Sets the scale bounds */
+    this.setScaleBounds = function (min, max) {
+        minScale = min;
+        maxScale = max;
+    };
     
     /** Sets the zoom of the Camera */
     this.setScale = function (s) {
@@ -84,9 +90,9 @@ function Camera(){
      */
     this.resize = function(display_width, display_height) {
         rawScale = Math.floor(display_width / this.desiredSize);
-        if (rawScale > maxScale) {
+        if (typeof maxScale === "number" && rawScale > maxScale) {
             rawScale = maxScale;
-        } else if (rawScale < minScale) {
+        } else if (typeof minScale === "number" && rawScale < minScale) {
             rawScale = minScale;
         }
         

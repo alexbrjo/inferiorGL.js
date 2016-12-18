@@ -3,7 +3,7 @@
  */
 function LevelGraphics () {
     
-    var tileSize = 16;
+    var tileSize = 0;
     var trunc = function(x) { return Math.trunc(x/tileSize, 2); };
     
     /**
@@ -13,6 +13,7 @@ function LevelGraphics () {
      * @param {RenderingContext2D} c The context to draw on
      */
     this.print = function(world, c) {
+        tileSize = world.getUniverse().tileSize;
         this.printBackground(world, c);
         this.printTerrain(world, c);
     	this.printUnits(world, c);

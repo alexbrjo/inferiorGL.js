@@ -78,6 +78,14 @@ var Graphics = function(camera) {
     };
     
     /**
+     * Disables the debug console
+     */
+    this.disableDebug = function () {
+        debug = null;
+    };
+    
+    
+    /**
      * The master print function called once (1) an update loop. Is responsible for
      * dispatching functions for drawing all items in the queue
      *

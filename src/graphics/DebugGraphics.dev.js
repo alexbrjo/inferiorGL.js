@@ -4,7 +4,7 @@
 function DebugGraphics() {
 
     /** The size of a board tile */ 
-    var tileSize = 16;
+    var tileSize = 0;
     
     /** 
      * Truncates a position to a block location
@@ -20,6 +20,7 @@ function DebugGraphics() {
      * @param {type} c
      */
     this.print = function (world, c) {
+        tileSize = world.getUniverse().tileSize;
         this.printAppDebug(world, c);
         if (typeof world.getUniverse().units !== "undefined" &&
             world.getUniverse().units.length > 0) this.printGameDebug(world, c);

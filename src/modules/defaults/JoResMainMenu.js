@@ -15,10 +15,12 @@ function JoResMainMenu() {
     this.init = function (world) {
         
         logo = world.get("JoRes_logo");
+        world.getCamera().setScale(2.0);
+        world.getCamera().setScaleBounds(2.0, 3.0);
         
         buttons.push(new Button(
                 world.get("JoRes_start"), 
-                0, 0, null, null, "center", "center",
+                0, -6, null, null, "center", "center",
                 function(app) { 
                     app.play(0); 
                 }
@@ -26,7 +28,7 @@ function JoResMainMenu() {
                 
         buttons.push(new Button(
                 world.get("JoRes_build"), 
-                0, 16, null, null, "center", "center", 
+                0, 10, null, null, "center", "center", 
                 function(app) { 
                     app.levelCreator(0); 
                 }

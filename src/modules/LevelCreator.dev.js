@@ -4,9 +4,17 @@
 function LevelCreator(){
     var universe = new Universe();
     
+    universe.resources.push("button_1.png");
+    
+    universe.hud = new LevelCreatorHUD();
+    
     universe.init = function (world, graphics) {
+        this.hud.init(world, graphics);
         graphics.addTask(new LevelGraphics());
+        graphics.addTask(this.hud);
+        graphics.disableDebug();
         world.getCamera().setFocusObj(this.wizard);
+        world.getCamera().setScaleBounds(1.0, 2.0);
     };
     
     universe.wizard = {
@@ -28,6 +36,7 @@ function LevelCreator(){
      */
     universe.update = function(world){
         this.wizard.update(world);
+        this.hud.update(world);
     };
     
     return universe;

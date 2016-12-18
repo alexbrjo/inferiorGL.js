@@ -64,7 +64,9 @@ function Button (img, x, y, w, h, va, ha, f) {
         
         // update the Anchor point
         this.state = this.updateState(world);
-        this.anchorPoint = this.updateAnchorPoint(ca);
+        this.anchorPoint = this.updateAnchorPoint(
+                Math.floor(world.getWidth()/ca.getScale()), 
+                Math.floor(world.getHeight()/ca.getScale()));
         this.graphics.set(this.state, 
               { x: this.anchorPoint.x + this.x, 
                 y: this.anchorPoint.y + this.y });
@@ -76,22 +78,23 @@ function Button (img, x, y, w, h, va, ha, f) {
     /**
      * Determines the buttons location based on the anchor point
      * 
-     * @param {Camera} camera The world's Camera object
+     * @param {Number} display_width The width of the display
+     * @param {Number} display_height The height of the display 
      */
-    this.updateAnchorPoint = function (camera) {
+    this.updateAnchorPoint = function (display_width, display_height) {
         var x = 0, y = 0;
         // Updates the horizontal anchor point
         if (this.horizonalAnchor === "right") {
-            x = this.width - camera.x * 2;
+            x = display_width - this.width;
         } else if (this.horizonalAnchor === "center") {
-            x = -(this.width/2) - camera.x;
+            x = (display_width - this.width)/ 2;
         }
         
         // Updates the vertial anchor point
         if (this.verticalAnchor === "bottom") {
-            y = this.height - camera.y * 2;
+            y = display_height - this.height;
         } else if (this.verticalAnchor === "center") {
-            y = -(this.height/2) - camera.y;
+            y = (display_height - this.height)/ 2;
         }
         return {x: x, y: y};
     };

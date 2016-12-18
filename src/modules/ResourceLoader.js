@@ -59,7 +59,7 @@ function ResourceLoader() {
             };
         } else if (typeof filedata === "object") {
             return filedata;
-        }else {
+        } else {
             console.log(filedata);
         }
     };

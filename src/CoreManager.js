@@ -96,7 +96,9 @@ function CoreManager(tileSize, rsc){
             getCamera: function () { return cam; },
             getController: function () { return ctl; },
             getUniverse: function () { return com; },
-            getTime: function () { return tim; }
+            getTime: function () { return tim; },
+            getWidth: function () { return gra.getDisplay().parentElement.offsetWidth; },
+            getHeight: function () { return gra.getDisplay().parentElement.offsetHeight; }
         };
     };
 
@@ -109,6 +111,7 @@ function CoreManager(tileSize, rsc){
         this.level = null;
         this.graphics.clearTasks();
         this.camera.setScale(1.0);
+        this.camera.setScaleBounds(null, null);
         this.camera.zoomed = false;
     };
 }

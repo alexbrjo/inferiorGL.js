@@ -97,10 +97,10 @@ function JoResEngine() {
         this.rsc.load(this.getLevelPath(level_id));
         this.rsc.whenReady(function () {
             joRes.core.component = new Universe();
+            
             // loads level resource data
             joRes.rsc.load(joRes.core.component.resources);
-            // @FIX move below 8 lines "joRes.core" to init()
-            joRes.rsc.whenReady(function(){ joRes.core.init(); });
+            joRes.rsc.whenReady(function(){ joRes.core.init();});
         });
     };
 
@@ -118,10 +118,10 @@ function JoResEngine() {
         this.rsc.load(this.getLevelPath(level_id));
         this.rsc.whenReady(function () {
             joRes.core.component = LevelCreator();
+            
             // loads level resource data
             joRes.rsc.load(joRes.core.component.resources);
-            joRes.rsc.whenReady(function () {
-            });
+            joRes.rsc.whenReady(function(){ joRes.core.init();});
         });
     };
 

@@ -4,7 +4,10 @@
 function JoResLoad () {
     
     /** Required screen functions */
-    this.init = function(world){};
+    this.init = function(world){
+        world.getCamera().setScale(1.0);
+    };
+    
     this.update = function(world, c){};
     
     /**
