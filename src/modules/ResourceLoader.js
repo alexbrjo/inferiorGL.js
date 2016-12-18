@@ -36,7 +36,7 @@ function ResourceLoader() {
             }
         } else {
             inQueue++;
-            doLoad(doLoad(convertToFileInfo(f)));
+            doLoad(convertToFileInfo(f));
         }
     };
     
@@ -60,7 +60,7 @@ function ResourceLoader() {
         } else if (typeof filedata === "object") {
             return filedata;
         }else {
-            throw new TypeError("Invalid resource information");
+            console.log(filedata);
         }
     };
 
@@ -209,7 +209,7 @@ function ResourceLoader() {
      * 
      * @param {type} path The path to set to
      */
-    this.scriptPath = function (path) {
+    this.setScriptPath = function (path) {
         path_js = path;
     };
 }

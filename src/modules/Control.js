@@ -14,6 +14,9 @@ function Control () {
             this.blocks_rendered[0] = value;
     };
     
+    /** If the mouse is clicked */
+    this.isDown = false;
+    
     /** If the space bar is pressed down*/
     this.space = false;
 
@@ -51,9 +54,9 @@ function Control () {
      * @param {MouseEvent} mouseEvent The mouse event from the HTML document
      */
     this.setMouseDown = function (mouseEvent) {
+        this.setMouse(mouseEvent);
         this.clickList.unshift(this.clickList.pop());
         this.clickList[0] = mouseEvent;
-        this.isDown = true;
     };
     
     /**
@@ -62,7 +65,7 @@ function Control () {
      * @param {MouseEvent} mouseEvent The mouse event from the HTML document
      */
     this.setMouseUp = function (mouseEvent) {
-        this.isDown = false;
+        this.setMouse(mouseEvent);
     };
     
     /**
@@ -70,9 +73,9 @@ function Control () {
      * 
      * @param {MouseEvent} mouseEvent The mouse event from the HTML document
      */
-    this.moveMouse = function (mouseEvent) {
-        this.posx = mouseEvent.offsetX;
-        this.posy = mouseEvent.offsetY;
+    this.setMouse = function (mouseEvent) {
+        this.current = mouseEvent;
+        this.isDown = mouseEvent.buttons > 0;
     };
     
     /**
@@ -83,5 +86,5 @@ function Control () {
     window.onkeyup = function (keyEvent) { t.setKey(keyEvent.which, false); };
     window.onmousedown = function (mouseEvent) { t.setMouseDown(mouseEvent); }; 
     window.onmouseup = function (mouseEvent) { t.setMouseUp(mouseEvent); }; 
-    window.onmousemove = function (mouseEvent) { t.moveMouse(mouseEvent); }; 
+    window.onmousemove = function (mouseEvent) { t.setMouse(mouseEvent); }; 
 }

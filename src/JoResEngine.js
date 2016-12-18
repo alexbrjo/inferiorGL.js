@@ -69,9 +69,9 @@ function JoResEngine() {
      * Updates the core or changes the application state
      */
     this.update = function () {
-        if (typeof joRes.core.applicationStateChange === "function") {
-            joRes.core.applicationStateChange(joRes);
-            joRes.core.applicationStateChange = null;
+        if (typeof this.core.applicationStateChange === "function") {
+            this.core.applicationStateChange(this);
+            this.core.applicationStateChange = null;
         } else {
             this.core.update();
         }
@@ -134,10 +134,12 @@ function JoResEngine() {
      */
     this.menu = function () {
         this.core.close();
-        this.core.graphics.addTask(new JoResMainMenu());
+        var menu = new JoResMainMenu();
+        menu.init(this.core.public());
+        this.core.graphics.addTask(menu);
         this.core.camera.setFocusObj({x: 0, y: 0});
         this.core.camera.scale = 4.0;
-        this.core.component = new Menu();
+        this.core.component = menu;
     };
 
     this.setLevelPath = function (url) {

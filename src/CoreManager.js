@@ -45,6 +45,7 @@ function CoreManager(tileSize, rsc){
     /** {Control} Keeps track of current user input */
     this.controller = new Control();
     
+    /** The state change the application is requesting */
     this.applicationStateChange = null;
     
     this.component = {update: function(){}};
@@ -73,12 +74,13 @@ function CoreManager(tileSize, rsc){
      * @return {HTMLcanvas} The canvas element on screen
      */
     this.getCanvas = function () { return this.graphics.canvas; };
-    
+   
     /**
+     * Creates a public verion of the universe of just getters
      * 
-     * @type Universe.level
+     * @return {Unvierse} A public version of the Universe
      */
-    this.public = function () {       
+    this.public = function () {
         var cam = this.camera;
         var ctl = this.controller;
         var gra = this.graphics;
