@@ -63,7 +63,7 @@ function ButtonGraphics (img, x, y) {
      * @param {RenderingContext2D} c The rendering context
      */
     this.printHover = function (c) {
-        c.globalAlpha = 0.7;
+        c.globalAlpha = 0.8;
         c.drawImage(this.img, this.x, this.y);
         c.globalAlpha = 1.0;
     };
@@ -74,7 +74,7 @@ function ButtonGraphics (img, x, y) {
      * @param {RenderingContext2D} c The rendering context
      */
     this.printClicked = function (c) {
-        c.globalAlpha = 0.2;
+        c.globalAlpha = 0.6;
         c.drawImage(this.img, this.x, this.y);
         c.globalAlpha = 1.0;
     };

@@ -89,6 +89,7 @@ function CoreManager(tileSize, rsc){
         var rsc = this.rsc;
         return { 
             get: function (a) { return rsc.get(a); },
+            load: function (x) { return rsc.load(x); },
             getBlocksRendered: function () { return gra.blocks_rendered; },
             getCamera: function () { return cam; },
             getController: function () { return ctl; },
