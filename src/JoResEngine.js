@@ -66,7 +66,7 @@ function JoResEngine() {
                     window.webkitRequestAnimationFrame ||
                     window.msRequestAnimationFrame ||
                     window.oRequestAnimationFrame;
-            frame(loop, joRes.core.getCanvas());
+            frame(loop, joRes.core.graphics.getCanvas());
         };
         loop();
     };

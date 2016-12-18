@@ -58,11 +58,15 @@ function CoreManager(tileSize, rsc){
     /**
      * The main game loop. Called dt/1000 times a second. 
      */
-    this.update = function () {        
+    this.update = function () {
+        
+        var parent = this.graphics.getDisplay().parentElement;
         var w = this.public();
+        
         this.applicationStateChange = this.component.update(w);
+        
         this.time.update(w); // updates the time 
-        this.camera.update(window.innerWidth, window.innerHeight);
+        this.camera.update(parent.offsetWidth, parent.offsetHeight);
         this.graphics.print(w);
     };
     
@@ -72,13 +76,6 @@ function CoreManager(tileSize, rsc){
      * @returns {Array} array of units in the UnitHandler
      */
     this.getUnits = function (){ return (this.units || {list:null}).list; };
-    
-    /**
-     * Returns an instance of the graphical drawing canvas
-     * 
-     * @return {HTMLcanvas} The canvas element on screen
-     */
-    this.getCanvas = function () { return this.graphics.canvas; };
    
     /**
      * Creates a public verion of the universe of just getters

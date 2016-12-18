@@ -20,6 +20,20 @@ var Graphics = function(camera) {
     var canvas = document.createElement('canvas');
     var ctx = canvas.getContext('2d');  
     
+    /**
+     * Returns an instance of the display canvas
+     * 
+     * @return {HTMLcanvas} The canvas element on screen
+     */
+    this.getDisplay = function () { return display; };
+    
+    /**
+     * Returns an instance of the graphical drawing canvas
+     * 
+     * @return {HTMLcanvas} The canvas element drawn on
+     */
+    this.getCanvas = function () { return canvas; };
+    
     /** 
      * Any function that has the ctx variable also needs the camera so I went
      * ahead and added a ref directly to the context.
@@ -72,9 +86,9 @@ var Graphics = function(camera) {
     this.print = function(world) {
 	
         // clear the edit_ctx for a new frame
-        canvas.width = display.width = window.innerWidth;
-        canvas.height = display.height = window.innerHeight;
-    	
+        canvas.width = display.width = display.parentElement.offsetWidth;
+        canvas.height = display.height = display.parentElement.offsetHeight;
+
         for (var task in printTasks) {
             printTasks[task].print(world, ctx);
         }     

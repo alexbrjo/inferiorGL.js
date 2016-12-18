@@ -14,8 +14,14 @@ function Camera(){
     /** How many times bigger pixels appear to be after zoomed */
     var scale = 1.0;
     
-    /** This controls the scaling of the program */
+    /** This controls the scaling of the camera */
     var rawScale = 1.0;
+    
+    /** The min scaling of the camera */
+    var minScale = 2.0;
+    
+    /** The max scaling of the camera */
+    var maxScale = 4.0;
     
     /** Sets the zoom of the Camera */
     this.setScale = function (s) {
@@ -24,7 +30,7 @@ function Camera(){
     
     /** Gets the entire scale of the program */
     this.getScale = function () {
-        return scale * rawScale;
+        return rawScale * scale;
     }
    ;
     /** How many pixels the camera's image encompasses */
@@ -78,6 +84,12 @@ function Camera(){
      */
     this.resize = function(display_width, display_height) {
         rawScale = Math.floor(display_width / this.desiredSize);
+        if (rawScale > maxScale) {
+            rawScale = maxScale;
+        } else if (rawScale < minScale) {
+            rawScale = minScale;
+        }
+        
         this.range.x = Math.round( display_width / (tileSize * this.getScale()));
         this.range.y = Math.round(display_height / (tileSize * this.getScale()));
         this.zoomed = true;
