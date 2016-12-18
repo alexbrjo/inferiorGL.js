@@ -100,14 +100,7 @@ function JoResEngine() {
             // loads level resource data
             joRes.rsc.load(joRes.core.component.resources);
             // @FIX move below 8 lines "joRes.core" to init()
-            joRes.rsc.whenReady(function () {
-                joRes.core.close();
-                joRes.core.graphics.addTask(new LevelGraphics());
-                joRes.core.graphics.addTask(new HudGraphics());
-                joRes.core.camera.setBounds(0, 0, 151 * 16, 30 * 16, true);
-                joRes.core.camera.setFocusObj(joRes.core.component.units[0]);
-                joRes.core.camera.scale = 4.0;
-            });
+            joRes.rsc.whenReady(function(){ joRes.core.init(); });
         });
     };
 
@@ -119,7 +112,7 @@ function JoResEngine() {
     this.levelCreator = function (level_id) {
         
         this.core.close();
-        this.core.screen("loading");
+        this.screen("loading");
         
         //loads level data
         this.rsc.load(this.getLevelPath(level_id));
@@ -128,10 +121,6 @@ function JoResEngine() {
             // loads level resource data
             joRes.rsc.load(joRes.core.component.resources);
             joRes.rsc.whenReady(function () {
-                joRes.core.close();
-                joRes.core.graphics.addTask(new LevelGraphics());
-                joRes.core.camera.setFocusObj(joRes.core.component.wizard);
-                joRes.core.camera.scale = 1.0;
             });
         });
     };
@@ -148,7 +137,6 @@ function JoResEngine() {
         screen.init(this.core.public());
         this.core.graphics.addTask(screen);
         this.core.camera.setFocusObj({x: 0, y: 0});
-        this.core.camera.scale = 4.0;
         this.core.component = screen;
     };
     

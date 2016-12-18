@@ -41,6 +41,19 @@ function Universe(){
     };
     
     /**
+     * Initalizes the Universe
+     * 
+     * @param {Universe} world The getting of the world
+     * @param {Graphics} graphics The core graphics object.
+     */
+    this.init = function (world, graphics) {
+        graphics.addTask(new LevelGraphics());
+        graphics.addTask(new HudGraphics());
+        world.getCamera().setBounds(0, 0, 151 * 16, 30 * 16, true);
+        world.getCamera().setFocusObj(this.units[0]);
+    };
+    
+    /**
      * The main game loop. Called dt/1000 times a second.
      * 
      * @param {World} world The getters for the Universe.

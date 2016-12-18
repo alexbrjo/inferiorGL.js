@@ -50,6 +50,11 @@ function CoreManager(tileSize, rsc){
     
     this.component = {update: function(){}};
     
+    this.init = function () {
+        this.close();
+        this.component.init(this.public(), this.graphics);
+    };
+    
     /**
      * The main game loop. Called dt/1000 times a second. 
      */
@@ -106,7 +111,7 @@ function CoreManager(tileSize, rsc){
         this.wizard = null;
         this.level = null;
         this.graphics.clearTasks();
-        this.camera.scale = 1.0;
+        this.camera.setScale(1.0);
         this.camera.zoomed = false;
     };
 }

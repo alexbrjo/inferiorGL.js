@@ -46,7 +46,7 @@ function JoResSplash (f) {
      * @param {Universe} world The entire world
      */
     this.update = function (world) {
-        world.getCamera().scale = 8.0;
+        world.getCamera().setScale(2.0);
         if (world.getTime().now > endTime) {
             callBack();
         } else {

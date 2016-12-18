@@ -106,7 +106,7 @@ function Button (img, x, y, w, h, va, ha, f) {
         var m = world.getController().current;
         var c = world.getCamera();
         if (m !== null && 
-                this.contains(m.offsetX/c.scale, m.offsetY/c.scale)) {
+                this.contains(m.offsetX/c.getScale(), m.offsetY/c.getScale())) {
             if (world.getController().isDown) {
                 return "clicked";
             } else {

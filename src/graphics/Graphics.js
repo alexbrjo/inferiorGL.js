@@ -86,8 +86,8 @@ var Graphics = function(camera) {
 		
         graphics.clearRect(0, 0, display.width, display.height);
         graphics.drawImage(canvas, 0,0, 
-        	display.width  * ctx.camera.scale, 
-        	display.height * ctx.camera.scale);
+        	display.width  * ctx.camera.getScale(), 
+        	display.height * ctx.camera.getScale());
         if (debug !== null) {
             debug.print(world, graphics);
         }

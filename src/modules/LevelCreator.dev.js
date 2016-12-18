@@ -3,6 +3,12 @@
  */  
 function LevelCreator(){
     var universe = new Universe();
+    
+    universe.init = function (world, graphics) {
+        graphics.addTask(new LevelGraphics());
+        world.getCamera().setFocusObj(this.wizard);
+    };
+    
     universe.wizard = {
             x: 0,
             y: 0,
@@ -17,6 +23,8 @@ function LevelCreator(){
     
     /**
      * The main game loop. Called dt/1000 times a second.
+     * 
+     * @param {Universe} world The entire universe
      */
     universe.update = function(world){
         this.wizard.update(world);

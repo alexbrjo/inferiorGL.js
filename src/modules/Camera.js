@@ -8,12 +8,25 @@ function Camera(){
             
     /** The object to center the camera on */        
     this.focusObj = {x:0, y:0};
-    
+      
+    this.desiredSize = 16 * 16;
+      
     /** How many times bigger pixels appear to be after zoomed */
-    this.scale = 1.0;
-    this.maxScale = 6;
-    this.edgeBuffer = 2;
+    var scale = 1.0;
     
+    /** This controls the scaling of the program */
+    var rawScale = 1.0;
+    
+    /** Sets the zoom of the Camera */
+    this.setScale = function (s) {
+        scale = s;
+    };
+    
+    /** Gets the entire scale of the program */
+    this.getScale = function () {
+        return scale * rawScale;
+    }
+   ;
     /** How many pixels the camera's image encompasses */
     this.range = {x:0, y:0};
     
@@ -40,8 +53,8 @@ function Camera(){
          * Centers Camera on the focusobj and prevents from moving out of 
          * bounds
          */
-        var half_width = display_width / (2 * this.scale);
-        var half_height = display_height / (2 * this.scale);
+        var half_width = display_width / (2 * this.getScale());
+        var half_height = display_height / (2 * this.getScale());
         
         this.x = Math.round(Math.round(this.focusObj.x) - half_width);
         this.y = Math.round(Math.round(this.focusObj.y) - half_height);
@@ -64,8 +77,9 @@ function Camera(){
      * @param {Number} display_height The height of the display.
      */
     this.resize = function(display_width, display_height) {
-        this.range.x = Math.round( display_width / (tileSize * this.scale));
-        this.range.y = Math.round(display_height / (tileSize * this.scale));
+        rawScale = Math.floor(display_width / this.desiredSize);
+        this.range.x = Math.round( display_width / (tileSize * this.getScale()));
+        this.range.y = Math.round(display_height / (tileSize * this.getScale()));
         this.zoomed = true;
     };
     
