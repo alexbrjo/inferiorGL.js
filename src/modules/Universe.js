@@ -13,18 +13,23 @@ function Universe(){
         throw new Error("Level not loaded");
     }
     
+    this.name = "", this.author = "", this.desc = "";
     this.h = 0, this.w = 0, this.tileSize = 0; // height, width and tileSize of the level
     this.resources = []; // every image sprite used in the level
     this.terrain_sprite = []; // the sprite sheet for the terrain
+    this.unit_index = []; // not implemented
     this.sprite_index = []; // <BLock data> LARGE ARRAY HOLDS TERRAIN SPRITE INFO
     this.data = [[]]; // <Level data> VERY LARGE ARRAY HOLDS ALL BLOCKS
-    this.unitList = []; // not implemented
+    this.unit_data = []; // not implemented
     
     Object.assign(this, new JoResLevel());
     /********************************************/
     
     /** {Array} Stores Units  */
     this.units = [];
+    
+    /** Graphics for the Universe */
+    this.graphics = [];
     
     /**
      * Gets the player object.
@@ -47,12 +52,22 @@ function Universe(){
      * @param {Graphics} graphics The core graphics object.
      */
     this.init = function (world, graphics) {
-        graphics.addTask(new LevelGraphics(16));
-        graphics.addTask(new HudGraphics());
+        this.graphics = [new LevelGraphics(16), new HudGraphics()];
+        graphics.addTask(this);
         world.getCamera().setBounds(0, 0, 
                 this.w * this.tileSize, this.h * this.tileSize, true);
         world.getCamera().setScaleBounds(2.0, 4.0);
-        world.getCamera().setFocusObj(this.units[0]);
+        
+        for (var i = 0; i < this.unit_data.length; i++) {
+            if (this.unit_data[i] === 1) {
+                this.newPlayer(i * this.tileSize, 0);
+            } else if (this.unit_data[i] === 2) {
+                this.newSoldier(i * this.tileSize, 0);
+            } else if (this.unit_data[i] === 3) {
+                this.newRPGsoldier(i * this.tileSize, 0);
+            }
+        }
+        world.getCamera().setFocusObj(this.player());
     };
     
     /**
@@ -61,7 +76,7 @@ function Universe(){
      * @param {World} world The getters for the Universe.
      */
     this.update = function(world){
-        if (this.units[0].x > 0) {
+        if (this.units.length > 0) {
             var toDestroy = [];
             // move this.units and objects
             for (var i = 0; i < this.units.length; i++) {
@@ -79,6 +94,18 @@ function Universe(){
                 }
             }
         }
+    };
+    
+    /**
+     * Prints the Universe
+     * 
+     * @param {Unniverse} world The entire Universe
+     * @param {RenderingContext2D} c The graphical context
+     */
+    this.print = function (world, c) {
+        for (var i = 0; i < this.graphics.length; i++) {
+            this.graphics[i].print(world, c);
+        } 
     };
 
     /**
@@ -197,12 +224,4 @@ function Universe(){
             }
         };
     };
-    
-        // ----- LevelData doesn't handle entities yet @TODO ----\\
-    this.newPlayer(150, 70);
-    this.newSoldier(14*16, 13*16);
-    this.newSoldier(50*16, 13*16);
-    this.newRPGsoldier(31*16, 13*16);
-    this.newSoldier(84*16, 3*16);
-    // ------------------------------------------------------//
 }

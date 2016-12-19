@@ -111,6 +111,9 @@ function Button (img, x, y, w, h, va, ha, f) {
         if (m !== null && 
                 this.contains(m.offsetX/c.getScale(), m.offsetY/c.getScale())) {
             if (world.getController().isDown) {
+                // This "claims" the mouse click, no other componenets will 
+                // think the mouse has been clicked
+                world.getController().isDown = false;
                 return "clicked";
             } else {
                 return "hover";

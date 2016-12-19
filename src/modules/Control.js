@@ -6,6 +6,15 @@ function Control () {
     /** The current mouse event */
     this.current = null;
     
+    /** 
+     * String of all characters typed since the last time the enter key has 
+     * been pressed
+     */
+    this.charString = "";
+    
+    /** Whether or not to log the keys pressed */
+    this.logKeys = false;
+    
     /** List of last 10 mouseEvents */
     this.clickList = new Array(10);
     
@@ -17,8 +26,17 @@ function Control () {
     /** If the mouse is clicked */
     this.isDown = false;
     
-    /** If the space bar is pressed down*/
+    /** If the space bar is pressed down */
     this.space = false;
+    
+    /** If the shift key is pressed down */
+    this.shift = false;
+    
+    /** If the enter key is pressed down */
+    this.enter = false;
+    
+    /** If the enter key is pressed down */
+    this.delete = false;
 
 //         __ _     _                           
 //        / /(_)___| |_ ___ _ __   ___ _ __   ___ 
@@ -26,26 +44,49 @@ function Control () {
 //      / /__| \__ \ ||  __/ | | |  __/ | | |\__ \
 //      \____/_|___/\__\___|_| |_|\___|_| | ||___/
 //       KeyEvent Listeners, MouseEvent Listeners                                     
-
+//
     /**
      * 
      * @param {Number} which The char code of the key that is down
      * @param {Boolean} down If the key is down
      */
     this.setKey = function (which, down) {
+        var char = "";
         if (which >= 65 && which <= 90) {
-            var key = String.fromCharCode(which);
-            this[key.toLowerCase()] = down;
+            char = String.fromCharCode(which);
+            this[char.toLowerCase()] = down;
         } else {
+            if (which === 8) this.delete = down;
+            if (which === 13) {
+                this.enter = down;
+                this.charString = "";
+            }
+            if (which === 16) this.shift = down;
             if (which === 32) this.space = down;
+        }
+        
+        // Logs the keys if enabled
+        if (down && this.logKeys) {
+            if (this.space) {
+                this.charString += " ";
+            } else if (this.delete) {
+                this.charString = this.charString.substring(0, this.charString.length - 1);
+            } else {
+                if (this.shift) {
+                    this.charString += char.toUpperCase();
+                } else {
+                    this.charString += char.toLowerCase();
+                }
+            }
         }
     };
     
     /**
-     * Sets all keys a to z to false
+     * Sets all keys a to z to false. Sets enter to reset charString;
      */
     for (var i = 65; i <= 90; i++) {
         this.setKey(i, false);
+        this.charString = "";
     }
     
     /**

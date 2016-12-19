@@ -51,6 +51,18 @@ function Camera(){
     /** The size of a board tile */ 
     var tileSize = 16;
     
+    /** The width of the screen */
+    this.screenWidth = null;
+    
+    /** The heigth of the screen */
+    this.screenHeight = null;
+    
+        /** The width of the canvas */
+    this.canvasWidth = null;
+    
+    /** The heigth of the canvas */
+    this.canvasHeight = null;
+    
     /**
      * Updates the position of the camera.
      * 
@@ -65,8 +77,8 @@ function Camera(){
          * Centers Camera on the focusobj and prevents from moving out of 
          * bounds
          */
-        var half_width = display_width / (2 * this.getScale());
-        var half_height = display_height / (2 * this.getScale());
+        var half_width = this.screenWidth / (2 * this.getScale());
+        var half_height = this.screenHeight / (2 * this.getScale());
         
         this.x = Math.round(Math.round(this.focusObj.x) - half_width);
         this.y = Math.round(Math.round(this.focusObj.y) - half_height);
@@ -76,9 +88,9 @@ function Camera(){
          */
         if (bounds.areSet) { 
             if(this.x < bounds.left) this.x = bounds.left;
-            if(this.x + display_width > bounds.right) this.x = bounds.right;
+            if(this.x + this.screenWidth > bounds.right) this.x = bounds.right;
             if(this.y < bounds.top) this.y = bounds.top;
-            if(this.y + display_height > bounds.bottom) this.y = bounds.bottom;
+            if(this.y + this.screenHeight > bounds.bottom) this.y = bounds.bottom;
         }
     };
     
@@ -95,6 +107,11 @@ function Camera(){
         } else if (typeof minScale === "number" && rawScale < minScale) {
             rawScale = minScale;
         }
+        
+        this.screenWidth = display_width;
+        this.screenHeight = display_height;
+        this.canvasWidth = display_width / this.getScale();
+        this.canvasHeight = display_height / this.getScale();
         
         this.range.x = Math.round( display_width / (tileSize * this.getScale()));
         this.range.y = Math.round(display_height / (tileSize * this.getScale()));
