@@ -10,11 +10,13 @@ function LevelCreatorHUD () {
     /** Block selector variables */
     var rowLength = 10;
     
+    var tileSize = 0;
+    
     this.init = function (world, graphics) {
         
         var level = world.getUniverse();
         var terrain = level.sprite_index;
-        var tileSize = level.tileSize;
+        tileSize = level.tileSize;
         
         // creates buttons for every terrain sprite
         for (var i = 0; i < terrain.length; i++) {
@@ -49,7 +51,6 @@ function LevelCreatorHUD () {
         var cam = world.getCamera();
         
         var menuHeight = 48;
-        var tileSize = 16;
         
         c.fillStyle = "#577f63";
         c.fillRect(0, cam.canvasHeight - (menuHeight + 2), cam.canvasWidth, 1);

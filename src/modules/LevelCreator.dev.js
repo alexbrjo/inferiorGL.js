@@ -15,6 +15,7 @@ function LevelCreator(){
         graphics.disableDebug();
         world.getCamera().setFocusObj(this.wizard);
         world.getCamera().setScaleBounds(1.0, 2.0);
+        world.getCamera().setTileSize(this.tileSize);
         
         var level = world.getUniverse();
         for (var i = 0; i < level.unit_data.length; i++) {
@@ -49,8 +50,8 @@ function LevelCreator(){
                 if (ctrl.isDown) {
                     var mouse = ctrl.current;
                     var cam = world.getCamera();
-                    var x = Math.trunc((mouse.offsetX / 2 + cam.x) / 16);
-                    var y = Math.trunc((mouse.offsetY / 2  + cam.y) / 16);
+                    var x = Math.trunc((mouse.offsetX / 2 + cam.x) / world.getUniverse().tileSize);
+                    var y = Math.trunc((mouse.offsetY / 2  + cam.y) / world.getUniverse().tileSize);
                     world.getUniverse().setData(x, y, this.brush);
                 }
             }

@@ -29,7 +29,7 @@ function LevelGraphics () {
         for (var i = 0; i < 3; i++) {
             c.drawImage(world.get("bg.png"),
                 0, 0, 240, 240,
-                i*240, -50, 240, 240);
+                i * 240, -50, 240, 240);
         }
     };
     

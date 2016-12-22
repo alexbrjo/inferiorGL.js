@@ -9,7 +9,7 @@ function Camera(){
     /** The object to center the camera on */        
     this.focusObj = {x:0, y:0};
       
-    this.desiredSize = 16 * 16;
+    this.desiredSize = 16 * 10;
       
     /** How many times bigger pixels appear to be after zoomed */
     var scale = 1.0;
@@ -49,7 +49,11 @@ function Camera(){
     this.zoomed = false;
     
     /** The size of a board tile */ 
-    var tileSize = 16;
+    var tileSize = 0;
+
+    this.setTileSize = function (ts) {
+        tileSize = ts;
+    };
     
     /** The width of the screen */
     this.screenWidth = null;

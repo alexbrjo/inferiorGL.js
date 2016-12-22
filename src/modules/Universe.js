@@ -57,6 +57,7 @@ function Universe(){
         world.getCamera().setBounds(0, 0, 
                 this.w * this.tileSize, this.h * this.tileSize, true);
         world.getCamera().setScaleBounds(2.0, 4.0);
+        world.getCamera().setTileSize(this.tileSize);
         
         for (var i = 0; i < this.unit_data.length; i++) {
             if (this.unit_data[i] === 1) {
@@ -154,7 +155,7 @@ function Universe(){
     };
 
     this.terrain = function (x, y) {
-        if (x > this.w || x < 0 || y < 0 || y > this.h ||
+        if (x > this.w - 1 || x < 0 || y < 0 || y > this.h - 1 ||
                 typeof x === "undefined" || typeof y === "undefined")
             return 0;
         return this.data[x][y];
