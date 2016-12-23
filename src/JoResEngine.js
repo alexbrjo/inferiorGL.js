@@ -96,7 +96,7 @@ function JoResEngine() {
         //loads level data
         this.rsc.load(this.getLevelPath(level_id));
         this.rsc.whenReady(function () {
-            joRes.core.component = new Universe();
+            joRes.core.component = new Universe(joRes.unit_list);
             
             // loads level resource data
             joRes.rsc.load(joRes.core.component.resources);
@@ -138,6 +138,11 @@ function JoResEngine() {
         this.core.graphics.addTask(screen);
         this.core.camera.setFocusObj({x: 0, y: 0});
         this.core.component = screen;
+    };
+    
+    this.unit_list = [];
+    this.addUnit = function (u) {
+        this.unit_list.push(u);
     };
     
     /** Quits the application */

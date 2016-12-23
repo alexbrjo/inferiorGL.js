@@ -1,18 +1,8 @@
 /**
- * Creates an RPGsoldier
+ * Stores the basic artifical intelligence for units
  */
-
-function RPGsoldier() {
-    /** Essential Unit Properties */
-    this.width = 15;
-    this.height = 25;
-    
-    /** Sprite Properties */
-    this.img = "rpgsoldier.png";
-    this.imgSize = 40;
-    this.imgDisplacement = [12,12];
-
-    this.move = function (world) {
+var BasicAI = {   
+    pace: function (world) {
         this.tick++;
         if (this.tick > 200)
             this.tick = 0;
@@ -27,7 +17,5 @@ function RPGsoldier() {
             this.vx = this.speed;
             this.direction = 1;
         }
-    };
-}
-
-
+    }
+};

@@ -60,12 +60,8 @@ function Universe(){
         world.getCamera().setTileSize(this.tileSize);
         
         for (var i = 0; i < this.unit_data.length; i++) {
-            if (this.unit_data[i] === 1) {
-                this.newPlayer(i * this.tileSize, 0);
-            } else if (this.unit_data[i] === 2) {
-                this.newSoldier(i * this.tileSize, 0);
-            } else if (this.unit_data[i] === 3) {
-                this.newRPGsoldier(i * this.tileSize, 0);
+            if (this.unit_data[i] > 0) { 
+                this.addUnit(this.unit_data[i] - 1, i * this.tileSize, i);
             }
         }
         world.getCamera().setFocusObj(this.player());
@@ -110,36 +106,26 @@ function Universe(){
     };
 
     /**
-     * Creates and adds a new Player object to the Unit array. 
+     * Creates and adds a new Unit to the Unit array. 
      * 
+     * @param {Number} type The type of the unit
      * @param {Number} x The x coordinate to create the Unit.
      * @param {Number} y The y coordinate to create the Unit.
      */
-    this.newPlayer = function (x, y) {
-        var e = Object.assign(new Unit(this.units.length, x, y), new Player());
-        this.units.push(e);
-    };
-    
-    /**
-     * Creates and adds a new Soldier to the Unit array.
-     * 
-     * @param {Number} x The x coordinate to create the Unit.
-     * @param {Number} y The y coordinate to create the Unit.
-     */
-    this.newSoldier = function (x, y) {
-        var e = Object.assign(new Unit(this.units.length, x, y), new Soldier());
-        this.units.push(e);
-    };
-    
-    /**
-     * Creates and adds a new RPG Soldier to the Unit array.
-     * 
-     * @param {Number} x The x coordinate to create the Unit.
-     * @param {Number} y The y coordinate to create the Unit.
-     */
-    this.newRPGsoldier = function (x, y) {
-        var e = Object.assign(new Unit(this.units.length, x, y), new RPGsoldier());
-        this.units.push(e);
+    this.addUnit = function (type, x, y) {
+        var unit = null;
+        
+        if (typeof this.unit_index[type] === "function") {
+            unit = this.unit_index[type]();
+        } else if (typeof this.unit_index[type] === "object") {
+            unit = Object.assign(this.unit_index[type]);
+        }
+        
+        if (typeof unit.move !== "function") {
+            unit.move = BasicAI[unit.move];
+        }
+        
+        this.units.push(Object.assign(new Unit(this.units.length, x, y), unit));
     };
     
     this.trunc = function (x) {
