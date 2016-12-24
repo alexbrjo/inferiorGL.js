@@ -1,19 +1,17 @@
 /**
- * The graphics for the terrian, units and entities.
+ * The graphics for the terrian, units and entities. Divides up the level into 
+ * slices to optimize drawing terrain.
+ * 
+ * @param {Universe} world The entire universe
  */
 function LevelGraphics (world) {
-    
-    var tileSize = 0;
-    var trunc = function(x) { return Math.trunc(x/tileSize, 2); };
-    
+
     var slices = [];
     
-    var slice_size = 8;
-    
     var level = world.getUniverse();
-    var height = level.data[0].length;
-    for (var i = 0; i < level.data.length / slice_size; i ++) {
-        slices.push(new Slice(i, slice_size, height, world));
+    var height = level.height();
+    for (var i = 0; i < level.data.length; i ++) { //@TODO don't directly use level.data
+        slices.push(new Slice(i, level.sliceSize, height, world));
     }
     
     /**
@@ -23,7 +21,6 @@ function LevelGraphics (world) {
      * @param {RenderingContext2D} c The context to draw on
      */
     this.print = function(world, c) {
-        tileSize = world.getUniverse().tileSize;
         this.printBackground(world, c);
         this.printSlices(world, c);
     	this.printUnits(world, c);
@@ -75,19 +72,19 @@ function LevelGraphics (world) {
         this.blocks_rendered = 0;
         // the +2 try to change to a variable or integrate into camera.range.x
 
-        for (var i = trunc(c.camera.x) - c.camera.range.x + 2; 
-        		 i < trunc(c.camera.x) + c.camera.range.x + 2;
+        for (var i = lvl.trunc(c.camera.x) - c.camera.range.x + 2; 
+        		 i < lvl.trunc(c.camera.x) + c.camera.range.x + 2;
         		 i++) {
-            for (var j = trunc(c.camera.y) - c.camera.range.y + 2; 
-            		 j < trunc(c.camera.y) + c.camera.range.y + 2; 
+            for (var j = lvl.trunc(c.camera.y) - c.camera.range.y + 2; 
+            		 j < lvl.trunc(c.camera.y) + c.camera.range.y + 2; 
             		 j++) {
-                var block = lvl.getBlockObject(tileSize * i, tileSize * j);
+                var block = lvl.generateBlockObject(lvl.tileSize * i, lvl.tileSize * j);
                 var pos = block.pos; // pos of tile in background
                 var img = block.sprite; //pos of sprite on img file
                     
                 if (img.id > 0) {
                     c.drawImage(world.get(lvl.terrain_sprite),
-                            img.x * tileSize, img.y * tileSize, img.w, img.h,
+                            img.x * lvl.tileSize, img.y * lvl.tileSize, img.w, img.h,
                             pos.x - c.camera.x, pos.y - c.camera.y, pos.w, pos.h);
                     this.blocks_rendered++;
                 }
@@ -106,7 +103,7 @@ function LevelGraphics (world) {
      */
     this.printSlices = function (world, c) {
         for (var i = 0; i < slices.length; i++) {
-            var img = slices[i].image;
+            var img = slices[i].getImage(world);
             var pos = slices[i].pos;
             c.drawImage(img,
                 0, 0, img.width, img.height,
@@ -138,6 +135,7 @@ function Slice (a, w, h, world) {
     var lvl = world.getUniverse();
     var ts = lvl.tileSize;
     
+    this.altered = true;
     this.image.width = this.w * ts;
     this.image.height = this.h * ts;
     this.pos = {
@@ -145,20 +143,38 @@ function Slice (a, w, h, world) {
         y: 0
     };
     
-    for (var i = 0; i < this.w; i++) {
-        for (var j = 0; j < this.h; j++) {
-            var block = lvl.getBlockObject(ts * (i + this.x), ts * j);
-            var pos = block.pos; // pos of tile in background
-            var img = block.sprite; //pos of sprite on img file
+    /**
+     * Gets the slice image and generates a need one if the slice has been 
+     * altered.
+     * 
+     * @param {Universe} world The entire Universe
+     */
+    this.getImage = function (world) {
+        if (world.getUniverse().altered(this.number)) this.generateImage(world);
+        return this.image;
+    };
+    
+    /**
+     * Generates the slice image
+     * 
+     * @param {Universe} world The entire Universe
+     */
+    this.generateImage = function(world) {
+        for (var i = 0; i < this.w; i++) {
+            for (var j = 0; j < this.h; j++) {
+                var block = lvl.generateBlockObject(ts * (i + this.x), ts * j);
+                var pos = block.pos; // pos of tile in background
+                var img = block.sprite; //pos of sprite on img file
 
-            if (img.id > 0) {
-                ctx.drawImage(world.get(lvl.terrain_sprite),
-                        img.x * ts, img.y * ts, img.w, img.h,
-                        pos.x - (this.x * ts), pos.y, pos.w, pos.h);
-                this.blocks_rendered++;
-            }
-        } // for j
-    } // for i
-    this.altered = false;
-   
+                if (img.id > 0) {
+                    ctx.drawImage(world.get(lvl.terrain_sprite),
+                            img.x * ts, img.y * ts, img.w, img.h,
+                            pos.x - (this.x * ts), pos.y, pos.w, pos.h);
+                    this.blocks_rendered++;
+                }
+            } // for j
+        } // for i
+        this.altered = false;
+    };
+    this.generateImage(world);
 }

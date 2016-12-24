@@ -41,8 +41,14 @@ function LevelDataGenerator (level) {
     for (var i = 0; i < level.data.length; i++) {
         file += "\t[";
         for (var j = 0; j < level.data[i].length; j++) {
-            file += level.data[i][j];
+            file += "\t\t[";
+            for (var k = 0; k < level.data[i][j].length; k++) {
+                file += level.data[i][j][k];
+                if (k !== level.data[i][j].length - 1) file += ",";
+            }
+            file += "]";
             if (j !== level.data[i].length - 1) file += ",";
+            file += "\n";
         }
         file += "]";
         if (i !== level.data.length - 1) file += ",";

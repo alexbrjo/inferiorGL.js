@@ -166,7 +166,7 @@ function Unit(id, x, y) {
         var next = {x: this.x, y: this.y + this.vy};
         for (var i = 0; i < this.points(); i++) {
             var point = this.points(i, next);
-            var block = lvl.getBlockObject(point.x, point.y).AABB;
+            var block = lvl.generateBlockObject(point.x, point.y).AABB;
             if (block.s(point.x, point.y)) {
                 // grounded
                 if (this.y + this.height <= block.y) {
@@ -195,7 +195,7 @@ function Unit(id, x, y) {
         var next = {x: this.x + this.vx, y: this.y};        
         for (var i = 0; i < this.points(); i++) {
             var point = this.points(i, next);
-            var block = lvl.getBlockObject(point.x, point.y).AABB;
+            var block = lvl.generateBlockObject(point.x, point.y).AABB;
             point = this.points(i, next);
             if (block.s(point.x, point.y)) {
                 // wall right

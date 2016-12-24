@@ -14,18 +14,24 @@ function Universe(){
     }
     
     this.name = "", this.author = "", this.desc = "";
-    this.h = 0, this.w = 0, this.tileSize = 0; // height, width and tileSize of the level
+    this.h = 0, this.w = 0, this.tileSize = 0, this.sliceSize = 0; 
     this.min_scale = 1, this.max_scale = 1;
     
     this.resources = []; // every image sprite used in the level
     this.terrain_sprite = []; // the sprite sheet for the terrain
     this.unit_index = []; // not implemented
     this.sprite_index = []; // <BLock data> LARGE ARRAY HOLDS TERRAIN SPRITE INFO
-    this.data = [[]]; // <Level data> VERY LARGE ARRAY HOLDS ALL BLOCKS
+    this.data = [[[]]]; // <Level data> VERY LARGE ARRAY HOLDS ALL BLOCKS
     this.unit_data = []; // not implemented
     
     Object.assign(this, new JoResLevel());
     /********************************************/
+    
+    /** {Array} Keeps track of which slices are altered */
+    var alter = new Array(this.data.length);
+    for (var i = 0; i < alter.length; i++) {
+        alter[i] = false;
+    }
     
     /** {Array} Stores Units  */
     this.units = [];
@@ -54,8 +60,11 @@ function Universe(){
      * @param {Graphics} graphics The core graphics object.
      */
     this.init = function (world, graphics) {
+        // set up graphics
         this.graphics = [new LevelGraphics(world), new HudGraphics()];
         graphics.addTask(this);
+        
+        // set up camera
         world.getCamera().setBounds(0, 0, 
                 this.w * this.tileSize, this.h * this.tileSize, true);
         world.getCamera().setScaleBounds(this.min_scale, this.max_scale);
@@ -108,6 +117,16 @@ function Universe(){
     };
 
     /**
+     * Getters, setters and small math utility functions 
+     */
+    this.trunc = function (x) { return Math.trunc(x / this.tileSize, 2); };
+    this.terrain_sprite_index = function (i) { return this.sprite_index[i]; };
+    this.height = function () { return this.h; };
+    this.width = function () { return this.w; };
+    this.altered = function (n) { return alter[n]; };
+    //this.getData = function () { return this.data; };
+
+    /**
      * Creates and adds a new Unit to the Unit array. 
      * 
      * @param {Number} type The type of the unit
@@ -130,52 +149,52 @@ function Universe(){
         this.units.push(Object.assign(new Unit(this.units.length, x, y), unit));
     };
     
-    this.trunc = function (x) {
-        return Math.trunc(x / this.tileSize, 2);
-    };
-    
-    this.terrain_sprite_index = function (i) {
-        return this.sprite_index[i];
-    };
-
-    this.terrainSpritesNum = function () {
-        return this.sprite_index.length;
-    };
-
-    this.terrain = function (x, y) {
+    /**
+     * Finds block data for valid coordinates
+     * 
+     * @param {Number} x The x coordinate of the data
+     * @param {Number} y The y coordinate of the data
+     * @returns {number} Block data
+     */
+    this.getBlock = function (x, y) {
         if (x > this.w - 1 || x < 0 || y < 0 || y > this.h - 1 ||
                 typeof x === "undefined" || typeof y === "undefined")
             return 0;
-        return this.data[x][y];
+        return this.data[Math.floor(x / this.sliceSize)][x % this.sliceSize][y];
     };
-
-    this.getHeight = function () {
-        return this.h;
-    };
-
-    this.getWidth = function () {
-        return this.w;
-    };
-
-    this.setData = function (x, y, n) {
+    
+    /** 
+     * Sets a block to a value if the coordinate is valid
+     * 
+     * @param {Number} x The x coordinate of the data
+     * @param {Number} y The y coordinate of the data
+     * @param {Number} n The value to set the block to
+     * @returns {Boolean} if the coordinate was valid and block data was set
+     */
+    this.setBlock = function (x, y, n) {
         if (x > this.w || x < 0 || y < 0 || y > this.h) {
             return false;
         } else {
-            this.data[x][y] = n;
+            var slice = Math.floor(x / this.sliceSize);
+            alter[slice] = true;
+            this.data[slice][x % this.sliceSize][y] = n;
             return true;
         }
     };
-
-    this.getData = function () {
-        return this.data;
-    };
-
-    // returns basic AABB object for x y
-    this.getBlockObject = function (i, j) {
+    
+    /** 
+     * Generates basic AABB object for a block
+     * 
+     * @param {Number} i The x coordinate of the block
+     * @param {Number} j The y coordinate of the block
+     * @returns {Object} with location of image on sprite sheet, position of
+     *      the block on the canvas and the AABB of the block
+     */
+    this.generateBlockObject = function (i, j) {
         // i, j are both in pixels
         var pos = {x: this.trunc(i), y: this.trunc(j)};
-        var _id = this.terrain(pos.x, pos.y);
-        var b = this.terrain_sprite_index(_id);
+        var id = this.getBlock(pos.x, pos.y);
+        var b = this.terrain_sprite_index(id);
 
         return{
             //position on img file
@@ -184,7 +203,7 @@ function Universe(){
                 y: b.sprite.y,
                 w: b.sprite.w,
                 h: b.sprite.h,
-                id: _id
+                id: id
             },
             //position on canvas
             pos: {
