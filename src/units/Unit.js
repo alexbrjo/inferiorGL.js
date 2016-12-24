@@ -40,6 +40,9 @@ function Unit(id, x, y) {
     /** The Unit's spritesheet */
     this.img = "";
     
+    /** The number of frames in sprite animations */
+    this.frames = 1;
+    
     /** 
      * The displacement of the unit's sprite on each space on the sprite
      * sheet. 
@@ -221,12 +224,12 @@ function Unit(id, x, y) {
     };
     
     /** 
-     * This function returns the entity obj. Holds a lot of sprite sheet logic.
+     * This function returns default entity obj. Holds a lot of sprite sheet logic.
      * 
      * @param {Clock} time The world clock object.
      */
     this.obj = function (time) {
-        var t = time.it_10 % 2;
+        var t = time.it_10 % this.frames;
         var s = {x: 0, y: 0, w: this.imgSize, h: this.imgSize, id: this.img};
         var pos = this.aabb();
         pos.x -= this.imgDisplacement[0];
@@ -243,10 +246,10 @@ function Unit(id, x, y) {
                 s.y = 0;
             }
         } else if (this.vx > 0) { // running right
-            s.x = time.it_12 % 3 * this.imgSize;
+            s.x = t * this.imgSize;
             s.y = this.imgSize * 1;
         } else if (this.vx < 0) { // running left
-            s.x = time.it_12 % 3 * this.imgSize;
+            s.x = t * this.imgSize;
             s.y = this.imgSize * 2;
         }
 

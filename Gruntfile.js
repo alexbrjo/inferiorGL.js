@@ -45,7 +45,7 @@ module.exports = function (grunt) {
         uglify: {
             build: {
                 files: {
-                    'dist/ninja.min.js': [ 'dist/JoResEngine.js' ]
+                    'dist/JoResEngine.min.js': [ 'dist/JoResEngine.js' ]
                 }
             }
         },
