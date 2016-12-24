@@ -10,7 +10,7 @@ function LevelCreator(){
     
     universe.init = function (world, graphics) {
         this.hud.init(world, graphics, this.wizard);
-        graphics.addTask(new LevelGraphics());
+        graphics.addTask(new LevelGraphics(world));
         graphics.addTask(this.hud);
         graphics.disableDebug();
         world.getCamera().setFocusObj(this.wizard);
@@ -18,13 +18,9 @@ function LevelCreator(){
         world.getCamera().setTileSize(this.tileSize);
         
         var level = world.getUniverse();
-        for (var i = 0; i < level.unit_data.length; i++) {
-            if (level.unit_data[i] === 1) {
-                this.newPlayer(i * level.tileSize, 0);
-            } else if (level.unit_data[i] === 1) {
-                this.newSoldier(i * level.tileSize, 0);
-            } else if (level.unit_data[i] === 2) {
-                this.newRPGsoldier(i * level.tileSize, 0);
+        for (var i = 0; i < this.unit_data.length; i++) {
+            if (this.unit_data[i] > 0) { 
+                this.addUnit(this.unit_data[i] - 1, i * this.tileSize, i);
             }
         }
     };

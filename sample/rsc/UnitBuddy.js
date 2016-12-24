@@ -3,8 +3,8 @@
  */
 function UnitBuddy() {
 
-    this.width = 14;
-    this.height = 10;
+    this.width = 7;
+    this.height = 7;
 
     this.speed = 120.0;
     this.img = "dog.png";
@@ -13,7 +13,7 @@ function UnitBuddy() {
     this.maxHealth = 10;
     this.frames = 3;
     this.imgSize = 16;
-    this.imgDisplacement = [1, 5];
+    this.imgDisplacement = [4, 8];
 
     var ctrl;
     this.setController = function (controller) {

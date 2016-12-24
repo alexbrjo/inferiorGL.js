@@ -15,6 +15,8 @@ function Universe(){
     
     this.name = "", this.author = "", this.desc = "";
     this.h = 0, this.w = 0, this.tileSize = 0; // height, width and tileSize of the level
+    this.min_scale = 1, this.max_scale = 1;
+    
     this.resources = []; // every image sprite used in the level
     this.terrain_sprite = []; // the sprite sheet for the terrain
     this.unit_index = []; // not implemented
@@ -52,11 +54,11 @@ function Universe(){
      * @param {Graphics} graphics The core graphics object.
      */
     this.init = function (world, graphics) {
-        this.graphics = [new LevelGraphics(16), new HudGraphics()];
+        this.graphics = [new LevelGraphics(world), new HudGraphics()];
         graphics.addTask(this);
         world.getCamera().setBounds(0, 0, 
                 this.w * this.tileSize, this.h * this.tileSize, true);
-        world.getCamera().setScaleBounds(2.0, 4.0);
+        world.getCamera().setScaleBounds(this.min_scale, this.max_scale);
         world.getCamera().setTileSize(this.tileSize);
         
         for (var i = 0; i < this.unit_data.length; i++) {
