@@ -16,7 +16,7 @@ var JoResLevel = function () {
     this.unit_index = [
         function () { return new UnitBuddy(); },
         {
-            width: 14, height: 10, img: "cat.png", imgSize: 16, frames: 2,
+            width: 14, height: 10, imgPath: "cat.png", imgSize: 16, frames: 2,
             imgDisplacement: [1, 5], move: "pace"
         }
     ];

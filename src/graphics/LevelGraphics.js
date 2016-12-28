@@ -41,7 +41,7 @@ function LevelGraphics (world) {
     };
     
     /**
-     * Responsible for printing all objects in the Unit queue
+     * Prints all units in the Unit queue
      * 
      * @param {Universe} world The entire universe
      * @param {RenderingContext2D} c The context to draw graphics
@@ -49,15 +49,7 @@ function LevelGraphics (world) {
     this.printUnits = function(world, c) {
         var units = world.getUniverse().units;
 	for (var i = 0; i < units.length; i++) {
-            var u = units[i].obj(world.getTime());
-            var img = u.sprite;
-            var pos = u.pos;
-            c.save();
-            if(units[i].invunerableUntil > world.getTime().now) c.globalAlpha = 0.7;
-            c.drawImage(world.get(img.id),
-                    img.x, img.y, img.w, img.h,
-                    pos.x - c.camera.x, pos.y - c.camera.y, img.w, img.h);
-            c.restore();
+            units[i].print(world, c);
         }
     };
 

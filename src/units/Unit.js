@@ -37,8 +37,11 @@ function Unit(id, x, y) {
     /** The x and y components of the Unit's velocity */
     this.vx = 0, this.vy = 0;
 
-    /** The Unit's spritesheet */
-    this.img = "";
+    /** The Unit img */
+    this.img = null;
+    
+    /** The path to the unit's image */
+    this.imgPath = "";
     
     /** The number of frames in sprite animations */
     this.frames = 1;
@@ -159,6 +162,7 @@ function Unit(id, x, y) {
      * @param {Universe} world The entire universe 
      */
     this.update = function (world) {
+        if (this.img === null) this.img = world.get(this.imgPath);
         this.move(world);
         var lvl = world.getUniverse();
         this.vy += 0.5;
@@ -223,43 +227,46 @@ function Unit(id, x, y) {
             
     };
     
+    /**
+     * Prints the unit
+     * 
+     * @param {Universe} world The entire universe
+     * @param {RenderingContext2d} c The rendering context
+     */
+    this.print = function (world,c ) {
+        var img = this.sprite(world.getTime());
+        c.drawImage(world.get(this.imgPath), img.x, img.y, img.w, img.h,
+                this.aabb().x - this.imgDisplacement[0] - c.camera.x, 
+                this.aabb().y - this.imgDisplacement[1] - c.camera.y, 
+                img.w, img.h);
+    };  
+    
     /** 
-     * This function returns default entity obj. Holds a lot of sprite sheet logic.
+     * Returns the units image's location on the sprite sheet.
      * 
      * @param {Clock} time The world clock object.
      */
-    this.obj = function (time) {
+    this.sprite = function (time) {
         var t = time.it_10 % this.frames;
-        var s = {x: 0, y: 0, w: this.imgSize, h: this.imgSize, id: this.img};
-        var pos = this.aabb();
-        pos.x -= this.imgDisplacement[0];
-        pos.y -= this.imgDisplacement[1];
-
-        var aabb = this.aabb();
+        var s = {x: 0, y: 0, w: this.imgSize, h: this.imgSize};
 
         if (this.vx === 0) { // not moving horizontally
-            if (this.direction === 1) { //standing still
-                s.x = 0;
-                s.y = 0;
+            s.y = 0;
+            if (this.direction === 1) {
+                s.x = this.img.width / 2;
             } else if (this.direction === 0) {
-                s.x = this.imgSize;
-                s.y = 0;
+                s.x = 0;
             }
-        } else if (this.vx > 0) { // running right
-            s.x = t * this.imgSize;
-            s.y = this.imgSize * 1;
-        } else if (this.vx < 0) { // running left
-            s.x = t * this.imgSize;
-            s.y = this.imgSize * 2;
-        }
+        } else { // moving horzionally
+            s.y = this.imgSize;
+            if (this.vx > 0) { // running right
+                s.x = this.img.width / 2 + t * this.imgSize;
+            } else if (this.vx < 0) { // running left
+                s.x = t * this.imgSize;
+            }
+        } 
 
-        return{
-            sprite: s, //position on img file
-            pos: pos, // position on canvas (happens to be the same to AABB)
-            AABB: aabb // Axis-aligned bounding box
-        };
+        return s;
     };
 
 }
-
-

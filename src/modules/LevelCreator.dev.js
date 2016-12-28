@@ -28,6 +28,7 @@ function LevelCreator(){
     universe.wizard = {
             x: 0,
             y: 0,
+            pos : {x: 0, y:0},
             speed: 2,
             brush: 0,
             update: function (world) {
@@ -37,6 +38,11 @@ function LevelCreator(){
                 if (ctrl.w) this.y -= this.speed;
                 if (ctrl.s) this.y += this.speed;
                 
+                var mouse = ctrl.current;
+                var cam = world.getCamera();
+                this.pos.x = Math.trunc((mouse.offsetX / 2 + cam.x) / world.getUniverse().tileSize);
+                this.pos.y = Math.trunc((mouse.offsetY / 2 + cam.y) / world.getUniverse().tileSize);
+                
                 if (ctrl.space) {
                     var fileData = LevelDataGenerator(world.getUniverse());
                     var file = document.getElementsByTagName('html');
@@ -44,11 +50,7 @@ function LevelCreator(){
                 }
                 
                 if (ctrl.isDown) {
-                    var mouse = ctrl.current;
-                    var cam = world.getCamera();
-                    var x = Math.trunc((mouse.offsetX / 2 + cam.x) / world.getUniverse().tileSize);
-                    var y = Math.trunc((mouse.offsetY / 2  + cam.y) / world.getUniverse().tileSize);
-                    world.getUniverse().setData(x, y, this.brush);
+                    world.getUniverse().setBlock(this.pos.x, this.pos.y, this.brush);
                 }
             }
         };

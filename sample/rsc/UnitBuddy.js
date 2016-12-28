@@ -7,7 +7,7 @@ function UnitBuddy() {
     this.height = 7;
 
     this.speed = 120.0;
-    this.img = "dog.png";
+    this.imgPath = "dog.png";
     this.jumpPrimed = false;
     this.health = 10;
     this.maxHealth = 10;
@@ -82,41 +82,48 @@ function UnitBuddy() {
         }
     };
 
+    /**
+     * Prints the unit
+     * 
+     * @param {Universe} world The entire universe
+     * @param {RenderingContext2d} c The rendering context
+     */
+    this.print = function (world,c ) {
+        var img = this.sprite(world.getTime());
+        c.save();
+        if(this.invunerableUntil > world.getTime().now) c.globalAlpha = 0.7;
+        c.drawImage(world.get(this.imgPath), img.x, img.y, img.w, img.h,
+                this.aabb().x - this.imgDisplacement[0] - c.camera.x, 
+                this.aabb().y - this.imgDisplacement[1] - c.camera.y, 
+                img.w, img.h);
+        c.restore();
+    };  
+
     /** 
-     * This function returns the entity obj. Holds a lot of sprite sheet logic.
+     * Determines the unit's location on the sprite sheet
      * 
      * @param {Clock} time The world clock object.
      * @TODO this is 100 lines this needs to be condensed
      */
-    this.obj = function (time) {
+    this.sprite = function (time) {
         var t = time.it_10 % 2;
-        var s = {x: 0, y: 0, w: this.imgSize, h: this.imgSize, id: this.img};
-        var pos = this.aabb();
-        pos.x -= this.imgDisplacement[0];
-        pos.y -= this.imgDisplacement[1];
-
-        var aabb = this.aabb();
+        var s = {x: 0, y: 0, w: this.imgSize, h: this.imgSize, id: this.imgPath};
 
         if (this.vx === 0) { // not moving horizontally
+            s.y = 0;
             if (this.direction === 1) { //standing still
-                s.x = 0;
-                s.y = 0;
+                s.x = this.img.width / 2;
             } else if (this.direction === 0) {
                 s.x = 0;
-                s.y = 0;
             }
         } else if (this.vx > 0) { // running right
-            s.x = t * this.imgSize;
+            s.x = this.img.width / 2 + t * this.imgSize;
             s.y = this.imgSize * 1;
         } else if (this.vx < 0) { // running left
             s.x = t * this.imgSize;
-            s.y = this.imgSize * 2;
+            s.y = this.imgSize * 1;
         }
 
-        return{
-            sprite: s, //position on img file
-            pos: pos, // position on canvas (happens to be the same to AABB)
-            AABB: aabb // Axis-aligned bounding box
-        };
+        return s;
     };
 }
