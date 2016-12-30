@@ -19,11 +19,11 @@ function RenderingContext3D (c, camera) {
     this.save = function() {ctx.save();};
     this.restore = function() {ctx.restore();};
     this.beginPath = function() {ctx.beginPath();};
-    this.fillRect = function(a,b,c,d) {ctx.fillStyle = this.fillStyle; ctx.fillRect(a,b,c,d);}; 
+    this.fillRect = function(a, b, c, d) {ctx.fillStyle = this.fillStyle; ctx.fillRect(a, b, c, d);}; 
     
     this.fov = 1.0/Math.tan((Math.PI/2)/2.0);
     this.camera;
-    this.clipSpace = {matrix:[], far:0, near:0};
+    this.clipSpace = {matrix: [], far: 0, near: 0};
     
     /**
      * Wraps the canvas.renderingContext2D.moveTo(). Rounds both coordinates to 
@@ -81,7 +81,7 @@ function RenderingContext3D (c, camera) {
      * @returns {undefined}
      */
     this.renderWireframeShape = function(shape) {
-        for (var i = 0; i <= shape.faces.length-1; i++) {
+        for (var i = 0; i <= shape.faces.length - 1; i++) {
             this.strokeStyle = shape.faces[i].color;
             this.projectPath(shape.faces[i].points);
             this.stroke(); 
@@ -143,15 +143,15 @@ function RenderingContext3D (c, camera) {
      */
     this.projectPath = function(path){
         this.beginPath();
-        for (var i = 0; i <= path.length-1; i++) {
+        for (var i = 0; i <= path.length - 1; i++) {
             var pro3d = this.projectPoint(path[i]);
             if(pro3d.w < 0){ // if in front of the camera
                 if (i > 0) {
-                    this.lineTo(pro3d.x*canvas.width + canvas.width/2,
-                        pro3d.y*canvas.width + canvas.height/2);
+                    this.lineTo(pro3d.x * canvas.width + canvas.width / 2,
+                        pro3d.y * canvas.width + canvas.height / 2);
                 } else {
-                    this.moveTo(pro3d.x*canvas.width + canvas.width/2,
-                        pro3d.y*canvas.width + canvas.height/2);
+                    this.moveTo(pro3d.x * canvas.width + canvas.width / 2,
+                        pro3d.y * canvas.width + canvas.height / 2);
                 }
             } 
         }
@@ -174,11 +174,11 @@ function RenderingContext3D (c, camera) {
      * @param {Number} b number of decimal places to round to, optional
      * @returns {Number} Whole number rounded to 0 or b decimal places
      */
-    function r(a,b) {
+    function r(a, b) {
         if(typeof b === 'undefined' || b === 'undefined'){
             return Math.round(a);
         } else {
-            return Math.round(a * Math.pow(10,b)) / Math.pow(10,b);
+            return Math.round(a * Math.pow(10, b)) / Math.pow(10, b);
         }   
     }
     
@@ -190,11 +190,11 @@ function RenderingContext3D (c, camera) {
      * @param {Number} c Third side length (optional)
      * @returns {Number} magnitude of the vector 
      */
-    function magnitude(a,b,c) {
+    function magnitude(a, b, c) {
         if (typeof c === 'undefined' || c === 'undefined') {
-            return Math.sqrt(Math.pow(a,2) + Math.pow(b,2));
+            return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
         } else {
-            return Math.sqrt(Math.pow(a,2) + Math.pow(b,2) + Math.pow(c,2));
+            return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2) + Math.pow(c, 2));
         }
     }
     

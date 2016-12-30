@@ -91,7 +91,7 @@ function inferiorGL(){
                     aniFrame(main, canvas);
             };
             console.log("Welcome to InferiorGL.js indev\n\tby Alex Johnson\nAvailable functions:\n"+
-            "\tgl.add(\"square\", <x>, <y>, <z>)\n\tgl.add(\"triangle\", <x>, <y>, <z>)\n"
+            "\tgl.addShape(new Square(<x>, <y>, <z>)\n"
             +"Camera Controls:\n\tA - left\t\tW - forward\t\t\tQ - up\n"
             +"\tD - right\t\tS - backward\t\tE - down\n"
             );
@@ -168,15 +168,16 @@ function inferiorGL(){
         edit_canvas.width = canvas.width = window.innerWidth; 
         edit_canvas.height = canvas.height = window.innerHeight;
         
-        // draw each shape       
+        // draw each shape 
+        //edit_ctx.beginPaint();
         for (var q = 0; q < objects.length; q++) {
-            if (q === 0) {
+            if (typeof objects[q].faces[0].origin !== "undefined") {
                 edit_ctx.renderShape(objects[q]);
             } else {
                 edit_ctx.renderWireframeShape(objects[q]);
             }
         }
-        
+        //edit_ctx.finishPaint();
         this.printDebug();
         ctx.drawImage(edit_canvas, 0, 0);
     };

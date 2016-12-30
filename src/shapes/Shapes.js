@@ -84,30 +84,6 @@ function Shape(p, f, o) {
     this.faces = f; // array of Face objects
     this.origin = o;
 }
-    
-function square(x, y, z) {
-    
-    var a = new Point(  x,  y,  z);
-    var b = new Point(1+x,  y,  z);
-    var c = new Point(1+x,1+y,  z);
-    var d = new Point(  x,1+y,  z);
-    var e = new Point(  x,  y,1+z);
-    var f = new Point(1+x,  y,1+z);
-    var g = new Point(1+x,1+y,1+z);
-    var h = new Point(  x,1+y,1+z);
-    var i = new Point(0.5+x, 0.5+y, 0.5+z);
-    
-    var faces = [
-        new Face([a,b,c,d,a], "red",   [0,0,-1], new Point(0.5+x,0.5+y,  z)),
-        new Face([a,b,f,e,a], "blue",  [0,-1,0], new Point(0.5+x,  y,0.5+z)),
-        new Face([b,c,g,f,b], "yellow",[ 1,0,0], new Point(1+x,0.5+y,0.5+z)),
-        new Face([c,d,h,g,c], "blue",  [0, 1,0], new Point(0.5+x,1+y,0.5+z)),
-        new Face([d,a,e,h,d], "green", [-1,0,0], new Point(  x,0.5+y,0.5+z)),
-        new Face([e,f,g,h,e], "red",   [0,0, 1], new Point(0.5+x,0.5+y,1+z))
-    ];
-    
-    return new Shape([a,b,c,d,e,f,g,h,i], faces, i);
-}
 
 function triangle(x, y, z) { 
 
