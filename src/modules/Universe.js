@@ -157,7 +157,7 @@ function Universe(){
      * @returns {number} Block data
      */
     this.getBlock = function (x, y) {
-        if (x > this.w - 1 || x < 0 || y < 0 || y > this.h - 1 ||
+        if (x > this.w || x < 0 || y < 0 || y > this.h ||
                 typeof x === "undefined" || typeof y === "undefined")
             return 0;
         return this.data[Math.floor(x / this.sliceSize)][x % this.sliceSize][y];
