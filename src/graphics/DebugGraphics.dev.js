@@ -49,8 +49,6 @@ function DebugGraphics() {
         var cam = world.getCamera();
         var lines = ["","",
             u.length + " entities",
-            world.getBlocksRendered() + "/" +
-                    (cam.range.x * 2) * (cam.range.y * 2) + " Blocks rendered",
             "camera x: " + cam.x + " y: " + cam.y,
             "( pos ) x: " + Math.round(u[0].x) + " y: " + Math.round(u[0].y),
             "(Block) x: " + trunc(u[0].x) + " y: " + trunc(Math.round(u[0].y))

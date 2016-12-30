@@ -47,10 +47,10 @@
             this.frames = 0;
         }
                   
-        var n = this.now/1000;
-        this.it_10 = Math.round( (n - Math.trunc(n) )* 10-0.5);
-        this.it_12 = Math.round( (n - Math.trunc(n) )* 12-0.5);
-        this.it_16 = Math.round( (n - Math.trunc(n) )* 16-0.5);
-        this.it_24 = Math.round( (n - Math.trunc(n) )* 24-0.5);
+        var n = this.now / 1000;
+        this.it_10 = Math.round( (n - Math.trunc(n) )* 10 - 0.5);
+        this.it_12 = Math.round( (n - Math.trunc(n) )* 12 - 0.5);
+        this.it_16 = Math.round( (n - Math.trunc(n) )* 16 - 0.5);
+        this.it_24 = Math.round( (n - Math.trunc(n) )* 24 - 0.5);
     };
 }

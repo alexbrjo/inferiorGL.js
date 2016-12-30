@@ -54,37 +54,6 @@ function LevelGraphics (world) {
     };
 
     /**
-     * Prints terrain
-     * 
-     * @param {Universe} world The entire universe
-     * @param {RenderingContext2D} c The context to draw graphics
-     */
-    this.printTerrain = function(world, c) {
-        var lvl = world.getUniverse();
-        this.blocks_rendered = 0;
-        // the +2 try to change to a variable or integrate into camera.range.x
-
-        for (var i = lvl.trunc(c.camera.x) - c.camera.range.x + 2; 
-        		 i < lvl.trunc(c.camera.x) + c.camera.range.x + 2;
-        		 i++) {
-            for (var j = lvl.trunc(c.camera.y) - c.camera.range.y + 2; 
-            		 j < lvl.trunc(c.camera.y) + c.camera.range.y + 2; 
-            		 j++) {
-                var block = lvl.generateBlockObject(lvl.tileSize * i, lvl.tileSize * j);
-                var pos = block.pos; // pos of tile in background
-                var img = block.sprite; //pos of sprite on img file
-                    
-                if (img.id > 0) {
-                    c.drawImage(world.get(lvl.terrain_sprite),
-                            img.x * lvl.tileSize, img.y * lvl.tileSize, img.w, img.h,
-                            pos.x - c.camera.x, pos.y - c.camera.y, pos.w, pos.h);
-                    this.blocks_rendered++;
-                }
-            } // for j
-        } // for i
-    };
-    
-    /**
      * Draws all the slices
      * Todo:
      *    + Draw only 3 or 4 slices closest to player
@@ -94,6 +63,8 @@ function LevelGraphics (world) {
      * @param {RenderingContext} c The rendering context of the canvas
      */
     this.printSlices = function (world, c) {
+        //var blocksWidth = Math.ceil(world.getCamera().canvasWidth / world.getUniverse().tileSize);
+        //var slicesToDisplay = Math.ceil( blocksWidth / world.getUniverse().sliceSize) + 1;
         for (var i = 0; i < slices.length; i++) {
             var img = slices[i].getImage(world);
             var pos = slices[i].pos;

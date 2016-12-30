@@ -37,10 +37,7 @@ function Camera(){
     /** Gets the entire scale of the program */
     this.getScale = function () {
         return rawScale * scale;
-    }
-   ;
-    /** How many pixels the camera's image encompasses */
-    this.range = {x:0, y:0};
+    };
     
     /** The limits, both near and far of the Camera */
     var bounds = {areSet: false, left: null, right: null, top: null, bottom: null};
@@ -117,8 +114,6 @@ function Camera(){
         this.canvasWidth = display_width / this.getScale();
         this.canvasHeight = display_height / this.getScale();
         
-        this.range.x = Math.round( display_width / (tileSize * this.getScale()));
-        this.range.y = Math.round(display_height / (tileSize * this.getScale()));
         this.zoomed = true;
     };
     
