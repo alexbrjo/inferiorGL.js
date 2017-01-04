@@ -10,7 +10,6 @@ function inferiorGL(){
     
     /**
      * Adds a shape into the array.
-     * 
      * @param {Shape} s The shape to add to the object list
      * @returns {Shape} The shape added to the object list.
      */
@@ -21,7 +20,6 @@ function inferiorGL(){
     
     /**
      * Adds an array of shapes to the object list.
-     * 
      * @param {Array} arr Array of shapes to add to the object list.
      */
     this.addShapes = function(arr) {
@@ -30,10 +28,16 @@ function inferiorGL(){
             th.addShape(shape);
         });
     };
+    
+    /**
+     * Clears the list of objects to draw
+     */
+    this.clearShapes = function () {
+        objects = [];
+    };
 
     /**
      * Gets the shape at the given index.
-     * 
      * @param {int} x The index of the shape to return.
      * @returns {Shape} The shape.
      */
