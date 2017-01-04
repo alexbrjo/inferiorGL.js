@@ -13,6 +13,9 @@ function RenderingContext3D (c, camera) {
     this.globalCompositeOperation = c.globalCompositeOperation;
     this.font = c.font;
 
+    /** List of faces to draw */
+    this.paintQueue = [];
+
     /*
      * Wrapped and unmodified canvas.renderingContext2D functions
      */
@@ -75,8 +78,64 @@ function RenderingContext3D (c, camera) {
     };
     
     /**
+     * Clears the faces to draw
+     */
+    this.beginPaint = function () {
+        this.paintQueue = [];
+    };
+    
+    /**
+     * Adds faces to the paint queue
+     * @param {Face} face Shape to paint
+     */
+    this.paintFace = function (face) {
+        this.paintQueue.push([face, distanceBetween(face.origin, camera)]);
+    };
+    
+    /**
+     * Adds faces of a shape to the paint queue
+     * @param {Shape} shape Shape to paint
+     */
+    this.paintShape = function (shape) {
+        for (var i = 0; i < shape.faces.length; i++) {
+            this.paintFace(shape.faces[i]);
+        }
+    };
+    
+    /**
+     * Paints the shapes
+     */
+    this.finishPaint = function () {
+        this.paintQueue.sort(function(a, b) {return b[1] - a[1];});
+        for (var i = 0; i < this.paintQueue.length; i++) {
+            var t = this.paintQueue[i][0];
+            if (typeof t === "object") {
+                if (t instanceof Face) {
+                    this.renderFace(t);
+                }
+            }
+        }
+    };
+    
+    /**
+     * Renders a single face. A face is not drawn if it's normal vector is 
+     * facing away from the camera.
+     * @param {Face} face The face to render
+     */
+    this.renderFace = function (face) {
+        var o = face.origin;
+        var t = camera.getTransform();
+        var adjustedCameraRotationVector = [t.x - o.x, t.y - o.y, t.z - o.z];
+
+        if (angle(face.normal, adjustedCameraRotationVector) < Math.PI/2) { 
+            this.fillStyle = face.color;
+            this.projectPath(face.points);
+            this.fill();
+        }
+    };
+    
+    /**
      * Renders the wireframe image of a shape.
-     * 
      * @param {Shape} shape Shape to draw outline of
      * @returns {undefined}
      */
@@ -89,29 +148,17 @@ function RenderingContext3D (c, camera) {
     };
     
     /**
-     * Fills each face of a shape with a solid color. Faces are not drawn if 
-     * their normal vector is facing away from the camera. 
-     *
+     * Fills each face of a shape with a solid color.
      * @param {Shape} shape Shape to draw
      */
     this.renderShape = function(shape){
         for (var i = 0; i <= shape.faces.length - 1; i++) { 
-            var f = shape.faces[i];
-            var o = f.origin;
-            var t = camera.getTransform();
-            var adjustedCameraRotationVector = [t.x - o.x, t.y - o.y, t.z - o.z];
-            
-            if (angle(f.normal, adjustedCameraRotationVector) < Math.PI/2) { 
-                this.fillStyle = f.color;
-                this.projectPath(f.points);
-                this.fill();
-            }
+            this.renderFace(shape.faces[i]);
         }
     };
     
     /**
      * Projects a 3D point onto the 2D viewing plane.
-     * 
      * @param {Point} p A 3D point
      * @returns {Point} The projected 2D point
      */
@@ -136,8 +183,7 @@ function RenderingContext3D (c, camera) {
     };
     
     /**
-     * Traces a path by cycling through an array of points. 
-     * 
+     * Traces a path by cycling through an array of points.
      * @private
      * @param {Array|Point} path Face to outline
      */
@@ -169,7 +215,6 @@ function RenderingContext3D (c, camera) {
     /**
      * Rounds a number to the nearest whole number or to a specified number
      * of decimal places.
-     * 
      * @param {Number} a number to round
      * @param {Number} b number of decimal places to round to, optional
      * @returns {Number} Whole number rounded to 0 or b decimal places
@@ -183,8 +228,7 @@ function RenderingContext3D (c, camera) {
     }
     
     /**
-     * Finds the magnitude of a vector using the Pythagonean Theorem
-     * 
+     * Finds the magnitude of a vector using the Pythagonean Theorem.
      * @param {Number} a First side length 
      * @param {Number} b Second side length 
      * @param {Number} c Third side length (optional)
@@ -200,7 +244,6 @@ function RenderingContext3D (c, camera) {
     
     /**
      * Finds the distance of a line connecting two 2D or 3D points.
-     * 
      * @param {Point} p1 Starting point line
      * @param {Point} p2 Ending point line
      * @returns {Number} distance between the two points
@@ -219,7 +262,6 @@ function RenderingContext3D (c, camera) {
     
     /**
      * Calculates cross product of two vectors
-     * 
      * @param {Array} v1 First  vector "[x,y,z]"
      * @param {Array} v2 Second vector "[x,y,z]"
      * @returns {Array} Cross product
@@ -234,7 +276,6 @@ function RenderingContext3D (c, camera) {
     
     /**
      * Calculates the dot product of two vectors
-     * 
      * @param {Array} v1 First  vector "[x,y,z]" or "[x,y]"
      * @param {Array} v2 Second vector "[x,y,z]" or "[x,y]"
      * @returns {Array} Cross product
@@ -247,7 +288,6 @@ function RenderingContext3D (c, camera) {
     
     /**
      * Calculates the angle between two vectors
-     * 
      * @param {Array} v1 First  vector "[x,y,z]" or "[x,y]"
      * @param {Array} v2 Second vector "[x,y,z]" or "[x,y]"
      * @returns {Number} Angle between the vectors

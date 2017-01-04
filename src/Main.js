@@ -169,15 +169,13 @@ function inferiorGL(){
         edit_canvas.height = canvas.height = window.innerHeight;
         
         // draw each shape 
-        //edit_ctx.beginPaint();
+        edit_ctx.beginPaint();
         for (var q = 0; q < objects.length; q++) {
             if (typeof objects[q].faces[0].origin !== "undefined") {
-                edit_ctx.renderShape(objects[q]);
-            } else {
-                edit_ctx.renderWireframeShape(objects[q]);
+                edit_ctx.paintShape(objects[q]);
             }
         }
-        //edit_ctx.finishPaint();
+        edit_ctx.finishPaint();
         this.printDebug();
         ctx.drawImage(edit_canvas, 0, 0);
     };

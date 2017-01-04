@@ -1,68 +1,41 @@
-JoRes Game Engine
+inferiorGL.js 
 ==================================================
-A personal HTML5 canvas Game Engine for simple 2D platformers. 
 
-Try out the sample game
---------------------------
+The graphics library I'm doubtful you're looking for
+----------------------------------------------------
+
+InferiorGL was designed to function just like a traditional graphics library, 
+but due to my own lack of experience and poor attention to detail it's hard to 
+call it a graphics library at all. But in all seriousness I'm writing this for 
+better understand what goes into rending 3D graphics and to get practice 
+writing larger code projects. 
+
+How to try it out
+----------------------
 1. Requires Grunt 0.4+ and a web browser that supports HTML5 canvas
 2. Clone git repo and run grunt task 'build'
-3. Open ../sample/play.html
+3. Open js console in your web browser and open ../test/playground.html
 
-How it's done
---------------------------
-1. Build JoResEngine.js and add the script to your webpage. 
-    ```html
-    <script type="text/javascript" src="JoResEngine.js"></script> 
-    ```
-    Your page must have a canvas element with id "JoRes-target".
-    ```html 
-    <canvas id="JoRes-target"></canvas>
-    ```
+Current Indev Tasks
+----------------------
+- Complete Test files 
+- Remove core dependency of ResourceLoader
+- Calculate projection-dependent angle between face normal and eye
+- Implement clip space and clip lines
 
-2. Create an instance of the Engine.
-    ```javascript
-    var joRes = new JoResEngine();
-    ```
-
-3. Override the default menu and load screen.
-    ```javascript 
-    joRes.load(['MyMenu.js', 'MyLoadScreen.js']);
-    ```
-
-4. Add the relative level data and image paths for JoRes to find.
-    ```javascript
-    joRes.setLevelPath('myLevels/level*.js');
-    joRes.setImgPath('myImages/*.png');
-    ```
-
-5. Start!
-    ```javascript 
-    joRes.start();
-    ```
-
-Todo before Beta Release
+Indev Tasks Completed
 -------------------------
-1. Add audio modules 
-    - music
-        - loading
-        - starting / pausing / stoping
-        - volume and (?)stereo control 
-    - sound effects
-2. Complete LevelCreator and Leveldata data format
-    - paralax scrolling background 
-    - foregrounds
-    - Add entity and unit support
-    - Optization 
-    - Add default settings/properties file 
-3. Complete HUD
-    - Add scoreboard and points module
-    - Add statistics to track in game actions 
-    - Add pause and setting screen
-4. Add docs 
-    - Tutorials with screenshots on how to use
-    - Docs on how to create units and blocks 
+- Create normals for object faces
+- Create objects for basic shapes
+- Clip points completely behind plane tangent to camera
+- Project 3D points onto the 2D display (thank you en.wikipedia.org/wiki/3D_projection)
 
-History
-------------
-Over the past decade I've collected maybe a hundred half-started coding projects. This began as a platformer game and was re-adopted in March 2016. Decemeber 2016 development was resumed and I decided to convert the project into a stand alone Game Engine.
+Future Indev Tasks
+---------------------
+- Image rendering
+- Object transformations
+- parametric equation rendering
 
+Disclaimer
+-------------
+This is an indev project so the API is extremely fluid. Expect function names to change. 

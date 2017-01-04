@@ -45,7 +45,8 @@ function cube(x, y, z, l) {
     
     var i = new Point(l/2+x, l/2+y, l/2+z);                              
     
-    /** Properties for each face
+    /** 
+     * Properties for each face
      *      The points that represent the face
      *      Default color 
      *      normal of face 
