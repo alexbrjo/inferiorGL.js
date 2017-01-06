@@ -79,28 +79,10 @@ function Face(p, c, n, o) {
  * @param f Array of object references to the faces that make up the shape
  * @param o Point origin (optional) 
  */ 
-function Shape(p, f, o) {
+function Shape(p, f, o, w) {
     this.points = p; // array of points
     this.faces = f; // array of Face objects
     this.origin = o;
-}
-
-function triangle(x, y, z) { 
-
-    var a = new Point( x, y, z);
-    var b = new Point(1+x, y, z);
-    var c = new Point(0.5+x,1+y, z);
-    var d = new Point(0.5+x,0.5+y,1+z);
-    var e = new Point(0.5+x,0.5+y,0.5+z);
-
-    var faces = [
-        new Face([a,b,c,a], "red"),
-        new Face([a,b,d,a], "green"),
-        new Face([b,c,d,b], "blue"),
-        new Face([c,a,d,c], "yellow")
-    ];
-    
-    return new Shape([a,b,c,d,e], faces, e);
 }
 
 function coordinatePlane(x, y, z, m) { 

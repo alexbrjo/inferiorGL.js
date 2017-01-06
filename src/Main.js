@@ -175,9 +175,7 @@ function inferiorGL(){
         // draw each shape 
         edit_ctx.beginPaint();
         for (var q = 0; q < objects.length; q++) {
-            if (typeof objects[q].faces[0].origin !== "undefined") {
-                edit_ctx.paintShape(objects[q]);
-            }
+            edit_ctx.paintShape(objects[q]);
         }
         edit_ctx.finishPaint();
         this.printDebug();

@@ -89,7 +89,10 @@ function RenderingContext3D (c, camera) {
      * @param {Face} face Shape to paint
      */
     this.paintFace = function (face) {
-        this.paintQueue.push([face, distanceBetween(face.origin, camera)]);
+        if (face.origin instanceof Point) {
+            this.paintQueue.push([face, distanceBetween(face.origin, camera)]);
+        } 
+        this.paintQueue.push([face, distanceBetween(new Point(0,0,0), camera)]);
     };
     
     /**
@@ -111,7 +114,11 @@ function RenderingContext3D (c, camera) {
             var t = this.paintQueue[i][0];
             if (typeof t === "object") {
                 if (t instanceof Face) {
-                    this.renderFace(t);
+                    if (t.origin instanceof Point) {
+                        this.renderFace(t);
+                    } else {
+                        this.renderWireframeFace(t);
+                    }
                 }
             }
         }
@@ -135,25 +142,33 @@ function RenderingContext3D (c, camera) {
     };
     
     /**
-     * Renders the wireframe image of a shape.
-     * @param {Shape} shape Shape to draw outline of
-     * @returns {undefined}
-     */
-    this.renderWireframeShape = function(shape) {
-        for (var i = 0; i <= shape.faces.length - 1; i++) {
-            this.strokeStyle = shape.faces[i].color;
-            this.projectPath(shape.faces[i].points);
-            this.stroke(); 
-        }
-    };
-    
-    /**
      * Fills each face of a shape with a solid color.
      * @param {Shape} shape Shape to draw
      */
     this.renderShape = function(shape){
         for (var i = 0; i <= shape.faces.length - 1; i++) { 
             this.renderFace(shape.faces[i]);
+        }
+    };
+    
+    /**
+     * Renders a wireframe face. All faces are drawn.
+     * @param {Face} face The face to render
+     */
+    this.renderWireframeFace = function (face) {
+        this.strokeStyle = face.color;
+        this.projectPath(face.points);
+        this.stroke();
+    };
+    
+    /**
+     * Renders the wireframe image of a shape.
+     * @param {Shape} shape Shape to draw outline of
+     * @returns {undefined}
+     */
+    this.renderWireframeShape = function(shape) {
+        for (var i = 0; i <= shape.faces.length - 1; i++) {
+            this.renderWireframeFace(shape.faces[i]);
         }
     };
     

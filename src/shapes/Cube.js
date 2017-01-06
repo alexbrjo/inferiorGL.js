@@ -1,6 +1,5 @@
 /**
  * Creates an axis aligned cube
- * 
  * @author Alex Johnson
  * @param {Number} x The x coordinate of the shape
  * @param {Number} y The y coordinate of the shape
