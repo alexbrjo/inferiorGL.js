@@ -45,22 +45,29 @@ for(var i = 0; i < 2 * Math.PI; i += Math.PI / spacing) {
 }
 ```
 
-Current Indev Tasks
-----------------------
-- Complete Test files 
-- Sort faces better; sorting by face origin distance isn't perfect
-- Implement clip space and clip lines
+How does it work?
+--------------------
+InferiorGL.js works by wrapping the 2D RenderingContext of an HTML canvas. In 
+addition to several of the normal RenderingContext2D functions, a dozen 3D 
+rendering functions are added. 
 
-Indev Tasks Completed
+RenderingContext3D is where the actual rendering happens and can be used stand
+alone from the entire library. It does not handle shapes, animation loops or 
+double buffering. But it can easily render a single frame with shapes.
+
+Features 
 -------------------------
-- Create normals for object faces
-- Create objects for basic shapes
-- Skip rendering faces with normals facing away from Camera
+- Created shapes with normal vectors and faces
+- Optimized rendering by only drawing faces with normals facing towards the Camera
 - Clip points completely behind plane tangent to camera
 - Project 3D points onto the 2D display (thank you en.wikipedia.org/wiki/3D_projection)
 
-Future Indev Tasks
+To be implemented 
 ---------------------
+- Better documentation
+- Complete Test files 
+- Sort faces better; sorting by face origin distance isn't perfect
+- Implement clip space and clip lines
 - Image rendering
 - Object transformations
 - parametric equation rendering
