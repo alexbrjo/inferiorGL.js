@@ -3,12 +3,16 @@ inferiorGL.js
 
 The graphics library I'm doubtful you're looking for
 ----------------------------------------------------
-
 InferiorGL was designed to function just like a traditional graphics library, 
 but due to my own lack of experience and poor attention to detail it's hard to 
-call it a graphics library at all. But in all seriousness I'm writing this for 
-better understand what goes into rending 3D graphics and to get practice 
-writing larger code projects. 
+call it a graphics library at all. But in all seriousness...
+
+Modern day computer graphics are almost unbelievable. Quite literally. A lot of 
+movie scenes and video game clips are so realistic it's hard to separate reality 
+from cgi. Thinking about the algorithms and research required to create todays 
+rendering software is incredibly intimidating. And that is my goal with this 
+project: To better understand the algorithms, optimization and concepts that 
+are required to make 3D graphics.
 
 How to try it out
 ----------------------
@@ -20,7 +24,7 @@ How to try it out
 ```javascript
 gl.clearShapes();
 for (var i = 0; i < 16; i++) { 
-    for(var j = 0; j < 32; j++) {
+    for(var j = 0; j < 16; j++) {
         gl.addShape(new cube( i, j, i^j));
     }
 }
@@ -28,8 +32,8 @@ for (var i = 0; i < 16; i++) {
 
 ```javascript
 gl.clearShapes(); 
-var radius = 16;
-var spacing = 16;
+var radius = 8;
+var spacing = 8;
 for(var i = 0; i < 2 * Math.PI; i += Math.PI / spacing) { 
     for(var j = 0; j < Math.PI; j += Math.PI / spacing) {
         gl.addShape(new cube( 
@@ -44,14 +48,14 @@ for(var i = 0; i < 2 * Math.PI; i += Math.PI / spacing) {
 Current Indev Tasks
 ----------------------
 - Complete Test files 
-- Remove core dependency of ResourceLoader
-- Calculate projection-dependent angle between face normal and eye
+- Sort faces better; sorting by face origin distance isn't perfect
 - Implement clip space and clip lines
 
 Indev Tasks Completed
 -------------------------
 - Create normals for object faces
 - Create objects for basic shapes
+- Skip rendering faces with normals facing away from Camera
 - Clip points completely behind plane tangent to camera
 - Project 3D points onto the 2D display (thank you en.wikipedia.org/wiki/3D_projection)
 
