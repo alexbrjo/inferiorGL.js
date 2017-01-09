@@ -8,10 +8,10 @@
  */
 function cube(x, y, z, l) {
     
-    var x = x | 0; // x coordiate of the shape, defaults to 0
-    var y = y | 0; // y coordiate of the shape, defaults to 0
-    var z = z | 0; // z coordiate of the shape, defaults to 0
-    var l = l | 1; // The side length of the cube defaults to 1
+    var x = x || 0; // x coordiate of the shape, defaults to 0
+    var y = y || 0; // y coordiate of the shape, defaults to 0
+    var z = z || 0; // z coordiate of the shape, defaults to 0
+    var l = l || 1; // The side length of the cube defaults to 1
     
     /**   
      * abcdegh are all the points that make up the faces of the cube.

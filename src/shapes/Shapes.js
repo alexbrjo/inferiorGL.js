@@ -14,8 +14,8 @@ var vector_2D = {
 function Point(x,y,z,w) {
     this.x = x;
     this.y = y;
-    this.z = typeof z === "number" ? z : null;
-    this.w = typeof w === "number" ? w : 1;
+    this.z = z || null;
+    this.w = w || 1;
     var isValid = typeof x === "number" && typeof y === "number";
     this.type = isValid ? (typeof z === "number" ?  "Point3D" : "Point2D") 
         : "Invalid";
@@ -79,7 +79,7 @@ function Face(p, c, n, o) {
  * @param f Array of object references to the faces that make up the shape
  * @param o Point origin (optional) 
  */ 
-function Shape(p, f, o, w) {
+function Shape(p, f, o) {
     this.points = p; // array of points
     this.faces = f; // array of Face objects
     this.origin = o;

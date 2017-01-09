@@ -23,18 +23,18 @@ function Camera(x, y, z, yaw, pitch , roll){
     }
     
     /* x, y, z Position  */
-    this.x = x;
-    this.y = y;
-    this.z = z;
+    this.x = x || 0;
+    this.y = y || 0;
+    this.z = z || 0;
     
     /** The yaw of the camera */
-    this.theta_x = yaw;
+    this.theta_x = yaw || 0;
     
     /** The pitch of the camera */
-    this.theta_y = pitch;
+    this.theta_y = pitch || 0;
     
     /** The roll of the camera */
-    this.theta_z = roll;
+    this.theta_z = roll || 0;
     
     /**
      * The current rotation of the camera
