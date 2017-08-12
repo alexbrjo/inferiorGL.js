@@ -1,18 +1,27 @@
 /**
- * 
+ * The Default camera controller
  * 
  * @author Alex Johnson
  */
+function DefaultController () {
 
-function DefaultController () { 
-    var ctrl = {vx:0, vy:0, vz: 0, left: false, right: false, up: false, down:false,
-                turnleft: false, turnright: false, turnup: false, turndown: false};
-            
+    /** The state of the controller */
+    var ctrl = {
+        vx: 0, left:  false, turnleft:  false,
+        vy: 0, right: false, turnright: false,
+        vz: 0, up:    false, turnup:    false,
+               down:  false, turndown:  false
+    };
+
+    /** Gets a reference to the state of the controller*/
     this.getCtrl = function () {
         return ctrl;
     };
-            
+
+    /** Handle resize */
     window.onresize = this.resize;
+
+    /** Handle keydown */
     window.onkeydown = function(x){
         if(x.which === "A".charCodeAt()) { 
             ctrl.left = true;
@@ -42,6 +51,8 @@ function DefaultController () {
             ctrl.down = true;
         }
     };
+
+    /** Handle keyup */
     window.onkeyup = function(x){
         if(x.which === "A".charCodeAt()) { 
             ctrl.left = false;

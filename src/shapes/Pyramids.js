@@ -43,7 +43,7 @@ function triangularPyramid(x, y, z) {
 
 /** 
  * Creates an axis-aligned retangluar pyramid
- * @todo make retangular pyramid regular
+ * @todo make rectangular pyramid regular
  * @todo add parameters for side lengths
  * @todo fix face normals, they're very incorrect
  * @todo add precise face origins 

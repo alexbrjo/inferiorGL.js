@@ -1,7 +1,7 @@
 /**
  * InferiorGL.js indev 
  * 
- * @author Alex Johnson 2016 
+ * @author Alex Johnson
  */  
 function inferiorGL(){
     

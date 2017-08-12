@@ -1,5 +1,6 @@
-/* 
- * 
+/**
+ * Test the resource loader
+ *
  * @author Alex Johnson
  */
 

@@ -1,5 +1,6 @@
-/* 
- * 
+/**
+ * Tests RenderingContext3D
+ *
  * @author Alex Johnson
  */
 

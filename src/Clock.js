@@ -40,7 +40,8 @@
             this.fps = this.frames;
             this.frames = 0;
         }
-                  
+
+        // update iterator states
         var n = this.now/1000;
         this.it_10 = Math.round( (n - Math.trunc(n) )* 10-0.5);
         this.it_12 = Math.round( (n - Math.trunc(n) )* 12-0.5);

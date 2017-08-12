@@ -226,7 +226,10 @@ function RenderingContext3D (c, camera) {
     this.clipImage = function() {};
     this.projectImage = function() {};
     this.projectLine = function() {};
-    
+
+    // get the normal of a collection of coplanar points
+    this.normalOfPlane = function() {};
+
     /**
      * Rounds a number to the nearest whole number or to a specified number
      * of decimal places.
